@@ -1,0 +1,82 @@
+.ai-center-block {
+  display: table;
+  margin: auto;
+}
+
+.ai-list-item {
+  overflow: hidden;
+}
+
+.ai-list-item-label {
+  font-size: 1.2em;
+  margin-bottom: 5px;
+}
+
+.ai-list-item-label span {
+  font-size: 0.8em;
+}
+
+/* Classes to print the routes images */
+.ai-route {
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 100px;
+  margin: 0 auto;
+  width: 60px;
+  background-size: cover;
+}
+
+.ai-top-route {
+  background-image: url("../../assets/images/image_route_top.png");
+}
+
+.ai-bottom-route {
+  background-image: url("../../assets/images/image_route_bottom.png");
+}
+
+.ai-middle-route {
+  background-image: url("../../assets/images/image_route_middle.png");
+}
+
+.ai-fill-route {
+  background-image: url("../../assets/images/image_route_line.png");
+  background-position: center;
+  background-repeat: repeat-y;
+  background-size: contain;
+  height: 100%;
+  width: 60px;
+  margin: 0 auto;
+}
+
+/* Classes to style the list of passengers */
+
+.ai-user-selection {
+  border: 2px solid #fff;
+  border-radius: 10px;
+  cursor: pointer;
+  display: inline-block;
+  padding: 2px 10px;
+  margin: 5px 5px;
+}
+
+.ai-user-list-icon {
+  margin-right: 10px;
+}
+
+.ai-user-selection i {
+  margin-left: 10px;
+}
+
+.ai-not-picked {
+  color: #f00;
+}
+
+.ai-picked {
+  color: #00da00;
+}
+
+/* Paginator */
+
+.ai-paginator {
+  margin: 0 auto;
+}

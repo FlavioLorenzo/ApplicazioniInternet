@@ -1,0 +1,45 @@
+<mat-card>
+  <div class="row">
+    <div class="col-12 col-md-2">
+      <h2> Stops List </h2>
+    </div>
+    <div class="col-12 col-md-10">
+      <h3>{{ride.date}} ({{ride.direction}})</h3>
+    </div>
+  </div>
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+      <div class="ai-list-item row" *ngFor="let busStop of ride.stopList; let i=index; let isFirst=first; let isLast=last;">
+        <div class="col-3">
+          <div class="ai-route" [ngClass]="isFirst ? 'ai-top-route' : (isLast ? 'ai-bottom-route' : 'ai-middle-route')"></div>
+          <ng-template [ngIf]="!isLast">
+            <div class="ai-fill-route"></div>
+          </ng-template>
+        </div>
+        <div class="col-9">
+          <div class="ai-list-item-label"><span>{{busStop.arrivaltime}}</span> {{busStop.name}}</div>
+          <p>
+            <span class="ai-user-selection" *ngFor="let passenger of busStop.passengers"
+                  (click)="pickOrUnpick(passenger)">
+              <b [ngClass]="passenger.picked ? 'ai-picked' : 'ai-not-picked'">
+                {{passenger.username}}</b>
+              <i class="far" [ngClass]="passenger.picked ? 'fa-times-circle' : 'fa-check-circle'"></i>
+            </span>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="ai-paginator">
+      <mat-paginator
+        [hidePageSize]="true"
+        [length]="pageNumber"
+        [pageIndex]="0"
+        [pageSize]="1"
+        (page)="changePage($event)">
+      </mat-paginator>
+    </div>
+  </div>
+</mat-card>
+
