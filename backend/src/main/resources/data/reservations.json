@@ -1,0 +1,9 @@
+[
+  {
+    "id_reservation": 1,
+    "id_ride": 1,
+    "id_user": 1,
+    "join_stop": 1001,
+    "leave_stop": 1002
+  }
+]

@@ -1,0 +1,20 @@
+[
+  {
+    "id_user": 1,
+    "first_name": "u1",
+    "last_name": "u1ln",
+    "phone": "1234",
+    "email": "a1@b.c",
+    "password": "password",
+    "password_confirm": "password"
+  },
+  {
+    "id_user": 2,
+    "first_name": "u1",
+    "last_name": "u1ln",
+    "phone": "1234",
+    "email": "a2@b.c",
+    "password": "password123",
+    "password_confirm": "password123"
+  }
+]

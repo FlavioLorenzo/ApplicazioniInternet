@@ -1,0 +1,17 @@
+[
+  {
+    "id_stop":1001,
+    "stop_name":"stop1",
+    "gps":"1234567890"
+  },
+  {
+    "id_stop":1002,
+    "stop_name":"stop2",
+    "gps":"1234567890"
+  },
+  {
+    "id_stop":1003,
+    "stop_name":"stop3",
+    "gps":"1234567890"
+  }
+]

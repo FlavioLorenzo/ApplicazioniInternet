@@ -1,0 +1,22 @@
+[
+  {
+    "id_busline_stop":1001,
+    "id_line":1001,
+    "id_stop":1001,
+    "arrival_time":"21:00:00",
+    "direction":true
+  },
+  {
+    "id_busline_stop":1002,
+    "id_line":1001,
+    "id_stop":1002,
+    "arrival_time":"22:00:00",
+    "direction":true
+  }
+]
+
+/*
+1 - Se non ci sono almeno due elementi in questo array con id_line uguale significa che un'autobus parte e rimane fermo in questa fermata
+2 - Arrival time in questo caso funge da ordinale, in quando non abbiamo previsto un bus_line_stop number (miglioramenti futuri)
+3 - Arrival time deve essere coerente con andata e ritorno, nel senso che se c'è un andata - andata - andata - ritorno (i successivi devono essere tutti come ritorno
+*/

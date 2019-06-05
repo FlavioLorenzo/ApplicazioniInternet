@@ -1,0 +1,35 @@
+version: '3'
+services:
+  angular:
+    build: frontend/
+    depends_on:
+      - spring-boot
+    ports:
+      - "4200:4200"
+    volumes:
+      - "./frontend/exercise4/:/var/www/"
+  spring-boot:
+    build: backend/
+    # depends on database is reduntant because of links
+    depends_on:
+      - database
+      - mailserver
+    ports:
+      - "8080:8080"
+    volumes:
+      - "./backend/target/:/var/www/"
+  database:
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: "aipolito"
+    expose:
+      - "5432"
+  mailserver:
+    build: mail-server/
+    ports:
+      - "1234:1234"
+    expose:
+      - "1234"
+    
+
+    

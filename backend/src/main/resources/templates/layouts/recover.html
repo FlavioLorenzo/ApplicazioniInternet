@@ -1,0 +1,27 @@
+<div class="ai-content" th:fragment="recover (messages)">
+    <div class="ai-hgroup">
+        <h2>Recover Password</h2>
+    </div>
+    <div class="row justify-content-md-center">
+        <p style="color: red" th:text="${messages['errorMessage']}"></p>
+    </div>
+    <div class="row justify-content-md-center">
+        <div class="col-md-6">
+            <form method="post" action="#">
+                <div class="form-group">
+                    <label for="passwd">Password</label>
+                    <input type="password" name="password" value="" id="passwd"
+                           th:placeholder="${messages.get('passwordErrMsg')}">
+                </div>
+                <div class="form-group">
+                    <label for="confirmPasswd">Conferma Password</label>
+                    <input type="password" name="confirmPassword" value="" id="confirmPasswd"
+                           th:placeholder="${messages.get('passwordErrMsg')}">
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Registrati">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
