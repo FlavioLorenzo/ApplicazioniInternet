@@ -3,11 +3,11 @@ import {RIDES} from './mock-buslines';
 import {User} from '../Models/User';
 
 @Component({
-  selector: 'app-busline',
-  templateUrl: './busline.component.html',
-  styleUrls: ['./busline.component.css']
+  selector: 'app-attendance',
+  templateUrl: './attendance.component.html',
+  styleUrls: ['./attendance.component.css']
 })
-export class BuslineComponent implements OnInit {
+export class AttendanceComponent implements OnInit {
   rides = RIDES;
   index = 0;
   ride = this.rides[this.index];

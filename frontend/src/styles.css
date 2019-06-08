@@ -2,7 +2,48 @@
 .mat-paginator-range-label {
   display: none;
 }
+
 body {
-  color: white;
-  background-color: #353535;
+  background-color: #24242d;
+  color: whitesmoke;
 }
+
+.ai-content {
+  margin-top: 30px;
+  text-align: center;
+}
+
+.ai-footer {
+  margin-top: 50px;
+  margin-bottom: 30px;
+}
+
+.ai-footer p {
+  font-size: 0.9em;
+  color: darkgrey;
+}
+
+.ai-hgroup {
+  margin-bottom: 40px;
+}
+
+.ai-hgroup h2 {
+  font-size: 3em;
+}
+
+.ai-quote {
+  margin-top: 40px;
+  margin-bottom: 30px;
+
+  font-size: 1em;
+}
+
+.ai-home-button {
+  width: 100px;
+}
+
+label {
+  width: 150px;
+  text-align: left;
+}
+
