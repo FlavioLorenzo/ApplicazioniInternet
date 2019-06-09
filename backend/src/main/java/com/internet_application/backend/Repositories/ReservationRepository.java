@@ -18,4 +18,7 @@ public interface ReservationRepository extends JpaRepository<ReservationEntity, 
 
     @Query("SELECT r.id from ReservationEntity r ORDER BY r.id DESC")
     List<Long> getLastId();
+
+    @Query("SELECT r.presence FROM ReservationEntity r WHERE r.user.id = ?1 AND r.ride.id = ?2")
+    Boolean getPresenceByUserIdAndRide(Long userId, Long rideId);
 }

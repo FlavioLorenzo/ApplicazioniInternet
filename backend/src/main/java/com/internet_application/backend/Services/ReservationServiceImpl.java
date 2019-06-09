@@ -52,6 +52,9 @@ public class ReservationServiceImpl implements ReservationService {
         rides.forEach((ride) -> {
             JsonNode rideNode = mapper.createObjectNode();
 
+            ((ObjectNode) rideNode).put("id", ride.getId().longValue());
+            ((ObjectNode) rideNode).put("date", MiscUtils.dateToString(d));
+
             // Translate the direction into a human comprehensible information and add it to the JsonNode
             ((ObjectNode) rideNode).put("direction", MiscUtils.directionBoolToString(ride.getDirection().booleanValue()));
 
@@ -61,19 +64,38 @@ public class ReservationServiceImpl implements ReservationService {
             // For each stop
             stops.forEach((stop) -> {
                 JsonNode stopNode = mapper.createObjectNode();
-                ((ObjectNode) stopNode).put("Name", stop.getName());
+                List<UserEntity> users;
 
-                // Select all users departing from this stop
-                List<UserEntity> users = reservationRepository.getAllJoiningUsersByStopIdAndRideId(stop.getId(), ride.getId());
+                // Set the id and name of the stop
+                ((ObjectNode) stopNode).put("id", stop.getId().longValue());
+                ((ObjectNode) stopNode).put("name", stop.getName());
 
-                ArrayNode joinUsers = UserSerializer.serializeUserArrayNodeWithFirstAndLastName(mapper, users);
-                ((ObjectNode) stopNode).set("Joining", joinUsers);
+                // Set the arrivalTime to the current stop
+                List<LineStopEntity> lineStopList = lineStopRepository.getLineStopsWithLineIdAndStopIdAndDir(ride.getLine().getId(), stop.getId(), ride.getDirection());
+                if (lineStopList.size() != 1)
+                    throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+                ((ObjectNode) stopNode).put("arrivaltime", lineStopList.get(0).getArrivalTime().toString());
 
-                // Select all users leaving from this stop
-                users = reservationRepository.getAllLeavingUsersByStopIdAndRideId(stop.getId(), ride.getId());
+                // Set the passengers attribute.
+                // We decide which list to use (joining/leaving users) based on the direction (Forth/Back)
+                if(ride.getDirection().booleanValue() == false) {
+                    // Select all users departing from this stop
+                    users = reservationRepository.getAllJoiningUsersByStopIdAndRideId(stop.getId(), ride.getId());
+                } else {
+                    // Select all users leaving from this stop
+                    users = reservationRepository.getAllLeavingUsersByStopIdAndRideId(stop.getId(), ride.getId());
+                }
 
-                ArrayNode leaveUsers = UserSerializer.serializeUserArrayNodeWithFirstAndLastName(mapper, users);
-                ((ObjectNode) stopNode).set("Leaving", leaveUsers);
+                // Build a structure for each user that details his first name and whether or not the user is present
+                ArrayNode userArray = mapper.createArrayNode();
+                users.forEach((user) -> {
+                    JsonNode userNode = mapper.createObjectNode();
+                    ((ObjectNode) userNode).put("username", user.getFirstName());
+                    ((ObjectNode) userNode).put("picked",
+                            reservationRepository.getPresenceByUserIdAndRide(user.getId(), ride.getId()).booleanValue());
+                    userArray.add(userNode);
+                });
+                ((ObjectNode) stopNode).set("passengers", userArray);
 
                 stopNodes.add(stopNode);
             });
@@ -105,6 +127,7 @@ public class ReservationServiceImpl implements ReservationService {
         r.setJoinStop(builtReservation.getJoinStop());
         r.setLeaveStop(builtReservation.getLeaveStop());
         r.setUser(builtReservation.getUser());
+        r.setPresence(builtReservation.getPresence());
         reservationRepository.save(r);
 
         return r;
@@ -159,6 +182,7 @@ public class ReservationServiceImpl implements ReservationService {
         r.setJoinStop(joinStop.getStop());
         r.setLeaveStop(leaveStop.getStop());
         r.setUser(user);
+        r.setPresence(false);
 
         return r;
     }

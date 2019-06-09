@@ -39,6 +39,12 @@ public class ReservationEntity {
     @JoinColumn(name = "id_leave_stop", referencedColumnName = "id_stop")
     private StopEntity leaveStop;
 
+    @JsonProperty("presence")
+    @Column
+    @Getter
+    @Setter
+    private boolean presence; // 0 absent, 1 present
+
     public StopEntity getJoinStop() {
         return joinStop;
     }
@@ -71,13 +77,18 @@ public class ReservationEntity {
         this.ride = ride;
     }
 
+    public boolean getPresence() {
+        return presence;
+    }
+
     @Override
     public String toString() {
         String result =  "Reservation " + id + ":\n" +
                 "\tRide: \n------------" + ride.toString() + "------------\n" +
                 "\tUser: \n------------" + user.toString() + "------------\n" +
                 "\tJoin Stop: \n------------" + joinStop.toString() + "------------\n" +
-                "\tLeave Stop: \n------------" + leaveStop.toString() + "------------\n";
+                "\tLeave Stop: \n------------" + leaveStop.toString() + "------------\n" +
+                "\tPresent: \n------------" + presence + "------------\n";
         return result;
     }
 }

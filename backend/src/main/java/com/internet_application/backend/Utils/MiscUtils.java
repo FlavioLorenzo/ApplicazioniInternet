@@ -19,6 +19,11 @@ public class MiscUtils {
         }
     }
 
+    public static String dateToString(Date date) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        return dateFormat.format(date);
+    }
+
     /**
      * Translate the direction into a human comprehensible information
      * @param direction The boolean representing the direction
@@ -26,8 +31,8 @@ public class MiscUtils {
      */
     public static String directionBoolToString(boolean direction) {
         if(direction)
-            return "Return";
+            return "Ritorno";
         else
-            return "Outward";
+            return "Andata";
     }
 }

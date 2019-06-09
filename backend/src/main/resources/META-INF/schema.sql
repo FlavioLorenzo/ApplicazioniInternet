@@ -10,7 +10,7 @@ CREATE TABLE role(id_role SERIAL PRIMARY KEY, name VARCHAR(30));
 
 CREATE TABLE users(id_user SERIAL PRIMARY KEY, first_name VARCHAR(20), last_name VARCHAR(20), phone VARCHAR(20), email VARCHAR(128), password VARCHAR(256), id_role INTEGER REFERENCES role (id_role), enabled BOOLEAN);
 
-CREATE TABLE reservation(id_reservation SERIAL PRIMARY KEY, id_ride INTEGER REFERENCES ride (id_ride), id_user INTEGER REFERENCES users (id_user), id_join_stop INTEGER REFERENCES stop (id_stop), id_leave_stop INTEGER REFERENCES stop (id_stop));
+CREATE TABLE reservation(id_reservation SERIAL PRIMARY KEY, id_ride INTEGER REFERENCES ride (id_ride), id_user INTEGER REFERENCES users (id_user), id_join_stop INTEGER REFERENCES stop (id_stop), id_leave_stop INTEGER REFERENCES stop (id_stop), presence BOOLEAN DEFAULT FALSE);
 
 CREATE TABLE confirmation_token(id_token SERIAL PRIMARY KEY, confirmation_token VARCHAR(255), creation_date DATE, id_user INTEGER REFERENCES users (id_user));
 
