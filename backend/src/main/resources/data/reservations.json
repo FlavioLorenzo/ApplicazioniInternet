@@ -3,7 +3,84 @@
     "id_reservation": 1,
     "id_ride": 1,
     "id_user": 1,
-    "join_stop": 1001,
-    "leave_stop": 1002
+    "join_stop": 1,
+    "leave_stop": 4
+  },
+  {
+    "id_reservation": 2,
+    "id_ride": 1,
+    "id_user": 2,
+    "join_stop": 1,
+    "leave_stop": 4
+  },
+  {
+    "id_reservation": 3,
+    "id_ride": 1,
+    "id_user": 3,
+    "join_stop": 2,
+    "leave_stop": 4
+  },
+  {
+    "id_reservation": 4,
+    "id_ride": 2,
+    "id_user": 1,
+    "join_stop": 4,
+    "leave_stop": 2
+  },
+  {
+    "id_reservation": 5,
+    "id_ride": 2,
+    "id_user": 2,
+    "join_stop": 4,
+    "leave_stop": 5
+  },
+  {
+    "id_reservation": 6,
+    "id_ride": 2,
+    "id_user": 3,
+    "join_stop": 4,
+    "leave_stop": 1
+  },
+  {
+    "id_reservation": 7,
+    "id_ride": 3,
+    "id_user": 1,
+    "join_stop": 1,
+    "leave_stop": 4
+  },
+  {
+    "id_reservation": 8,
+    "id_ride": 3,
+    "id_user": 3,
+    "join_stop": 2,
+    "leave_stop": 4
+  },
+  {
+    "id_reservation": 9,
+    "id_ride": 4,
+    "id_user": 1,
+    "join_stop": 4,
+    "leave_stop": 2
+  },
+  {
+    "id_reservation": 10,
+    "id_ride": 4,
+    "id_user": 3,
+    "join_stop": 4,
+    "leave_stop": 1
+  },
+  {
+    "id_reservation": 11,
+    "id_ride": 5,
+    "id_user": 4,
+    "join_stop": 8,
+    "leave_stop": 9
+  },
+  {
+    "id_reservation": 12,
+    "id_ride": 6,
+    "id_user": 4,
+    "join_stop": 9,
+    "leave_stop": 8
   }
 ]

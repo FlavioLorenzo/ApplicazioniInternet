@@ -13,6 +13,7 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationFa
 @Configuration
 @EnableWebSecurity
 public class SecurityJavaConfig extends WebSecurityConfigurerAdapter {
+
     /*@Autowired
     private CustomAccessDeniedHandler accessDeniedHandler;*/
 
@@ -40,7 +41,7 @@ public class SecurityJavaConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-
+        /* Disabled for development
         http
             .csrf().disable()
             .exceptionHandling()
@@ -55,7 +56,10 @@ public class SecurityJavaConfig extends WebSecurityConfigurerAdapter {
                     .hasAnyRole("ADMIN", "SYS_ADMIN")
                 .anyRequest().authenticated()
         .and()
-            .apply(new JwtConfigurer(jwtTokenProvider));
+            .apply(new JwtConfigurer(jwtTokenProvider));*/
+
+
+
         /*.and()
             .formLogin()
             .successHandler(mySuccessHandler)

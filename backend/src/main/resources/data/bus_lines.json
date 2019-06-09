@@ -1,16 +1,16 @@
 [
   {
-    "id_line":1001,
+    "id_line":1,
     "line_name":"line1",
     "admin_email":"admin@ciao.it"
   },
   {
-    "id_line":1002,
+    "id_line":2,
     "line_name":"line2",
     "admin_email":"admin@ciao.it"
   },
   {
-    "id_line":1002,
+    "id_line":3,
     "line_name":"line3",
     "admin_email":"admin@ciao.it"
   }
