@@ -7,7 +7,10 @@ services:
     ports:
       - "4200:4200"
     volumes:
-      - "./frontend/:/var/www/"
+      - "./frontend/:/var/www"
+      - "/var/www/node_modules"
+      #- "./frontend/:/app"
+      #- "/app/node_modules"
   spring-boot:
     build: backend/
     # depends on database is reduntant because of links

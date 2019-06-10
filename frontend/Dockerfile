@@ -1,16 +1,23 @@
-FROM ubuntu:latest
+# base image
+FROM node:latest
 
-RUN apt-get update -y
-RUN apt-get install -y curl
-RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
-RUN apt-get install -y nodejs
-WORKDIR /var/www/
+# set working directory
+WORKDIR /var/www
 
+# add `/app/node_modules/.bin` to $PATH
+ENV PATH /var/www/node_modules/.bin:$PATH
+
+# install and cache app dependencies
+COPY package.json /var/www/package.json
 RUN npm install
 RUN npm install -g @angular/cli
-RUN npm install --save-dev @angular/cli
+
+# add app
+COPY . /var/www
 
 EXPOSE 4200
 
-CMD ["ng", "serve", "--host", "0.0.0.0"]
+# start app
+CMD ng serve --host 0.0.0.0
+
 
