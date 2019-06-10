@@ -16,7 +16,7 @@
 
     <properties>
         <java.version>1.8</java.version>
-        <start-class>com.internet_application.exercise_3.Exercise3Application</start-class>
+        <start-class>com.internet_application.backend.BackendApplication</start-class>
     </properties>
 
     <dependencies>
