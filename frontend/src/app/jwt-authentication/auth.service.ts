@@ -1,40 +1,42 @@
 import { Injectable } from '@angular/core';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
-import { catchError, map } from 'rxjs/operators';
-import {Observable} from "rxjs";
+import { map } from 'rxjs/operators';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {CurrentUser} from '../Models/currentUser';
 
 @Injectable()
 export class AuthService {
 
-  public isAuthenticated(): boolean {
-    return localStorage.getItem('id_token') !== null;
-  }
+  private currentUserSubject: BehaviorSubject<CurrentUser>
+  public currentUser: Observable<CurrentUser>
 
   constructor(private http: HttpClient) {
+    this.currentUserSubject = new BehaviorSubject<CurrentUser>
+    (JSON.parse(localStorage.getItem('currentUser')));
+    this.currentUser = this.currentUserSubject.asObservable();
+  }
+
+  public get currentUserValue(): CurrentUser {
+    return this.currentUserSubject.value;
   }
 
   login(email: string, password: string ) {
-    return this.http.post<any>('http://localhost:8080/login', {email, password})
+    return this.http.post<any>('http://localhost:8080/login',
+      {email, password})
       .pipe(map(res =>  {
+        let cus = null;
         if (res) {
-          this.setSession(res);
+          console.log('setting user...');
+          cus = new CurrentUser(res.mail, res.token)
+          localStorage.setItem('currentUser', JSON.stringify(cus));
+          this.currentUserSubject.next(cus);
         }
-      }),
-        catchError(e => {
-          return null;
-        })
-      );
-  }
-
-  private setSession(authResp) {
-    localStorage.setItem('id_token', authResp.token);
-  }
-
-  public getToken() {
-    return localStorage.getItem('id_token');
+        return cus;
+      }));
   }
 
   public logout() {
-    localStorage.removeItem('id_token');
+    localStorage.removeItem('currentUser');
+    this.currentUserSubject.next(null);
   }
 }

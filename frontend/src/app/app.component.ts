@@ -1,4 +1,7 @@
 import { Component } from '@angular/core';
+import {CurrentUser} from './Models/currentUser';
+import {Router} from '@angular/router';
+import {AuthService} from './jwt-authentication/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -6,4 +9,9 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
+  currentUser: CurrentUser
+  constructor(private router: Router, private authenticationService: AuthService) {
+    this.authenticationService.currentUser.subscribe(x =>
+    this.currentUser = x);
+  }
 }

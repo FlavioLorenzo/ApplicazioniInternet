@@ -10,10 +10,12 @@ import { AuthService } from './auth.service';
 @Injectable()
 export class AuthGuardService implements CanActivate {
 
-  constructor(public auth: AuthService, public router: Router) {}
+  constructor(public authenticationService: AuthService,
+              public router: Router) {}
 
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-    const currentUser = this.auth.isAuthenticated();
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+    const currentUser = this.authenticationService.currentUserValue;
+    console.log(currentUser);
     if (currentUser) {
       return true;
     }

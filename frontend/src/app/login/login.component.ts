@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {AuthService} from '../jwt-authentication/auth.service';
-import {throwError} from "rxjs";
+import {first, take} from 'rxjs/operators';
 
 
 @Component({
@@ -11,28 +11,41 @@ import {throwError} from "rxjs";
   styleUrls: ['./login.component.css'],
   providers: [AuthService]
 })
+
 export class LoginComponent implements OnInit {
   form: FormGroup;
+  submitted = false;
+
   constructor(private fb: FormBuilder,
-              private authService: AuthService,
-              private router: Router) {
+              private authenticationService: AuthService,
+              private router: Router
+  ) {
+      if (this.authenticationService.currentUserValue) {
+        this.router.navigate(['/']);
+      }
+
       this.form = this.fb.group({
         email: ['', Validators.required],
         password: ['', Validators.required]
       });
   }
 
-  login() {
+  onLogin() {
+    this.submitted = true;
+
+    if (this.form.invalid) {
+      return;
+    }
+
     const val = this.form.value;
     if (val.email && val.password) {
-      this.authService.login(val.email, val.password)
-        .subscribe((res) => {
-          if (res === null) { throwError('Bad Response'); }
-          this.router.navigateByUrl('/');
+      this.authenticationService.login(val.email, val.password)
+        .pipe(first())
+        .subscribe(
+          data => {
+            this.router.navigate(['/']);
         },
-        () => {
-          console.log('Wrong credentials');
-        });
+        error => { console.log('wrong credentials'); });
     }
   }
 
