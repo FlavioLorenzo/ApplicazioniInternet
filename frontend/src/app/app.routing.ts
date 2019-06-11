@@ -20,6 +20,10 @@ const appRoutes: Routes = [
     path: 'login',
     component: LoginComponent
   },
+  { // Otherwise redirect to home
+    path: '**',
+    redirectTo: ''
+  }
 ];
 
 export const appRoutingModule = RouterModule.forRoot(appRoutes);
