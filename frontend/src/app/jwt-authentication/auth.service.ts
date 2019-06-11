@@ -7,10 +7,7 @@ import {Observable} from "rxjs";
 export class AuthService {
 
   public isAuthenticated(): boolean {
-    if (localStorage.getItem('id_token') === null) {
-      return false;
-    }
-    return true;
+    return localStorage.getItem('id_token') !== null;
   }
 
   constructor(private http: HttpClient) {
