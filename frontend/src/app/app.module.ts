@@ -16,12 +16,25 @@ import {ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
 import {HTTP_INTERCEPTORS} from '@angular/common/http';
 import { JwtInterceptor } from 'src/app/jwt-authentication/jwt.interceptor';
-import {AuthService} from './jwt-authentication/auth.service';
+import { AuthService } from './jwt-authentication/auth.service';
+import { AuthGuardService as AuthGuard } from './jwt-authentication/authguard.service';
+import { HeaderComponent } from './header/header.component';
 
 const appRoutes: Routes = [
-  {path: '', component: HomeComponent},
-  {path: 'attendance', component: AttendanceComponent},
-  {path: 'login', component: LoginComponent},
+  {
+    path: '',
+    component: HomeComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'attendance',
+    component: AttendanceComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'login',
+    component: LoginComponent
+  },
 ];
 
 @NgModule({
@@ -29,7 +42,8 @@ const appRoutes: Routes = [
     AppComponent,
     AttendanceComponent,
     HomeComponent,
-    LoginComponent
+    LoginComponent,
+    HeaderComponent
   ],
   imports: [
     BrowserModule,
@@ -48,7 +62,8 @@ const appRoutes: Routes = [
       provide: HTTP_INTERCEPTORS,
       useClass: JwtInterceptor,
       multi: true,
-    }
+    },
+    AuthGuard
   ],
   bootstrap: [AppComponent]
 })

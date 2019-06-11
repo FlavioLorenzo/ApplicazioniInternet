@@ -1,11 +1,19 @@
-import {Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
-import {catchError, map} from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
+import {Observable} from "rxjs";
 
 @Injectable()
 export class AuthService {
-  constructor(private http: HttpClient) {
 
+  public isAuthenticated(): boolean {
+    if (localStorage.getItem('id_token') === null) {
+      return false;
+    }
+    return true;
+  }
+
+  constructor(private http: HttpClient) {
   }
 
   login(email: string, password: string ) {
@@ -14,18 +22,20 @@ export class AuthService {
         if (res) {
           this.setSession(res);
         }
-      })/*,
+      }),
         catchError(e => {
           return null;
-        })*/
-      ); }
+        })
+      );
+  }
 
-    private setSession(authResp) {
-      localStorage.setItem('id_token', authResp.token);
-      console.log('Session was set');
-      console.log(localStorage.getItem('id_token'));
-    }
+  private setSession(authResp) {
+    localStorage.setItem('id_token', authResp.token);
+  }
 
+  public getToken() {
+    return localStorage.getItem('id_token');
+  }
 
   public logout() {
     localStorage.removeItem('id_token');
