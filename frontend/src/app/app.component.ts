@@ -9,9 +9,12 @@ import {AuthService} from './jwt-authentication/auth.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  currentUser: CurrentUser
+
+  currentUser: CurrentUser;
+
   constructor(private router: Router, private authenticationService: AuthService) {
-    this.authenticationService.currentUser.subscribe(x =>
-    this.currentUser = x);
+    this.authenticationService.currentUser
+      .subscribe(x => this.currentUser = x);
   }
+
 }

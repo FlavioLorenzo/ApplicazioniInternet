@@ -20,6 +20,7 @@ import {HomeComponent} from './home/home.component';
 import {AppComponent} from './app.component';
 import {AttendanceComponent} from './attendance/attendance.component';
 import {LoginComponent} from './login/login.component';
+import { LogoutComponent } from './logout/logout.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import {LoginComponent} from './login/login.component';
     AttendanceComponent,
     HomeComponent,
     LoginComponent,
-    HeaderComponent
+    HeaderComponent,
+    LogoutComponent
   ],
   imports: [
     BrowserModule,

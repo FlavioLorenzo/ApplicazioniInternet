@@ -21,7 +21,7 @@ export class LoginComponent implements OnInit {
               private router: Router
   ) {
       if (this.authenticationService.currentUserValue) {
-        this.router.navigate(['/']);
+        this.router.navigate(['/']); // If user is logged i go directly to the homepage
       }
 
       this.form = this.fb.group({
@@ -43,6 +43,7 @@ export class LoginComponent implements OnInit {
         .pipe(first())
         .subscribe(
           data => {
+            console.log('Redirecting to home');
             this.router.navigate(['/']);
         },
         error => { console.log('wrong credentials'); });
