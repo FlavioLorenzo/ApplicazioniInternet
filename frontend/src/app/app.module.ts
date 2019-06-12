@@ -10,9 +10,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
 import {HTTP_INTERCEPTORS} from '@angular/common/http';
-import { JwtInterceptor } from 'src/app/jwt-authentication/jwt.interceptor';
-import { AuthService } from './jwt-authentication/auth.service';
-import { AuthGuardService as AuthGuard } from './jwt-authentication/authguard.service';
+import { JwtInterceptor } from 'src/app/helpers/jwt.interceptor';
+import { AuthService } from './services/auth.service';
+import { AuthGuard as AuthGuard } from './guards/auth.guard';
 
 import {appRoutingModule} from './app.routing';
 import {HeaderComponent} from './header/header.component';

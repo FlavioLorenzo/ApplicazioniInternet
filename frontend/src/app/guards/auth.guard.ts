@@ -5,10 +5,10 @@ import {
   ActivatedRouteSnapshot,
   RouterStateSnapshot
 } from '@angular/router';
-import { AuthService } from './auth.service';
+import { AuthService } from '../services/auth.service';
 
 @Injectable()
-export class AuthGuardService implements CanActivate {
+export class AuthGuard implements CanActivate {
 
   constructor(public authenticationService: AuthService,
               public router: Router) {}

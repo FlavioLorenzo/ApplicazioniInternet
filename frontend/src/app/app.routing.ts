@@ -3,7 +3,7 @@ import {RouterModule, Routes} from '@angular/router';
 import { AttendanceComponent } from './attendance/attendance.component';
 import { HomeComponent } from './home/home.component';
 import {LoginComponent} from './login/login.component';
-import {AuthGuardService as AuthGuard} from './jwt-authentication/authguard.service';
+import {AuthGuard as AuthGuard} from './guards/auth.guard';
 import {LogoutComponent} from './logout/logout.component';
 
 const appRoutes: Routes = [

@@ -4,6 +4,7 @@ import { map } from 'rxjs/operators';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {CurrentUser} from '../Models/currentUser';
 import {Router} from '@angular/router';
+import {environment} from '../../environments/environment';
 
 @Injectable()
 export class AuthService {
@@ -26,7 +27,7 @@ export class AuthService {
 
     console.log('Prelogin redirect url is:', this.redirectUrl);
 
-    return this.http.post<any>('http://localhost:8080/login',
+    return this.http.post<any>(environment.apiUrl + '/login',
       {email, password})
       .pipe(map(res =>  {
         let cus = null;
