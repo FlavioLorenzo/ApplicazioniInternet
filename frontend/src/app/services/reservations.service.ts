@@ -13,8 +13,10 @@ export class ReservationsService {
 
   public getReservationsForLineAndDay(
     lineId: number, date: string) {
-    return this.http.get<Ride[]>(
-      environment.apiUrl + '/' + lineId + '/' + date)
+    return this.http.get<any>(
+      environment.apiUrl +
+      environment.reservationsUrl +
+      '/' + lineId + '/' + date)
       .pipe(
         retry(3),
         // catchError()
@@ -24,7 +26,9 @@ export class ReservationsService {
   public getReservation(
     lineId: number, date: string, reservationId: number) {
     return this.http.get<any>(
-      environment.apiUrl + '/' + lineId + '/' + date + '/' + reservationId)
+      environment.apiUrl +
+      environment.reservationsUrl +
+      '/' + lineId + '/' + date + '/' + reservationId)
       .pipe(
         retry(3),
         // catchError()
@@ -35,7 +39,9 @@ export class ReservationsService {
     lineId: number, date: string, reservationId: number,
     rpb: ReservationPostBody) {
     return this.http.put(
-      environment.apiUrl + '/' + lineId + '/' + date + '/' + reservationId,
+      environment.apiUrl +
+      environment.reservationsUrl +
+      '/' + lineId + '/' + date + '/' + reservationId,
       rpb)
       .pipe(
         retry(3),
@@ -46,7 +52,8 @@ export class ReservationsService {
   public deleteReservation(
     lineId: number, date: string, reservationId: number) {
     return this.http.delete(
-      environment.apiUrl + '/' + lineId + '/' + date + '/' + reservationId)
+      environment.apiUrl +
+      environment.reservationsUrl + '/' + lineId + '/' + date + '/' + reservationId)
       .pipe(
         retry(3),
         // catchError()
@@ -57,7 +64,9 @@ export class ReservationsService {
     lineId: number, date: string, reservationId: number,
     rpb: ReservationPostBody) {
     return this.http.put(
-  environment.apiUrl + '/' + lineId + '/' + date,
+  environment.apiUrl +
+      environment.reservationsUrl +
+      '/' + lineId + '/' + date,
       rpb)
       .pipe(
         retry(3),

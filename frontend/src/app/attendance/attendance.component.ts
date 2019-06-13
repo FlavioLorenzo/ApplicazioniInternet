@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {RIDES} from './mock-buslines';
 import {User} from '../Models/User';
+import {ReservationsService} from '../services/reservations.service';
 
 @Component({
   selector: 'app-attendance',
@@ -13,7 +14,17 @@ export class AttendanceComponent implements OnInit {
   ride = this.rides[this.index];
   pageNumber = this.rides.length;
 
-  constructor() { }
+  date: Date;
+  direction: number;
+  lineId: number;
+
+
+  constructor(private reservationsService: ReservationsService) {
+    this.date = new Date();
+    this.direction = 0;
+    // TODO replace with selected value
+    this.lineId = 1;
+  }
 
   ngOnInit() {
   }
@@ -23,6 +34,10 @@ export class AttendanceComponent implements OnInit {
   }
 
   changePage(event) {
-    this.ride = this.rides[event.pageIndex];
+    this.reservationsService
+      .getReservationsForLineAndDay(this.lineId,
+        this.date.toISOString().split('T')[0])
+      .subscribe(bothDirection => this.ride = bothDirection[this.direction]);
+    // this.ride = this.rides[event.pageIndex];
   }
 }
