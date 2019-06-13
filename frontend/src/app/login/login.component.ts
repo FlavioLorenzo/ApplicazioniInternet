@@ -8,8 +8,7 @@ import {first, take} from 'rxjs/operators';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css'],
-  providers: [AuthService]
+  styleUrls: ['./login.component.css']
 })
 
 export class LoginComponent implements OnInit {
@@ -46,7 +45,10 @@ export class LoginComponent implements OnInit {
             console.log('Redirecting to home');
             this.router.navigate(['/']);
         },
-        error => { console.log('wrong credentials'); });
+        error => {
+            console.error(error);
+            console.log('wrong credentials');
+          });
     }
   }
 
