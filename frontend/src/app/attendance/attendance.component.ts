@@ -27,6 +27,20 @@ export class AttendanceComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.reservationsService
+      .getReservationsForLineAndDay(this.lineId,
+        this.date.toISOString().split('T')[0])
+      .subscribe(
+        (data) => {
+          this.rides = data;
+          this.ride = this.rides[0];
+          this.pageNumber = this.rides.length;
+          this.index = 0;
+          console.log(JSON.stringify(data));
+        },
+        (error) => {  console.log(error); },
+        () => console.log('Done loading reservations')
+      );
   }
 
   pickOrUnpick(user: User) {
@@ -34,16 +48,8 @@ export class AttendanceComponent implements OnInit {
   }
 
   changePage(event) {
-    this.reservationsService
-      .getReservationsForLineAndDay(this.lineId,
-        this.date.toISOString().split('T')[0])
-      .subscribe(
-        (data) => {
-          this.ride = data[0];
-          console.log(JSON.stringify(data));
-        },
-        (error) => {  console.log(error); },
-        () => console.log('Done loading reservations')
-        );
+    this.index = event.pageIndex;
+    this.ride = this.rides[this.index];
   }
+
 }

@@ -22,6 +22,8 @@ import {AttendanceComponent} from './attendance/attendance.component';
 import {LoginComponent} from './login/login.component';
 import { LogoutComponent } from './logout/logout.component';
 import {ReservationsService} from './services/reservations.service';
+import {LinesService} from './services/lines.service';
+import { LinesComponent } from './lines/lines.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +32,8 @@ import {ReservationsService} from './services/reservations.service';
     HomeComponent,
     LoginComponent,
     HeaderComponent,
-    LogoutComponent
+    LogoutComponent,
+    LinesComponent
   ],
   imports: [
     BrowserModule,
@@ -51,7 +54,8 @@ import {ReservationsService} from './services/reservations.service';
       multi: true,
     },
     AuthGuard,
-    ReservationsService
+    ReservationsService,
+    LinesService
   ],
   bootstrap: [AppComponent]
 })

@@ -1,0 +1,9 @@
+<div class="col-12 col-md-10">
+  <h3>Elenco linee</h3>
+  <p>
+    <span class="" *ngFor="let line of lines"
+          (click)="selectLine(line)">
+      <b>{{line.line_name}}</b>
+    </span>
+  </p>
+</div>

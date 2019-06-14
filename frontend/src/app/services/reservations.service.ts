@@ -1,9 +1,8 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {catchError, retry} from 'rxjs/operators';
-import {Ride} from '../Models/Ride';
 import {environment} from '../../environments/environment';
-import {Observable} from 'rxjs';
+import {Observable, throwError} from 'rxjs';
 
 // TODO insert error handler and create model for getReservation
 
@@ -17,11 +16,15 @@ export class ReservationsService {
     return this.http.get<any>(
       environment.apiUrl +
       environment.reservationsUrl +
-      '/' + lineId + '/' + date);
-    //  .pipe(
-    //    retry(3),
-    //    // catchError()
-    //  );
+      '/' + lineId + '/' + date)
+      .pipe(
+        retry(3),
+        catchError(err => {
+          console.error(err.message);
+          console.log('Error is handled');
+          return throwError('Error thrown from catchError');
+        })
+     );
   }
 
   public getReservation(
@@ -32,7 +35,11 @@ export class ReservationsService {
       '/' + lineId + '/' + date + '/' + reservationId)
       .pipe(
         retry(3),
-        // catchError()
+        catchError(err => {
+          console.error(err.message);
+          console.log('Error is handled');
+          return throwError('Error thrown from catchError');
+        })
       );
   }
 
@@ -46,7 +53,11 @@ export class ReservationsService {
       rpb)
       .pipe(
         retry(3),
-        // catchError()
+        catchError(err => {
+          console.error(err.message);
+          console.log('Error is handled');
+          return throwError('Error thrown from catchError');
+        })
       );
   }
 
@@ -57,7 +68,11 @@ export class ReservationsService {
       environment.reservationsUrl + '/' + lineId + '/' + date + '/' + reservationId)
       .pipe(
         retry(3),
-        // catchError()
+        catchError(err => {
+          console.error(err.message);
+          console.log('Error is handled');
+          return throwError('Error thrown from catchError');
+        })
       );
   }
 
@@ -71,7 +86,11 @@ export class ReservationsService {
       rpb)
       .pipe(
         retry(3),
-        // catchError()
+        catchError(err => {
+          console.error(err.message);
+          console.log('Error is handled');
+          return throwError('Error thrown from catchError');
+        })
       );
   }
 }
