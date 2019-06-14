@@ -3,6 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {catchError, retry} from 'rxjs/operators';
 import {Ride} from '../Models/Ride';
 import {environment} from '../../environments/environment';
+import {Observable} from 'rxjs';
 
 // TODO insert error handler and create model for getReservation
 
@@ -12,15 +13,15 @@ export class ReservationsService {
   constructor(private http: HttpClient) {}
 
   public getReservationsForLineAndDay(
-    lineId: number, date: string) {
+    lineId: number, date: string): Observable<any> {
     return this.http.get<any>(
       environment.apiUrl +
       environment.reservationsUrl +
-      '/' + lineId + '/' + date)
-      .pipe(
-        retry(3),
-        // catchError()
-      );
+      '/' + lineId + '/' + date);
+    //  .pipe(
+    //    retry(3),
+    //    // catchError()
+    //  );
   }
 
   public getReservation(

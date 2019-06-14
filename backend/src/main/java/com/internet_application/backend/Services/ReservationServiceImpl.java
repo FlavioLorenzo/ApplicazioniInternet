@@ -99,7 +99,7 @@ public class ReservationServiceImpl implements ReservationService {
 
                 stopNodes.add(stopNode);
             });
-            ((ObjectNode) rideNode).set("Stop", stopNodes);
+            ((ObjectNode) rideNode).set("stopList", stopNodes);
             rootNode.add(rideNode);
 
         });

@@ -37,7 +37,13 @@ export class AttendanceComponent implements OnInit {
     this.reservationsService
       .getReservationsForLineAndDay(this.lineId,
         this.date.toISOString().split('T')[0])
-      .subscribe(bothDirection => this.ride = bothDirection[this.direction]);
-    // this.ride = this.rides[event.pageIndex];
+      .subscribe(
+        (data) => {
+          this.ride = data[0];
+          console.log(JSON.stringify(data));
+        },
+        (error) => {  console.log(error); },
+        () => console.log('Done loading reservations')
+        );
   }
 }
