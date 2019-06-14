@@ -1,5 +1,4 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {ReservationsService} from '../services/reservations.service';
 import {LinesService} from '../services/lines.service';
 import {AttendanceComponent} from '../attendance/attendance.component';
 
@@ -30,7 +29,7 @@ export class LinesComponent implements OnInit {
       );
   }
 
-  selectLine(line){
+  selectLine(line) {
     console.log(JSON.stringify(line));
     this.attendance.changeLine(line.id_line);
   }

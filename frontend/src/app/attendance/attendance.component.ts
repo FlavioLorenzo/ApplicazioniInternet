@@ -10,12 +10,13 @@ import {ReservationsService} from '../services/reservations.service';
 })
 export class AttendanceComponent implements OnInit {
   rides = RIDES;
-  index = 0;
-  ride = this.rides[this.index];
+  direction = 0;
+  ride = this.rides[this.direction];
   pageNumber = this.rides.length;
 
-  direction: number;
   lineId: number;
+
+  isValid: boolean;
 
   @Input()
   date: Date;
@@ -25,6 +26,7 @@ export class AttendanceComponent implements OnInit {
     this.direction = 0;
     // TODO replace with selected value
     this.lineId = 1;
+    this.isValid = true;
   }
 
   ngOnInit() {
@@ -32,6 +34,7 @@ export class AttendanceComponent implements OnInit {
   }
 
   queryReservationService() {
+    this.isValid = false;
     this.reservationsService
       .getReservationsForLineAndDay(this.lineId,
         this.date.toISOString().split('T')[0])
@@ -40,10 +43,14 @@ export class AttendanceComponent implements OnInit {
           this.rides = data;
           this.ride = this.rides[0];
           this.pageNumber = this.rides.length;
-          this.index = 0;
+          this.direction = 0;
           console.log(JSON.stringify(data));
+          this.isValid = true;
         },
-        (error) => {  console.log(error); },
+        (error) => {
+          console.log(error);
+          this.isValid = false;
+          },
         () => console.log('Done loading reservations')
       );
   }
@@ -53,12 +60,17 @@ export class AttendanceComponent implements OnInit {
   }
 
   changePage(event) {
-    this.index = event.pageIndex;
-    this.ride = this.rides[this.index];
+    this.direction = event.pageIndex;
+    this.ride = this.rides[this.direction];
   }
 
   changeLine(event) {
     this.lineId = event;
+    this.queryReservationService();
+  }
+
+  changeDate(event) {
+    this.date = event;
     this.queryReservationService();
   }
 

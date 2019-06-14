@@ -1,4 +1,5 @@
 <div>
-  <app-lines (lineSelected)='onLineSelected($event)' [attendance]='attendance'></app-lines>
+  <app-lines (lineSelected)='onLineSelected($event)' [attendance]="attendance"></app-lines>
+  <app-datepicker [attendance]="attendance"></app-datepicker>
   <app-attendance #attendance [date]='selectedDate'></app-attendance>
 </div>

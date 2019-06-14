@@ -26,7 +26,8 @@ import {ReservationsService} from './services/reservations.service';
 import {LinesService} from './services/lines.service';
 import { LinesComponent } from './lines/lines.component';
 import { AttendanceWrapperComponent } from './attendance-wrapper/attendance-wrapper.component';
-import {MatNativeDateModule} from '@angular/material';
+import {MatFormFieldModule, MatInputModule, MatNativeDateModule} from '@angular/material';
+import { DatepickerComponent } from './datepicker/datepicker.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import {MatNativeDateModule} from '@angular/material';
     HeaderComponent,
     LogoutComponent,
     LinesComponent,
-    AttendanceWrapperComponent
+    AttendanceWrapperComponent,
+    DatepickerComponent
   ],
   imports: [
     BrowserModule,
@@ -50,7 +52,9 @@ import {MatNativeDateModule} from '@angular/material';
     ReactiveFormsModule,
     HttpClientModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatFormFieldModule,
+    MatInputModule
   ],
   providers: [
     AuthService,

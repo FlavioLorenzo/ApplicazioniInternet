@@ -25,13 +25,13 @@
   },
   {
     "id_ride": 5,
-    "date": "2019-06-15",
+    "date": "2019-06-14",
     "direction": 0,
     "id_line": 2
   },
   {
     "id_ride": 6,
-    "date": "2019-06-15",
+    "date": "2019-06-14",
     "direction": 1,
     "id_line": 2
   }
