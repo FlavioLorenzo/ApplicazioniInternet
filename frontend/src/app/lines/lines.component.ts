@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {ReservationsService} from '../services/reservations.service';
 import {LinesService} from '../services/lines.service';
+import {AttendanceComponent} from '../attendance/attendance.component';
 
 @Component({
   selector: 'app-lines',
@@ -8,6 +9,8 @@ import {LinesService} from '../services/lines.service';
   styleUrls: ['./lines.component.css']
 })
 export class LinesComponent implements OnInit {
+
+  @Input() attendance: AttendanceComponent;
 
   lines = [];
 
@@ -29,7 +32,10 @@ export class LinesComponent implements OnInit {
 
   selectLine(line){
     console.log(JSON.stringify(line));
+    this.attendance.changeLine(line.id_line);
   }
+
+
 
 
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {RIDES} from './mock-buslines';
 import {User} from '../Models/User';
 import {ReservationsService} from '../services/reservations.service';
@@ -14,19 +14,24 @@ export class AttendanceComponent implements OnInit {
   ride = this.rides[this.index];
   pageNumber = this.rides.length;
 
-  date: Date;
   direction: number;
   lineId: number;
 
+  @Input()
+  date: Date;
+
 
   constructor(private reservationsService: ReservationsService) {
-    this.date = new Date();
     this.direction = 0;
     // TODO replace with selected value
     this.lineId = 1;
   }
 
   ngOnInit() {
+    this.queryReservationService();
+  }
+
+  queryReservationService() {
     this.reservationsService
       .getReservationsForLineAndDay(this.lineId,
         this.date.toISOString().split('T')[0])
@@ -50,6 +55,11 @@ export class AttendanceComponent implements OnInit {
   changePage(event) {
     this.index = event.pageIndex;
     this.ride = this.rides[this.index];
+  }
+
+  changeLine(event) {
+    this.lineId = event;
+    this.queryReservationService();
   }
 
 }

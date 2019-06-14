@@ -6,6 +6,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {MatDatepickerModule} from '@angular/material/datepicker';
 
 import {ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
@@ -24,6 +25,8 @@ import { LogoutComponent } from './logout/logout.component';
 import {ReservationsService} from './services/reservations.service';
 import {LinesService} from './services/lines.service';
 import { LinesComponent } from './lines/lines.component';
+import { AttendanceWrapperComponent } from './attendance-wrapper/attendance-wrapper.component';
+import {MatNativeDateModule} from '@angular/material';
 
 @NgModule({
   declarations: [
@@ -33,7 +36,8 @@ import { LinesComponent } from './lines/lines.component';
     LoginComponent,
     HeaderComponent,
     LogoutComponent,
-    LinesComponent
+    LinesComponent,
+    AttendanceWrapperComponent
   ],
   imports: [
     BrowserModule,
@@ -45,6 +49,8 @@ import { LinesComponent } from './lines/lines.component';
     appRoutingModule,
     ReactiveFormsModule,
     HttpClientModule,
+    MatDatepickerModule,
+    MatNativeDateModule
   ],
   providers: [
     AuthService,
@@ -55,7 +61,8 @@ import { LinesComponent } from './lines/lines.component';
     },
     AuthGuard,
     ReservationsService,
-    LinesService
+    LinesService,
+    MatDatepickerModule
   ],
   bootstrap: [AppComponent]
 })

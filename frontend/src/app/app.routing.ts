@@ -5,6 +5,7 @@ import { HomeComponent } from './home/home.component';
 import {LoginComponent} from './login/login.component';
 import {AuthGuard as AuthGuard} from './guards/auth.guard';
 import {LogoutComponent} from './logout/logout.component';
+import {AttendanceWrapperComponent} from './attendance-wrapper/attendance-wrapper.component';
 
 const appRoutes: Routes = [
   {
@@ -14,7 +15,7 @@ const appRoutes: Routes = [
   },
   {
     path: 'attendance',
-    component: AttendanceComponent,
+    component: AttendanceWrapperComponent ,
     canActivate: [AuthGuard]
   },
   {
