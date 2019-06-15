@@ -21,6 +21,7 @@ import {AppComponent} from './app.component';
 import {AttendanceComponent} from './attendance/attendance.component';
 import {LoginComponent} from './login/login.component';
 import { LogoutComponent } from './logout/logout.component';
+import {RegisterComponent} from './register/register.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { LogoutComponent } from './logout/logout.component';
     AttendanceComponent,
     HomeComponent,
     LoginComponent,
+    RegisterComponent,
     HeaderComponent,
     LogoutComponent
   ],
