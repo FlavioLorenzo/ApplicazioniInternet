@@ -65,8 +65,10 @@
     </div>
   </ng-template>
   <ng-template [ngIf]="!ride">
-    <div class="row justify-content-center">
-    <b>There are no rides for the line {{this.lineId}} in {{date.toISOString().split('T')[0]}}</b>
+    <div class="row ai-no-rides-mex">
+      <div class="col-12">
+        <b>There are no rides for the line {{this.lineId}} in {{date.toISOString().split('T')[0]}}</b>
+      </div>
     </div>
   </ng-template>
 </div>

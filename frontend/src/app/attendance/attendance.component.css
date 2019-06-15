@@ -121,3 +121,10 @@
 #ai-missing-passengers {
   text-align: center;
 }
+
+
+/* Mex to print if no rides are available */
+.ai-no-rides-mex {
+  margin-top: 2rem;
+  text-align: center;
+}
