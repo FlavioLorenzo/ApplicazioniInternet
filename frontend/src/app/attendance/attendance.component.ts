@@ -1,8 +1,10 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {RIDES} from './mock-buslines';
 import {User} from '../Models/User';
-import {ReservationsService} from '../services/reservations.service';
+import {ReservationPostBody, ReservationsService} from '../services/reservations.service';
 import {UsersService} from '../services/users.service';
+import {Ride} from '../Models/Ride';
+import {BusStop} from '../Models/BusLineStop';
 
 @Component({
   selector: 'app-attendance',
@@ -69,8 +71,22 @@ export class AttendanceComponent implements OnInit {
       );
   }
 
-  pickOrUnpick(user: User) {
-    user.picked = !user.picked;
+  pickOrUnpick(ride: Ride, busStop: BusStop, passenger: User) {
+    const rpb = new ReservationPostBody(passenger.userId, busStop.id,
+      ride.stopList[ride.stopList.length - 1].id, !!this.direction, !passenger.picked);
+    console.log(JSON.stringify(rpb));
+
+    this.reservationsService.modifyReservation(
+      this.lineId,
+      this.date.toISOString().split('T')[0],
+      passenger.reservationId,
+      rpb
+    ).subscribe((data) => {
+      passenger.picked = !passenger.picked;
+    },
+      (error) => {
+        console.log(error);
+      });
   }
 
   changePage(event) {
@@ -94,7 +110,7 @@ export class AttendanceComponent implements OnInit {
     this.ride.stopList.forEach(busStop => {
       busStop.passengers.forEach(passenger => {
         console.log(passenger.username);
-        const index = this.allUsers.findIndex(pass => pass.first_name === passenger.username)
+        const index = this.allUsers.findIndex(pass => pass.first_name === passenger.username);
         console.log('INDEX FOUND:', index);
         if (index > -1) {
           actualUsers.splice(index, 1);

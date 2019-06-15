@@ -97,8 +97,24 @@ export class ReservationsService {
 
 
 export class ReservationPostBody {
-  userId: number;
-  joinStop: number;
-  leaveStop: number;
+  // tslint:disable-next-line:variable-name
+  id_user: number;
+  // tslint:disable-next-line:variable-name
+  join_stop: number;
+  // tslint:disable-next-line:variable-name
+  leave_stop: number;
   direction: boolean;
+  presence: boolean;
+  constructor(userId: number,
+              joinStop: number,
+              leaveStop: number,
+              direction: boolean,
+              presence: boolean) {
+    this.id_user = userId;
+    this.join_stop = joinStop;
+    this.leave_stop = leaveStop;
+    this.direction = direction;
+    this.presence = presence;
+  }
+
 }
