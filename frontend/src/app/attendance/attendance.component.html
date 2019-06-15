@@ -27,7 +27,7 @@
                 <div class="ai-list-item-label"><span>{{busStop.arrivaltime}}</span> {{busStop.name}}</div>
                 <p class="ai-user-selection-container">
                   <span class="ai-user-selection" *ngFor="let passenger of busStop.passengers"
-                        (click)="pickOrUnpick(passenger)">
+                        (click)="pickOrUnpick(ride, busStop, passenger)">
                     <b [ngClass]="passenger.picked ? 'ai-picked' : 'ai-not-picked'">
                       {{passenger.username}}</b>
                     <i class="far" [ngClass]="passenger.picked ? 'fa-times-circle' : 'fa-check-circle'"></i>
@@ -40,10 +40,10 @@
       </div>
       <div class="row">
         <div class="col-12" id="ai-missing-passengers">
-          <h3>Passeggeri non previsti</h3>
+          <h3>Unexpected Passengers</h3>
           <p>
             <span class="ai-user-selection" *ngFor="let passenger of remainingUsers"
-                  (click)="pickOrUnpick(passenger)">
+                  (click)="pickOrUnpick(ride, null, passenger)">
               <b [ngClass]="passenger.picked ? 'ai-picked' : 'ai-not-picked'">
                 {{passenger.first_name}}</b>
               <i class="far" [ngClass]="passenger.picked ? 'fa-times-circle' : 'fa-check-circle'"></i>
