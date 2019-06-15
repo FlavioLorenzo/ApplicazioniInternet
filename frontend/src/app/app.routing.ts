@@ -5,7 +5,7 @@ import { HomeComponent } from './home/home.component';
 import {LoginComponent} from './login/login.component';
 import {AuthGuardService as AuthGuard} from './jwt-authentication/authguard.service';
 import {LogoutComponent} from './logout/logout.component';
-import {RegisterComponent} from "./register/register.component";
+import {RegisterComponent} from './register/register.component';
 
 const appRoutes: Routes = [
   {

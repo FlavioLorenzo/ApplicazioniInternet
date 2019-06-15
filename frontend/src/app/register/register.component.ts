@@ -5,6 +5,9 @@ import {AuthService} from '../jwt-authentication/auth.service';
 import {first, take} from 'rxjs/operators';
 
 
+// @ts-ignore
+// @ts-ignore
+// @ts-ignore
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -16,20 +19,21 @@ export class RegisterComponent implements OnInit {
   form: FormGroup;
   submitted = false;
 
-  constructor(private fb: FormBuilder,
+  // authenticationService dovrebbe essere httpRegistrationService appena capisco come passarlo
+  constructor(private fb: FormBuilder, private authenticationService: AuthService,
               private router: Router
   ) {
-      this.form = this.fb.group({
-        first: ['', Validators.required],
-        last: ['', Validators.required],
-        phone: ['', Validators.required],
-        email: ['', Validators.required],
-        password: ['', Validators.required],
-        passwordConfirm: ['', Validators.required]
-      });
+    this.form = this.fb.group({
+      first: ['', Validators.required],
+      last: ['', Validators.required],
+      phone: ['', Validators.required],
+      email: ['', Validators.required],
+      password: ['', Validators.required],
+      passwordConfirm: ['', Validators.required]
+    });
   }
 
-  onLogin() {
+  onRegister() {
     this.submitted = true;
 
     if (this.form.invalid) {
@@ -37,11 +41,27 @@ export class RegisterComponent implements OnInit {
     }
 
     const val = this.form.value;
-    if ( val.first && val.second && val.phone && val.email && val.password && val.passwordConfirm) {
-
+    if (val.first && val.second && val.phone && val.email && val.password && val.passwordConfirm) {
+      // Questa funzione va modificata con il servizio corretto che sarebbe httpRegistrationService
+      this.authenticationService.login(val.email, val.password)
+        .pipe(first())
+        .subscribe(
+          data => {
+            console.log('Redirecting to home');
+            this.router.navigate(['/']);
+          },
+          error => {
+            console.log('wrong credentials');
+          });
     }
+
+
+
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
   }
+
 }
+
+
