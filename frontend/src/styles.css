@@ -9,6 +9,10 @@ body {
   color: whitesmoke;
 }
 
+.ai-main-content {
+  margin-top: 2rem;
+}
+
 .ai-content {
   margin-top: 30px;
   text-align: center;
@@ -17,6 +21,8 @@ body {
 .ai-footer {
   margin-top: 50px;
   margin-bottom: 30px;
+
+  text-align: center;
 }
 
 .ai-footer p {

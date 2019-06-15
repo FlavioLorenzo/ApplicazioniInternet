@@ -7,6 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatSelectModule} from '@angular/material/select';
 
 import {ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
@@ -55,7 +56,8 @@ import { DatepickerComponent } from './datepicker/datepicker.component';
     MatDatepickerModule,
     MatNativeDateModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
+    MatSelectModule
   ],
   providers: [
     AuthService,

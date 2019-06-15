@@ -29,9 +29,10 @@ export class LinesComponent implements OnInit {
       );
   }
 
-  selectLine(line) {
-    console.log(JSON.stringify(line));
-    this.attendance.changeLine(line.id_line);
+  selectLine(idLine) {
+    console.log("This is my line ");
+    console.log(idLine);
+    this.attendance.changeLine(idLine);
   }
 
 

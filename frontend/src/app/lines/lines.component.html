@@ -1,4 +1,8 @@
-<div class="col-12 col-md-10">
+<select (change)="selectLine($event.target.value)">
+  <option *ngFor="let line of lines" [value]="line.id_line">{{line.line_name}}</option>
+</select>
+
+<!--div class="col-12 col-md-10">
   <h3>Elenco linee</h3>
   <p>
     <span class="" *ngFor="let line of lines"
@@ -6,4 +10,4 @@
       <b>{{line.line_name}}</b>
     </span>
   </p>
-</div>
+</div-->
