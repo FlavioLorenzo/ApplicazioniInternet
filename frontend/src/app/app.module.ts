@@ -24,6 +24,7 @@ import {LoginComponent} from './login/login.component';
 import { LogoutComponent } from './logout/logout.component';
 import {ReservationsService} from './services/reservations.service';
 import {LinesService} from './services/lines.service';
+import {UsersService} from './services/users.service';
 import { LinesComponent } from './lines/lines.component';
 import { AttendanceWrapperComponent } from './attendance-wrapper/attendance-wrapper.component';
 import {MatFormFieldModule, MatInputModule, MatNativeDateModule} from '@angular/material';
@@ -66,6 +67,7 @@ import { DatepickerComponent } from './datepicker/datepicker.component';
     AuthGuard,
     ReservationsService,
     LinesService,
+    UsersService,
     MatDatepickerModule
   ],
   bootstrap: [AppComponent]

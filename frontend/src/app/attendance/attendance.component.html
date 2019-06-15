@@ -34,6 +34,17 @@
     </div>
   </div>
   <div class="row">
+    <h3>Passeggeri non previsti</h3>
+    <p>
+            <span class="ai-user-selection" *ngFor="let passenger of remainingUsers"
+                  (click)="pickOrUnpick(passenger)">
+              <b [ngClass]="passenger.picked ? 'ai-picked' : 'ai-not-picked'">
+                {{passenger.first_name}}</b>
+              <i class="far" [ngClass]="passenger.picked ? 'fa-times-circle' : 'fa-check-circle'"></i>
+            </span>
+    </p>
+  </div>
+  <div class="row">
     <div class="ai-paginator">
       <mat-paginator
         [hidePageSize]="true"

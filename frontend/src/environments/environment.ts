@@ -6,7 +6,8 @@ export const environment = {
   production: false,
   apiUrl: 'http://localhost:8080',
   reservationsUrl: '/reservations',
-  linesUrl: '/lines'
+  linesUrl: '/lines',
+  usersUrl: '/users'
 };
 
 /*

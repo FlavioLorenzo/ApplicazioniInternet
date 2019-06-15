@@ -1,5 +1,13 @@
 <div>
-  <app-lines (lineSelected)='onLineSelected($event)' [attendance]="attendance"></app-lines>
+  <app-lines  [attendance]="attendance"></app-lines>
   <app-datepicker [attendance]="attendance"></app-datepicker>
+  <!-- TODO:
+  Qua c'è da fare una modifica.
+  Inizialmente avevo (Matteo) inserito selectedDate come un oggetto esterno al datapicker e appartenente al wrapper.
+  Siccome l'implementazione finale prevede che il componente attendance sia passato al datepicker che ne chiama i metodi
+  una volta selezionata la data, "selectedDate" si potrebbe togliere.
+  Al momento da errore se si toglie in quanto l'inizializzazione di attendance avviene ancora con questo selectedDate passato ma
+  di cui poi non ha bisogno.
+  -->
   <app-attendance #attendance [date]='selectedDate'></app-attendance>
 </div>

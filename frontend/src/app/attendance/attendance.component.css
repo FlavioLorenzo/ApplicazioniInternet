@@ -51,7 +51,7 @@
 /* Classes to style the list of passengers */
 
 .ai-user-selection {
-  border: 2px solid #fff;
+  border: 2px solid #000000;
   border-radius: 10px;
   cursor: pointer;
   display: inline-block;

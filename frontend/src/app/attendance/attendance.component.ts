@@ -2,6 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {RIDES} from './mock-buslines';
 import {User} from '../Models/User';
 import {ReservationsService} from '../services/reservations.service';
+import {UsersService} from '../services/users.service';
 
 @Component({
   selector: 'app-attendance',
@@ -9,20 +10,25 @@ import {ReservationsService} from '../services/reservations.service';
   styleUrls: ['./attendance.component.css']
 })
 export class AttendanceComponent implements OnInit {
+
   rides = RIDES;
   direction = 0;
   ride = this.rides[this.direction];
   pageNumber = this.rides.length;
 
+  allUsers = [];
+  remainingUsers = [];
+  loadedUsers = false;
+  loadedLine = false;
+
   lineId: number;
 
-  isValid: boolean;
+  isValid: boolean; // If is not valid shows empty screen
 
-  @Input()
-  date: Date;
+  @Input() date: Date; // Linked to calendar component TODO: da rimuovere, in attendance-wrapper.component.html spiego il perchè
 
 
-  constructor(private reservationsService: ReservationsService) {
+  constructor(private reservationsService: ReservationsService, private usersService: UsersService) {
     this.direction = 0;
     // TODO replace with selected value
     this.lineId = 1;
@@ -31,6 +37,7 @@ export class AttendanceComponent implements OnInit {
 
   ngOnInit() {
     this.queryReservationService();
+    this.queryAllUsersService();
   }
 
   queryReservationService() {
@@ -45,7 +52,14 @@ export class AttendanceComponent implements OnInit {
           this.pageNumber = this.rides.length;
           this.direction = 0;
           console.log(JSON.stringify(data));
-          this.isValid = true;
+          this.isValid = true; // TODO: IS VALID DOVREBBE ESSERE SE DATA NON E' VUOTO: QUELLO CHE SUCCEDE ORA
+                               // TODO: E' CHE NEL CASO LA RISPOSTA SIA VUOTA VIENE CHIAMATO L'ERRORE. IN REALTÀ L'ERRORE DOVREBBE
+                               // TODO: ESSERE CHIAMATO SOLO QUANDO EFFETTIVAMENTE C'È UN ERRORE
+          this.loadedLine = true;
+          if (this.loadedUsers && this.ride) {
+            console.log('Calling processRemainingUsers from query reservations');
+            this.processRemainingUsers();
+          }
         },
         (error) => {
           console.log(error);
@@ -62,6 +76,7 @@ export class AttendanceComponent implements OnInit {
   changePage(event) {
     this.direction = event.pageIndex;
     this.ride = this.rides[this.direction];
+    this.processRemainingUsers();
   }
 
   changeLine(event) {
@@ -74,4 +89,36 @@ export class AttendanceComponent implements OnInit {
     this.queryReservationService();
   }
 
+  private processRemainingUsers() {
+    const actualUsers = this.allUsers.slice();
+    this.ride.stopList.forEach(busStop => {
+      busStop.passengers.forEach(passenger => {
+        console.log(passenger.username);
+        const index = this.allUsers.findIndex(pass => pass.first_name === passenger.username)
+        console.log('INDEX FOUND:', index);
+        if (index > -1) {
+          actualUsers.splice(index, 1);
+        }
+      });
+    });
+
+    this.remainingUsers = actualUsers;
+
+  }
+
+  private queryAllUsersService() {
+
+    this.usersService.getAllusers().subscribe(
+      (data) => {
+        this.allUsers = data;
+        this.loadedUsers = true;
+        if (this.loadedLine  && this.ride) {
+          console.log('Calling processRemainingUsers from query users');
+          this.processRemainingUsers();
+        }
+      },
+    (error) => {},
+      () => console.log('Loading users completed')
+    );
+  }
 }

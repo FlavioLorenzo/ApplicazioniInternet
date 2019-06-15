@@ -55,7 +55,8 @@ public class SecurityJavaConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/css/**")
                     .permitAll()
                 .antMatchers("/users", "/users/*")
-                    .hasAnyRole("ADMIN", "SYS_ADMIN")
+                    .permitAll()
+                    //.hasAnyRole("ADMIN", "SYS_ADMIN")
                 .anyRequest().authenticated()
         .and()
             .apply(new JwtConfigurer(jwtTokenProvider));
