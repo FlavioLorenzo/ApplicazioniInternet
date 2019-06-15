@@ -10,7 +10,6 @@ body {
 }
 
 .ai-main-content {
-  margin-top: 2rem;
 }
 
 .ai-content {
@@ -19,9 +18,8 @@ body {
 }
 
 .ai-footer {
-  margin-top: 50px;
-  margin-bottom: 30px;
-
+  margin-top: 1rem;
+  margin-bottom: 1rem;
   text-align: center;
 }
 

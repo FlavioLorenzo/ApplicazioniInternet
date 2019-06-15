@@ -1,6 +1,10 @@
-<select (change)="selectLine($event.target.value)">
-  <option *ngFor="let line of lines" [value]="line.id_line">{{line.line_name}}</option>
-</select>
+<mat-form-field>
+  <mat-label>Select the line</mat-label>
+  <select matNativeControl (change)="selectLine($event.target.value)">
+    <option value="" selected></option>
+    <option *ngFor="let line of lines" [value]="line.id_line">{{line.line_name}}</option>
+  </select>
+</mat-form-field>
 
 <!--div class="col-12 col-md-10">
   <h3>Elenco linee</h3>
