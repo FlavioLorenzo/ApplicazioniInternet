@@ -5,6 +5,8 @@ import {ReservationPostBody, ReservationsService} from '../services/reservations
 import {UsersService} from '../services/users.service';
 import {Ride} from '../Models/Ride';
 import {BusStop} from '../Models/BusLineStop';
+import {MatDialog} from '@angular/material';
+import {DialogBoxPickNotBookedUserComponent} from './dialog-box-pick-not-booked-user.component';
 
 @Component({
   selector: 'app-attendance',
@@ -12,7 +14,6 @@ import {BusStop} from '../Models/BusLineStop';
   styleUrls: ['./attendance.component.css']
 })
 export class AttendanceComponent implements OnInit {
-
   rides = RIDES;
   direction = 0;
   ride = this.rides[this.direction];
@@ -30,7 +31,9 @@ export class AttendanceComponent implements OnInit {
   @Input() date: Date; // Linked to calendar component TODO: da rimuovere, in attendance-wrapper.component.html spiego il perchè
 
 
-  constructor(private reservationsService: ReservationsService, private usersService: UsersService) {
+  constructor(private reservationsService: ReservationsService,
+              private usersService: UsersService,
+              public dialog: MatDialog) {
     this.direction = 0;
     // TODO replace with selected value
     this.lineId = 1;
@@ -141,7 +144,6 @@ export class AttendanceComponent implements OnInit {
   }
 
   private queryAllUsersService() {
-
     this.usersService.getAllusers().subscribe(
       (data) => {
         this.allUsers = data;
@@ -155,4 +157,17 @@ export class AttendanceComponent implements OnInit {
       () => console.log('Loading users completed')
     );
   }
+
+  openDialogBoxPickNotBookedUser(ride: Ride, passenger: User) {
+    const dialogRef = this.dialog.open(DialogBoxPickNotBookedUserComponent, {
+      width: '250px',
+      data: {ride: this.ride, user: passenger}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      // TODO implement this function
+      // this.createNewReservation(ride, result, passenger);
+    });
+  }
 }
+

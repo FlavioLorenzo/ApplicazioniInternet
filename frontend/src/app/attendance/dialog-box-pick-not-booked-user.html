@@ -1,0 +1,16 @@
+<h1 mat-dialog-title> Picking {{data.user.username}}</h1>
+<div mat-dialog-content>
+  <p>Where are you picking this user?</p>
+  <mat-form-field>
+    <mat-label>Picking at stop...</mat-label>
+    <mat-select #stopValue>
+      <mat-option *ngFor="let stop of data.ride.stopList" [value]="stop">
+        {{stop.name}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">No Thanks</button>
+  <button mat-button [mat-dialog-close]="stopValue" cdkFocusInitial>Ok</button>
+</div>

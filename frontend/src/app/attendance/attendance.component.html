@@ -43,7 +43,7 @@
           <h3>Unexpected Passengers</h3>
           <p>
             <span class="ai-user-selection" *ngFor="let passenger of remainingUsers"
-                  (click)="pickOrUnpick(ride, null, passenger)">
+                  (click)="openDialogBoxPickNotBookedUser(ride, passenger)">
               <b [ngClass]="passenger.picked ? 'ai-picked' : 'ai-not-picked'">
                 {{passenger.first_name}}</b>
               <i class="far" [ngClass]="passenger.picked ? 'fa-times-circle' : 'fa-check-circle'"></i>
