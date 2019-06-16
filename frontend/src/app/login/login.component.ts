@@ -14,6 +14,7 @@ import {first, take} from 'rxjs/operators';
 export class LoginComponent implements OnInit {
   form: FormGroup;
   submitted = false;
+  invalidCredentials: boolean;
 
   constructor(private fb: FormBuilder,
               private authenticationService: AuthService,
@@ -23,6 +24,7 @@ export class LoginComponent implements OnInit {
         this.router.navigate(['/']); // If user is logged i go directly to the homepage
       }
 
+      this.invalidCredentials = false;
       this.form = this.fb.group({
         email: ['', Validators.required],
         password: ['', Validators.required]
@@ -47,6 +49,7 @@ export class LoginComponent implements OnInit {
         error => {
             console.error(error);
             console.log('wrong credentials');
+            this.invalidCredentials = true;
           });
     }
   }
