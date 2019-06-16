@@ -11,12 +11,12 @@ import {ReservationPostBody} from '../services/reservations.service';
 // @ts-ignore
 @Component({
   selector: 'app-register',
-  templateUrl: './register.component.html',
-  styleUrls: ['./register.component.css'],
+  templateUrl: './postRegistration.component.html',
+  styleUrls: ['./postRegistration.component.css'],
   providers: [RegistrationService]
 })
 
-export class RegisterComponent implements OnInit {
+export class PostRegistrationComponent implements OnInit {
   form: FormGroup;
   submitted = false;
 
@@ -53,7 +53,7 @@ export class RegisterComponent implements OnInit {
         .subscribe(
           data => {
             console.log('Redirecting to login');
-            this.router.navigate(['/postRegistration']);
+            this.router.navigate(['/login']);
           },
           error => {
             console.error(error);

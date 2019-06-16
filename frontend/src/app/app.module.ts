@@ -6,13 +6,16 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatSelectModule} from '@angular/material/select';
 
-import {ReactiveFormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
 import {HTTP_INTERCEPTORS} from '@angular/common/http';
-import { JwtInterceptor } from 'src/app/jwt-authentication/jwt.interceptor';
-import { AuthService } from './jwt-authentication/auth.service';
-import { AuthGuardService as AuthGuard } from './jwt-authentication/authguard.service';
+
+import { JwtInterceptor } from 'src/app/helpers/jwt.interceptor';
+import { AuthService } from './services/auth.service';
+import { AuthGuard as AuthGuard } from './guards/auth.guard';
 
 import {appRoutingModule} from './app.routing';
 import {HeaderComponent} from './header/header.component';
@@ -21,7 +24,19 @@ import {AppComponent} from './app.component';
 import {AttendanceComponent} from './attendance/attendance.component';
 import {LoginComponent} from './login/login.component';
 import { LogoutComponent } from './logout/logout.component';
+
+import {ReservationsService} from './services/reservations.service';
+import {LinesService} from './services/lines.service';
+import {UsersService} from './services/users.service';
+import {RegistrationService} from './services/registration.service';
+
+import { LinesComponent } from './lines/lines.component';
+import { AttendanceWrapperComponent } from './attendance-wrapper/attendance-wrapper.component';
+import {MatDialogModule, MatFormFieldModule, MatInputModule, MatNativeDateModule} from '@angular/material';
+import { DatepickerComponent } from './datepicker/datepicker.component';
+import {DialogBoxPickNotBookedUserComponent} from './attendance/dialog-box-pick-not-booked-user.component';
 import {RegisterComponent} from './register/register.component';
+import {PostRegistrationComponent} from "./post-registration/postRegistration.component";
 
 @NgModule({
   declarations: [
@@ -30,9 +45,15 @@ import {RegisterComponent} from './register/register.component';
     HomeComponent,
     LoginComponent,
     RegisterComponent,
+    PostRegistrationComponent,
     HeaderComponent,
-    LogoutComponent
+    LogoutComponent,
+    LinesComponent,
+    AttendanceWrapperComponent,
+    DatepickerComponent,
+    DialogBoxPickNotBookedUserComponent
   ],
+  entryComponents: [DialogBoxPickNotBookedUserComponent],
   imports: [
     BrowserModule,
     MatListModule,
@@ -43,6 +64,13 @@ import {RegisterComponent} from './register/register.component';
     appRoutingModule,
     ReactiveFormsModule,
     HttpClientModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatDialogModule,
+    FormsModule
   ],
   providers: [
     AuthService,
@@ -51,7 +79,12 @@ import {RegisterComponent} from './register/register.component';
       useClass: JwtInterceptor,
       multi: true,
     },
-    AuthGuard
+    AuthGuard,
+    ReservationsService,
+    LinesService,
+    UsersService,
+    RegistrationService,
+    MatDatepickerModule
   ],
   bootstrap: [AppComponent]
 })

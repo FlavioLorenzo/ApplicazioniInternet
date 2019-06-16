@@ -4,6 +4,7 @@ import { map } from 'rxjs/operators';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {CurrentUser} from '../Models/currentUser';
 import {Router} from '@angular/router';
+import {environment} from '../../environments/environment';
 
 @Injectable()
 export class AuthService {
@@ -13,6 +14,7 @@ export class AuthService {
   public redirectUrl: string; // store the URL so we can redirect after logging in
 
   constructor(private http: HttpClient, private router: Router) {
+    console.log('NEW ISTANCE OF AUTH SERVICE');
     this.currentUserSubject = new BehaviorSubject<CurrentUser>
     (JSON.parse(localStorage.getItem('currentUser')));
     this.currentUser = this.currentUserSubject.asObservable();
@@ -26,7 +28,7 @@ export class AuthService {
 
     console.log('Prelogin redirect url is:', this.redirectUrl);
 
-    return this.http.post<any>('http://localhost:8080/login',
+    return this.http.post<any>(environment.apiUrl + '/login',
       {email, password})
       .pipe(map(res =>  {
         let cus = null;

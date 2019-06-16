@@ -1,4 +1,4 @@
-<form [formGroup]="form">
+<form [formGroup]="form" class="ai-form">
   <fieldset>
     <legend>Register</legend>
     <p>You have to register to create your personal account</p>
@@ -30,7 +30,10 @@
     </div>
   </fieldset>
   <div class="form-buttons">
-    <button class="button button-primary"
+    <button class="btn btn-warning"
             (click)="onRegister()">Register</button>
+  </div>
+  <div class="ai-form-link">
+    <a routerLink="/login">Already a registered user? Log in here!</a>
   </div>
 </form>
