@@ -53,9 +53,8 @@ export class AttendanceComponent implements OnInit {
       .subscribe(
         (data) => {
           this.rides = data;
-          this.ride = this.rides[0];
+          this.ride = this.rides[this.direction];
           this.pageNumber = this.rides.length;
-          this.direction = 0;
           console.log(JSON.stringify(data));
           this.isValid = true; // TODO: IS VALID DOVREBBE ESSERE SE DATA NON E' VUOTO: QUELLO CHE SUCCEDE ORA
                                // TODO: E' CHE NEL CASO LA RISPOSTA SIA VUOTA VIENE CHIAMATO L'ERRORE. IN REALTÀ L'ERRORE DOVREBBE
@@ -75,24 +74,6 @@ export class AttendanceComponent implements OnInit {
   }
 
   pickOrUnpick(ride: Ride, busStop: BusStop, passenger: User) {
-    if (busStop == null) {
-      busStop = ride.stopList[0];
-
-      const rpb = new ReservationPostBody(passenger.userId, busStop.id,
-        ride.stopList[ride.stopList.length - 1].id, !!this.direction, !passenger.picked);
-
-      this.reservationsService.createReservation(
-        this.lineId,
-        this.date.toISOString().split('T')[0],
-        passenger.reservationId,
-        rpb
-      ).subscribe((data) => {
-          passenger.picked = !passenger.picked;
-        },
-        (error) => {
-          console.log(error);
-        });
-    } else {
       const rpb = new ReservationPostBody(passenger.userId, busStop.id,
         ride.stopList[ride.stopList.length - 1].id, !!this.direction, !passenger.picked);
 
@@ -107,7 +88,6 @@ export class AttendanceComponent implements OnInit {
         (error) => {
           console.log(error);
         });
-    }
   }
 
   changePage(event) {
@@ -127,20 +107,24 @@ export class AttendanceComponent implements OnInit {
   }
 
   private processRemainingUsers() {
-    const actualUsers = this.allUsers.slice();
+    console.log('actualUser before: ' + this.allUsers.length);
+    const bookedUserIds: number[] = new Array();
     this.ride.stopList.forEach(busStop => {
-      busStop.passengers.forEach(passenger => {
-        console.log(passenger.username);
-        const index = this.allUsers.findIndex(pass => pass.first_name === passenger.username);
-        console.log('INDEX FOUND:', index);
-        if (index > -1) {
-          actualUsers.splice(index, 1);
-        }
+        busStop.passengers.forEach(passenger => {
+          bookedUserIds.push(passenger.userId);
+        });
       });
+
+    console.log(JSON.stringify(bookedUserIds));
+    this.remainingUsers = this.allUsers.filter( (item) => {
+      if (bookedUserIds.includes(item.id_user)) {
+        console.log('removing: ' + item.id_user);
+        return false;
+      }
+      return true;
     });
 
-    this.remainingUsers = actualUsers;
-
+    console.log('actualUser after: ' + this.remainingUsers.length);
   }
 
   private queryAllUsersService() {
@@ -158,15 +142,37 @@ export class AttendanceComponent implements OnInit {
     );
   }
 
-  openDialogBoxPickNotBookedUser(ride: Ride, passenger: User) {
+  openDialogBoxPickNotBookedUser(passenger: any) {
+    console.log(JSON.stringify(passenger));
     const dialogRef = this.dialog.open(DialogBoxPickNotBookedUserComponent, {
       width: '250px',
-      data: {ride: this.ride, user: passenger}
+      data: {ride: this.ride, user: passenger, direction: this.direction}
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      // TODO implement this function
-      // this.createNewReservation(ride, result, passenger);
+    dialogRef.afterClosed().subscribe(() => {
+      console.log('closed dialog...');
+    });
+
+    dialogRef.componentInstance.update.subscribe(busStop => {
+      const rpb = new ReservationPostBody(
+        passenger.id_user,
+        (!!this.direction) ? this.ride.stopList[this.ride.stopList.length - 1].id : busStop.id,
+        (!!this.direction) ? busStop.id : this.ride.stopList[this.ride.stopList.length - 1].id,
+        !!this.direction,
+        !passenger.picked);
+      console.log('update: ' + JSON.stringify(rpb));
+
+      this.reservationsService.createReservation(
+        this.lineId,
+        this.date.toISOString().split('T')[0],
+        rpb
+      ).subscribe(() => {
+          passenger.picked = !passenger.picked;
+          this.ngOnInit();
+        },
+        (error) => {
+          console.log(error);
+        });
     });
   }
 }
