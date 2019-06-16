@@ -25,6 +25,7 @@ E` possibile vedere degli screen della funzionalita` nella cartella Applicazioni
 In automatico si viene rediretti sulla pagina di login.
 Per testare senza registrarsi e` possibile fare login con le credenziali: u2@example.it:password  (1_login.PNG)
 Una volta effettuato l'accesso si presenta una pagina dove e` possibile selezionare la linea e la data.  (2_line_view.PNG e 3_line_view.PNG)
+Si presti attenzione che attualmente le date disponibili sono 14/06/2019 - 15/06/2019.
 Se la corsa non e` disponibile un messaggio viene visualizzato a schermo, altrimenti la corsa viene visualizzata.
 Cliccando sugli utenti che si sono prenotati e` possibile cambiare il loro stato (presi/lasciati) alla fermata corrispondente. (4_u1_unpicked.PNG e 4_u1_picked.PNG)
 Nel caso si volesse aggiungere un utente che non si e` prenotato basta cliccare nell'apposita lista in basso.

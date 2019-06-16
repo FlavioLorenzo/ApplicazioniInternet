@@ -21,10 +21,10 @@ export class AuthGuard implements CanActivate {
     if (this.authenticationService.currentUserValue) { return true; }
 
     // Store the attempted URL for redirecting
-    this.authenticationService.redirectUrl = url;
+    // this.authenticationService.redirectUrl = url;
 
     // Navigate to the login page with extras
-  //  this.router.navigate(['/login']);
+    this.router.navigate(['/login']);
     return false;
   }
 
