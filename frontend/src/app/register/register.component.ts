@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {AuthService} from '../jwt-authentication/auth.service';
-import {first, take} from 'rxjs/operators';
+import {first, last, take} from 'rxjs/operators';
+import {HttpRegistrationService} from '../httpRegistrationService/httpRegistration.service';
 
 
 // @ts-ignore
@@ -12,15 +13,14 @@ import {first, take} from 'rxjs/operators';
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css'],
-  providers: [AuthService]
+  providers: [HttpRegistrationService]
 })
 
 export class RegisterComponent implements OnInit {
   form: FormGroup;
   submitted = false;
 
-  // authenticationService dovrebbe essere httpRegistrationService appena capisco come passarlo
-  constructor(private fb: FormBuilder, private authenticationService: AuthService,
+  constructor(private fb: FormBuilder, private httpRegistrationService: HttpRegistrationService,
               private router: Router
   ) {
     this.form = this.fb.group({
@@ -43,7 +43,7 @@ export class RegisterComponent implements OnInit {
     const val = this.form.value;
     if (val.first && val.second && val.phone && val.email && val.password && val.passwordConfirm) {
       // Questa funzione va modificata con il servizio corretto che sarebbe httpRegistrationService
-      this.authenticationService.login(val.email, val.password)
+      this.httpRegistrationService.Register(val.email, val.password, val.passwordConfirm, val.first, val.last)
         .pipe(first())
         .subscribe(
           data => {
