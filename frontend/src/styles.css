@@ -52,3 +52,10 @@ label {
   text-align: left;
 }
 
+/* Styles for the modal dialog buttons */
+.ai-dialog-button-div {
+  text-align: center;
+}
+.ai-dialog-button-container {
+  margin-bottom: 1rem;
+}
