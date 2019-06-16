@@ -24,24 +24,26 @@ export class RegisterComponent implements OnInit {
               private router: Router
   ) {
     this.form = this.fb.group({
-      first: ['', Validators.required],
-      last: ['', Validators.required],
+      first: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(256)]],
+      last: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(256)]],
       phone: ['', Validators.required],
-      email: ['', Validators.required],
-      password: ['', Validators.required],
-      passwordConfirm: ['', Validators.required]
+      email: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(255), Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(32)]],
+      passwordConfirm: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(32)]]
     });
   }
 
   onRegister() {
     this.submitted = true;
-
     if (this.form.invalid) {
       console.log('This form is invalid');
       return;
     }
 
     const val = this.form.value;
+    if (val.password !== val.passwordConfirm) {
+      return;
+    }
 
     if (val.first && val.last && val.phone && val.email && val.password && val.passwordConfirm) {
       const rpb = new RegistrationPostBody(val.email, val.password, val.passwordConfirm, val.first, val.last);
