@@ -1,28 +1,29 @@
 # ApplicazioniInternet
 
-1# Installare docker
-2# Assicurarsi che il drive su cui c'e` questa cartella faccia parte degli shared drives (docker / Setting / Shared Drives)
-3# Fermare tutte le istanze di postgres, fakesmtpserver, angular e spring che stanno girando
-4# Dentro la cartella principale (dove si trova docker-compose.yml)
-   docker-compose up                ----> fa partire i 4 docker in foreground (control-c per stoppare)
-   docker-compose up -d             ----> fa partire i 4 docker in background (docker compose stop per stoppare)
+* Installare docker
+* Assicurarsi che il drive su cui c'e` questa cartella faccia parte degli shared drives (docker / Setting / Shared Drives)
+* Fermare tutte le istanze di postgres, fakesmtpserver, angular e spring che stanno girando
+* Dentro la cartella principale (dove si trova docker-compose.yml)
+    * docker-compose up                ----> fa partire i 4 docker in foreground (control-c per stoppare)
+    * docker-compose up -d             ----> fa partire i 4 docker in background (docker compose stop per stoppare)
 
 
 Per far funzionare il tutto occorre avviare i seguenti componenti in sequenza:
 
-1#  Avviare Postgres con nome utente e password configurati in 
-    ApplicazioniInternet\backend\src\main\java\com\internet_application\backend\Configuration\PersistenceJPAConfig.java
-    (di default il nome utente e` 'postgres' e la password e` 'aipolito').
-2#  Avviare il fake smtp server (ApplicazioniInternet\mail-server\fakeSMTP-2.0.jar)
-    sulla porta 1234 (il default e` 25).
-3#  Avviare il server di backend (ApplicazioniInternet\backend\target\backend-0.0.1-SNAPSHOT.jar).
-4#  Avviare il server di frontend lanciando da powershell il comando 'ng serve' nella cartella \ApplicazioniInternet\frontend.
+* Avviare Postgres con nome utente e password configurati in ApplicazioniInternet\backend\src\main\java\com\internet_application\backend\Configuration\PersistenceJPAConfig.java (di default il nome utente e` 'postgres' e la password e` 'aipolito').
+* Avviare il fake smtp server (ApplicazioniInternet\mail-server\fakeSMTP-2.0.jar) sulla porta 1234 (il default e` 25).
+* Per avviare il server di backend: 
+    * Aprire IntelliJ (o IDE di preferenza) e, dal terminale, digitare il comando: mvn -Dmaven.test.skip=true package
+    * Successivamente, avviare il server di backend (ApplicazioniInternet\backend\target\backend-0.0.1-SNAPSHOT.jar).
+* Per avviare il server di frontend è necessario seguire i seguenti passi da powershell nella cartella \ApplicazioniInternet\frontend:
+    * ng install
+    * ng serve
 
 A questo punto si puo` accedere alle funzionalita` dell'applicazione navigando su http://localhost:4200.
 E` possibile vedere degli screen della funzionalita` nella cartella ApplicazioniInternet\screenshots
 
 In automatico si viene rediretti sulla pagina di login.
-Per testare senza registrarsi e` possibile fare login con le credenziali: u1@example.it:password  (1_login.PNG)
+Per testare senza registrarsi e` possibile fare login con le credenziali: u2@example.it:password  (1_login.PNG)
 Una volta effettuato l'accesso si presenta una pagina dove e` possibile selezionare la linea e la data.  (2_line_view.PNG e 3_line_view.PNG)
 Se la corsa non e` disponibile un messaggio viene visualizzato a schermo, altrimenti la corsa viene visualizzata.
 Cliccando sugli utenti che si sono prenotati e` possibile cambiare il loro stato (presi/lasciati) alla fermata corrispondente. (4_u1_unpicked.PNG e 4_u1_picked.PNG)
