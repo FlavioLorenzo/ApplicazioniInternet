@@ -39,20 +39,21 @@ export class RegisterComponent implements OnInit {
     if (this.form.invalid) {
       const mexBox = document.getElementById('ai-mex-box');
 
-      if (count === 0) {
+      if (this.countErrors === 0) {
         mexBox.classList.add('ai-mex-box-error');
       }
 
-      const toRemove = document.getElementById('ai-email-already-used');
+      const toRemove = document.getElementById('ai-generic-error');
       if (toRemove) {
         mexBox.removeChild(toRemove);
-        count--;
+        this.countErrors--;
       }
 
       const node = document.createElement('div');
-      node.appendChild(document.createTextNode('There is an error in the form.'));
+      node.setAttribute('id', 'ai-generic-error');
+      node.appendChild(document.createTextNode('There is an error in your form.'));
       mexBox.appendChild(node);
-      count++;
+      this.countErrors++;
       return;
     }
 
@@ -60,20 +61,21 @@ export class RegisterComponent implements OnInit {
     if (val.password !== val.passwordConfirm) {
       const mexBox = document.getElementById('ai-mex-box');
 
-      if (count === 0) {
+      if (this.countErrors === 0) {
         mexBox.classList.add('ai-mex-box-error');
       }
 
-      const toRemove = document.getElementById('ai-email-already-used');
+      const toRemove = document.getElementById('ai-generic-error');
       if (toRemove) {
         mexBox.removeChild(toRemove);
-        count--;
+        this.countErrors--;
       }
 
       const node = document.createElement('div');
-      node.appendChild(document.createTextNode('There is an error in the form.'));
+      node.setAttribute('id', 'ai-generic-error');
+      node.appendChild(document.createTextNode('The two passwords are not equal.'));
       mexBox.appendChild(node);
-      count++;
+      this.countErrors++;
       return;
     }
 
@@ -103,8 +105,8 @@ export class RegisterComponent implements OnInit {
           const mexBox = document.getElementById('ai-mex-box');
           if (toRemove) {
             mexBox.removeChild(toRemove);
-            count--;
-            if (count === 0) {
+            this.countErrors--;
+            if (this.countErrors === 0) {
               mexBox.classList.remove('ai-mex-box-error');
             }
           }
@@ -116,7 +118,7 @@ export class RegisterComponent implements OnInit {
             return;
           }
 
-          if (count === 0) {
+          if (this.countErrors === 0) {
             mexBox.classList.add('ai-mex-box-error');
           }
 
@@ -125,7 +127,7 @@ export class RegisterComponent implements OnInit {
           node.appendChild(document.createTextNode('This email is not valid or it already exists.'));
           mexBox.appendChild(node);
 
-          count++;
+          this.countErrors++;
         });
   }
 
