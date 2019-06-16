@@ -7,8 +7,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatSelectModule} from '@angular/material/select';
 
-import {ReactiveFormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
 import {HTTP_INTERCEPTORS} from '@angular/common/http';
 import { JwtInterceptor } from 'src/app/helpers/jwt.interceptor';
@@ -27,8 +28,10 @@ import {LinesService} from './services/lines.service';
 import {UsersService} from './services/users.service';
 import { LinesComponent } from './lines/lines.component';
 import { AttendanceWrapperComponent } from './attendance-wrapper/attendance-wrapper.component';
-import {MatFormFieldModule, MatInputModule, MatNativeDateModule} from '@angular/material';
+import {MatDialogModule, MatFormFieldModule, MatInputModule, MatNativeDateModule} from '@angular/material';
 import { DatepickerComponent } from './datepicker/datepicker.component';
+import {DialogBoxPickNotBookedUserComponent} from './attendance/dialog-box-pick-not-booked-user.component';
+import {RegisterComponent} from './register/register.component';
 
 @NgModule({
   declarations: [
@@ -36,12 +39,15 @@ import { DatepickerComponent } from './datepicker/datepicker.component';
     AttendanceComponent,
     HomeComponent,
     LoginComponent,
+    RegisterComponent,
     HeaderComponent,
     LogoutComponent,
     LinesComponent,
     AttendanceWrapperComponent,
-    DatepickerComponent
+    DatepickerComponent,
+    DialogBoxPickNotBookedUserComponent
   ],
+  entryComponents: [DialogBoxPickNotBookedUserComponent],
   imports: [
     BrowserModule,
     MatListModule,
@@ -55,7 +61,10 @@ import { DatepickerComponent } from './datepicker/datepicker.component';
     MatDatepickerModule,
     MatNativeDateModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
+    MatSelectModule,
+    MatDialogModule,
+    FormsModule
   ],
   providers: [
     AuthService,

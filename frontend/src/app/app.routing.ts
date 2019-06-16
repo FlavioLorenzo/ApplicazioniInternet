@@ -6,6 +6,7 @@ import {LoginComponent} from './login/login.component';
 import {AuthGuard as AuthGuard} from './guards/auth.guard';
 import {LogoutComponent} from './logout/logout.component';
 import {AttendanceWrapperComponent} from './attendance-wrapper/attendance-wrapper.component';
+import {RegisterComponent} from './register/register.component';
 
 const appRoutes: Routes = [
   {
@@ -21,6 +22,10 @@ const appRoutes: Routes = [
   {
     path: 'login',
     component: LoginComponent
+  },
+  {
+    path: 'register',
+    component: RegisterComponent
   },
   {
     path: 'logout',

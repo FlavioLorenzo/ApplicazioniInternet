@@ -7,17 +7,20 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="nav navbar-nav ml-auto">
-        <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+        <!--li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
           <a class="nav-link" routerLink="/">Home</a>
+        </li-->
+        <li class="nav-item" *ngIf='!currentUser' routerLinkActive="active">
+          <a class="nav-link" routerLink="/register">Registration</a>
         </li>
-        <li class="nav-item" routerLinkActive="active">
-          <a class="nav-link" *ngIf='!currentUser' routerLink="/login">Login</a>
+        <li class="nav-item" *ngIf='!currentUser' routerLinkActive="active">
+          <a class="nav-link" routerLink="/login">Login</a>
         </li>
-        <li class="nav-item" routerLinkActive="active">
+        <li class="nav-item" *ngIf='currentUser' routerLinkActive="active">
           <a class="nav-link" routerLink="/attendance">Attendance</a>
         </li>
-        <li class="nav-item" routerLinkActive="active">
-          <a class="nav-link" *ngIf='currentUser' routerLink="/logout">Logout</a>
+        <li class="nav-item" *ngIf='currentUser' routerLinkActive="active">
+          <a class="nav-link" routerLink="/logout">Logout</a>
         </li>
       </ul>
     </div>

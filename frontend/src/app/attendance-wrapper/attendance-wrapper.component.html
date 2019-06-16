@@ -1,6 +1,14 @@
 <div>
-  <app-lines  [attendance]="attendance"></app-lines>
-  <app-datepicker [attendance]="attendance"></app-datepicker>
+  <div class="row" id="ai-settings-bar">
+    <div class="col-12">
+      <div class="container">
+        <div class="ai-settings-elem">
+          <app-lines  [attendance]="attendance"></app-lines>
+        </div>
+        <div class="ai-settings-elem"><app-datepicker [attendance]="attendance" class="ai-datepicker"></app-datepicker></div>
+      </div>
+    </div>
+  </div>
   <!-- TODO:
   Qua c'è da fare una modifica.
   Inizialmente avevo (Matteo) inserito selectedDate come un oggetto esterno al datapicker e appartenente al wrapper.
@@ -9,5 +17,11 @@
   Al momento da errore se si toglie in quanto l'inizializzazione di attendance avviene ancora con questo selectedDate passato ma
   di cui poi non ha bisogno.
   -->
-  <app-attendance #attendance [date]='selectedDate'></app-attendance>
+  <div class="row" id="ai-attendance-div">
+    <div class="col-12">
+      <div class="container">
+        <app-attendance #attendance [date]='selectedDate'></app-attendance>
+      </div>
+    </div>
+  </div>
 </div>

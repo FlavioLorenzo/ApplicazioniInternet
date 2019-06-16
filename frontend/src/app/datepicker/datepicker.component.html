@@ -1,8 +1,6 @@
-<div class="col-12 col-md-10">
-  <mat-form-field>
-    <input matInput [matDatepicker]="datepicker" placeholder="Select the date"
-          (dateInput)="changeDateEvent($event)">
-    <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
-    <mat-datepicker #datepicker></mat-datepicker>
-  </mat-form-field>
-</div>
+<mat-form-field>
+  <input matInput [matDatepicker]="datepicker" placeholder="Select the date"
+        (dateInput)="changeDateEvent($event)">
+  <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
+  <mat-datepicker #datepicker></mat-datepicker>
+</mat-form-field>

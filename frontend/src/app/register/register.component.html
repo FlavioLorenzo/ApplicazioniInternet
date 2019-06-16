@@ -1,0 +1,39 @@
+<form [formGroup]="form" class="ai-form">
+  <fieldset>
+    <legend>Register</legend>
+    <p>You have to register to create your personal account</p>
+    <div class="form-field">
+      <label>First Name:</label>
+      <input name="first" formControlName="first">
+    </div>
+    <div class="form-field">
+      <label>Last Name:</label>
+      <input name="last" formControlName="last">
+    </div>
+    <div class="form-field">
+      <label>Phone:</label>
+      <input name="phone" formControlName="phone">
+    </div>
+    <div class="form-field">
+      <label>Email:</label>
+      <input name="email" formControlName="email">
+    </div>
+    <div class="form-field">
+      <label>Password:</label>
+      <input name="password" formControlName="password"
+             type="password">
+    </div>
+    <div class="form-field">
+      <label>Confirm Password:</label>
+      <input name="passwordConfirm" formControlName="passwordConfirm"
+             type="password">
+    </div>
+  </fieldset>
+  <div class="form-buttons">
+    <button class="btn btn-warning"
+            (click)="onRegister()">Register</button>
+  </div>
+  <div class="ai-form-link">
+    <a routerLink="/login">Already a registered user? Log in here!</a>
+  </div>
+</form>
