@@ -172,6 +172,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public boolean checkEmail(String email) {
+        if(userRepository.findByEmail(email) != null){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Mail already exists");
+        }
+        return true;
+    }
+
+    @Override
     public UserEntity findByEmail(String email) {
         return userRepository.findByEmail(email);
     }

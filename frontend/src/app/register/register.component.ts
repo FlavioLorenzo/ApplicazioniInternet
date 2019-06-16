@@ -3,7 +3,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {RegistrationPostBody, RegistrationService} from '../services/registration.service';
 import {first, take} from 'rxjs/operators';
-import {ReservationPostBody} from "../services/reservations.service";
+import {ReservationPostBody} from '../services/reservations.service';
 
 
 // @ts-ignore
@@ -44,7 +44,7 @@ export class RegisterComponent implements OnInit {
     }
 
     const val = this.form.value;
-    console.log(val);
+
     if (val.first && val.last && val.phone && val.email && val.password && val.passwordConfirm) {
       const rpb = new RegistrationPostBody(val.email, val.password, val.passwordConfirm, val.first, val.last);
 
@@ -60,6 +60,33 @@ export class RegisterComponent implements OnInit {
             console.log('Something went wrong');
           });
     }
+  }
+
+  onEmailBlur(email: string) {
+    this.registrationService.checkEmail(email)
+      .pipe(first())
+      .subscribe(
+        data => {
+          const toRemove = document.getElementById('ai-email-already-used');
+          const mexBox = document.getElementById('ai-mex-box');
+          if (toRemove) {
+            mexBox.removeChild(toRemove);
+            mexBox.classList.remove('ai-mex-box-error');
+          }
+        },
+        error => {
+          const mexBox = document.getElementById('ai-mex-box');
+
+          if (document.getElementById('ai-email-already-used')) {
+            return;
+          }
+
+          mexBox.classList.add('ai-mex-box-error');
+          const node = document.createElement('div');
+          node.setAttribute('id', 'ai-email-already-used');
+          node.appendChild(document.createTextNode('This email is not valid or it already exists.'));
+          mexBox.appendChild(node);
+        });
   }
 
   ngOnInit(): void {

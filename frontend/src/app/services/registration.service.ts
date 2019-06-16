@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClientModule, HttpClient } from '@angular/common/http';
-import { map } from 'rxjs/operators';
-import {BehaviorSubject, Observable} from 'rxjs';
+import {HttpClientModule, HttpClient, HttpHeaders} from '@angular/common/http';
+import {catchError, map, retry} from 'rxjs/operators';
+import {BehaviorSubject, Observable, throwError} from 'rxjs';
 import {CurrentUser} from '../Models/currentUser';
 import {Router} from '@angular/router';
 
@@ -19,8 +19,6 @@ export class RegistrationService {
   }
 
   register(rpb: RegistrationPostBody) {
-    console.log('executing registration'); // for testing only
-    // localhost:8080/register è corretto?
     return this.http.post<any>(
       'http://localhost:8080/register',
        rpb)
@@ -29,6 +27,18 @@ export class RegistrationService {
           this.router.navigate(['/login']);
         }
      }));
+  }
+
+  checkEmail(email: string) {
+    const requestOptions: object = {
+      responseType: 'text'
+      };
+
+    return this.http.post<any>(
+      'http://localhost:8080/check-email',
+      {email},
+      requestOptions)
+      .pipe(retry(3));
   }
 }
 

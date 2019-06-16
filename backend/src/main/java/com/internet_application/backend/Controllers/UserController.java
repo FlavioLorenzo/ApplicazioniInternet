@@ -3,10 +3,7 @@ package com.internet_application.backend.Controllers;
 import com.internet_application.backend.Configuration.SecurityConfiguration.JwtTokenProvider;
 
 import com.internet_application.backend.Entities.UserEntity;
-import com.internet_application.backend.PostBodies.LoginPostBody;
-import com.internet_application.backend.PostBodies.RecoverNewPwdPostBody;
-import com.internet_application.backend.PostBodies.RecoverRequestPostBody;
-import com.internet_application.backend.PostBodies.RegistrationPostBody;
+import com.internet_application.backend.PostBodies.*;
 import com.internet_application.backend.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -93,6 +90,13 @@ public class UserController {
     public ResponseEntity restorePassword(@PathVariable(value="randomUUID") String token, @RequestBody @Valid RecoverNewPwdPostBody rrpb) {
         userService.restorePassword(rrpb.getPassword(), rrpb.getConfirmPassword(), token);
         return ResponseEntity.status(HttpStatus.OK).body("Password correctly restored");
+    }
+
+    @PostMapping("/check-email")
+    @ResponseBody
+    public ResponseEntity checkEmail(@RequestBody @Valid CheckEmailPostBody cepb) {
+        userService.checkEmail(cepb.getEmail());
+        return ResponseEntity.status(HttpStatus.OK).body("ok");
     }
 }
 

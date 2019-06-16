@@ -16,4 +16,5 @@ public interface UserService {
     void recoverAccount(String email);
     void restorePassword(String password, String confirmPassword, String randomUUID);
     void modifyRole(Long userId, String line, String role);
+    boolean checkEmail(String email);
 }

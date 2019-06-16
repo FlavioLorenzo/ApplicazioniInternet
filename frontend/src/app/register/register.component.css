@@ -12,3 +12,12 @@
   margin-bottom: 1.5rem;
   font-size: 0.9rem;
 }
+
+/* CSS for the errors message box */
+.ai-mex-box-error {
+  border: 1px solid red;
+  border-radius: 10px;
+  color: red;
+  margin-bottom: 1rem;
+  padding: 0.8rem;
+}

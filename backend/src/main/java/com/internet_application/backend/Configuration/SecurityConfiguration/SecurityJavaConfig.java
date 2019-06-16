@@ -50,7 +50,8 @@ public class SecurityJavaConfig extends WebSecurityConfigurerAdapter {
         .and()
             .authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS,"/**").permitAll()
-                .antMatchers("/login", "/register", "/confirm-account", "/recover", "/recover/**")
+                .antMatchers("/login", "/register", "/confirm-account", "/recover", "/recover/**",
+                        "/check-email")
                     .permitAll()
                 .antMatchers("/css/**")
                     .permitAll()
