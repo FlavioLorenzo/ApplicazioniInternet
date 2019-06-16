@@ -6,3 +6,9 @@
 .ai-form .form-buttons {
   margin-top: 1rem;
 }
+
+.ai-form-link {
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+}
