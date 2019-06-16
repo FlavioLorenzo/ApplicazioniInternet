@@ -17,12 +17,13 @@ import {first, take} from 'rxjs/operators';
 export class RegisterComponent implements OnInit {
   form: FormGroup;
   submitted = false;
+  let countErrors;
 
   // authenticationService dovrebbe essere httpRegistrationService appena capisco come passarlo
   constructor(private fb: FormBuilder,
               private registrationService: RegistrationService,
               private router: Router
-  ) {
+  ){
     this.form = this.fb.group({
       first: ['', Validators.required],
       last: ['', Validators.required],
@@ -31,13 +32,24 @@ export class RegisterComponent implements OnInit {
       password: ['', Validators.required],
       passwordConfirm: ['', Validators.required]
     });
+    countErrors = 0;
   }
 
-  onRegister() {
+  onRegister(){
     this.submitted = true;
 
     if (this.form.invalid) {
-      console.log('This form is invalid');
+      const mexBox = document.getElementById('ai-mex-box');
+
+      if (count === 0) {
+        mexBox.classList.add('ai-mex-box-error');
+      }
+
+
+      const node = document.createElement('div');
+      node.setAttribute('id', 'ai-email-already-used');
+      node.appendChild(document.createTextNode('This email is not valid or it already exists.'));
+      mexBox.appendChild(node);
       return;
     }
 
