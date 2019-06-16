@@ -16,8 +16,6 @@ export class JwtInterceptor implements HttpInterceptor {
     // add authorization header with jwt token if available
     const currentUser = this.authenticationService.currentUserValue;
     if (currentUser && currentUser.token) {
-      console.log(currentUser.token);
-      console.log('adding token');
       request = request.clone({
         setHeaders: {
           Authorization: `Bearer ${currentUser.token}`
@@ -31,7 +29,8 @@ export class JwtInterceptor implements HttpInterceptor {
           if (err.status !== 401) {
             return;
           }
-          this.router.navigate(['login']);
+          this.authenticationService.logout();
+          this.router.navigate(['/login']);
         }
       }));
     }

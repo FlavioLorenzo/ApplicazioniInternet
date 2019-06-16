@@ -77,9 +77,9 @@ export class ReservationsService {
   }
 
   public createReservation(
-    lineId: number, date: string, reservationId: number,
+    lineId: number, date: string,
     rpb: ReservationPostBody) {
-    return this.http.put(
+    return this.http.post(
   environment.apiUrl +
       environment.reservationsUrl +
       '/' + lineId + '/' + date,

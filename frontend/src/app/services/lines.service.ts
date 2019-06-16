@@ -16,7 +16,7 @@ export class LinesService {
       environment.apiUrl +
       environment.linesUrl)
       .pipe(
-        retry(3),
+        retry(1),
         catchError(err => {
           console.error(err.message);
           console.log('Error is handled');
