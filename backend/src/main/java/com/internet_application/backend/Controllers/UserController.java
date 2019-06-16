@@ -6,7 +6,6 @@ import com.internet_application.backend.Entities.UserEntity;
 import com.internet_application.backend.PostBodies.*;
 import com.internet_application.backend.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,9 +17,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import javax.xml.ws.Response;
 import java.io.IOException;
-import java.net.URI;
 import java.util.*;
 
 @CrossOrigin()

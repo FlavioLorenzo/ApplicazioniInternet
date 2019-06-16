@@ -3,8 +3,6 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {RegistrationPostBody, RegistrationService} from '../services/registration.service';
 import {first, take} from 'rxjs/operators';
-import {ReservationPostBody} from '../services/reservations.service';
-
 
 // @ts-ignore
 // @ts-ignore
