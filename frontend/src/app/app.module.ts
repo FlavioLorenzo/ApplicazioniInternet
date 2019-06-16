@@ -12,6 +12,7 @@ import {MatSelectModule} from '@angular/material/select';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
 import {HTTP_INTERCEPTORS} from '@angular/common/http';
+
 import { JwtInterceptor } from 'src/app/helpers/jwt.interceptor';
 import { AuthService } from './services/auth.service';
 import { AuthGuard as AuthGuard } from './guards/auth.guard';
@@ -23,9 +24,12 @@ import {AppComponent} from './app.component';
 import {AttendanceComponent} from './attendance/attendance.component';
 import {LoginComponent} from './login/login.component';
 import { LogoutComponent } from './logout/logout.component';
+
 import {ReservationsService} from './services/reservations.service';
 import {LinesService} from './services/lines.service';
 import {UsersService} from './services/users.service';
+import {RegistrationService} from './services/registration.service';
+
 import { LinesComponent } from './lines/lines.component';
 import { AttendanceWrapperComponent } from './attendance-wrapper/attendance-wrapper.component';
 import {MatDialogModule, MatFormFieldModule, MatInputModule, MatNativeDateModule} from '@angular/material';
@@ -77,6 +81,7 @@ import {RegisterComponent} from './register/register.component';
     ReservationsService,
     LinesService,
     UsersService,
+    RegistrationService,
     MatDatepickerModule
   ],
   bootstrap: [AppComponent]

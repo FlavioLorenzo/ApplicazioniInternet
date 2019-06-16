@@ -6,7 +6,7 @@ import {CurrentUser} from '../Models/currentUser';
 import {Router} from '@angular/router';
 
 @Injectable()
-export class HttpRegistrationService {
+export class RegistrationService {
 
   /*
   private currentUserSubject: BehaviorSubject<CurrentUser>;
@@ -18,15 +18,38 @@ export class HttpRegistrationService {
 
   }
 
-  Register(email: string, password: string, confirmPassword: string, firstName: string, lastName: string) {
+  register(rpb: RegistrationPostBody) {
     console.log('executing registration'); // for testing only
     // localhost:8080/register è corretto?
-    return this.http.post<any>('http://localhost:8080/register',
-      {email, password, confirmPassword, firstName, lastName})
+    return this.http.post<any>(
+      'http://localhost:8080/register',
+       rpb)
       .pipe(map(res =>  {
         if (res) {
           this.router.navigate(['/login']);
         }
      }));
+  }
+}
+
+export class RegistrationPostBody {
+  email: string;
+  password: string;
+  // tslint:disable-next-line:variable-name
+  confirm_password: string;
+  // tslint:disable-next-line:variable-name
+  first_name: string;
+  // tslint:disable-next-line:variable-name
+  last_name: string;
+  constructor(email: string,
+              password: string,
+              confirmPassword: string,
+              firstName: string,
+              lastName: string) {
+    this.email = email;
+    this.password = password;
+    this.confirm_password = confirmPassword;
+    this.first_name = firstName;
+    this.last_name = lastName;
   }
 }

@@ -9,11 +9,11 @@ import {AttendanceWrapperComponent} from './attendance-wrapper/attendance-wrappe
 import {RegisterComponent} from './register/register.component';
 
 const appRoutes: Routes = [
-  {
+  /*{
     path: '',
     component: HomeComponent,
     canActivate: [AuthGuard]
-  },
+  },*/
   {
     path: 'attendance',
     component: AttendanceWrapperComponent ,
@@ -34,7 +34,7 @@ const appRoutes: Routes = [
   },
   { // Otherwise redirect to home
     path: '**',
-    redirectTo: ''
+    redirectTo: 'attendance'
   }
 ];
 
