@@ -3,6 +3,7 @@ package com.internet_application.backend.Configuration.SecurityConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -48,12 +49,14 @@ public class SecurityJavaConfig extends WebSecurityConfigurerAdapter {
             .authenticationEntryPoint(restAuthenticationEntryPoint)
         .and()
             .authorizeRequests()
+                .antMatchers(HttpMethod.OPTIONS,"/**").permitAll()
                 .antMatchers("/login", "/register", "/confirm-account", "/recover", "/recover/**")
                     .permitAll()
                 .antMatchers("/css/**")
                     .permitAll()
                 .antMatchers("/users", "/users/*")
-                    .hasAnyRole("ADMIN", "SYS_ADMIN")
+                    .permitAll()
+                    //.hasAnyRole("ADMIN", "SYS_ADMIN")
                 .anyRequest().authenticated()
         .and()
             .apply(new JwtConfigurer(jwtTokenProvider));

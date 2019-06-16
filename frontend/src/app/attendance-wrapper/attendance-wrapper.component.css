@@ -1,0 +1,25 @@
+.ai-datepicker {
+}
+
+/* Style the bar which contains the line and date settings*/
+#ai-settings-bar {
+  padding-top: 1rem;
+  padding-bottom: 0.2rem;
+
+  background-color: #ffc937;
+}
+
+.ai-settings-elem {
+  color: #505050;
+  display: inline-block;
+  width: 200px;
+}
+
+/* Style of the attendance list */
+#ai-attendance-div {
+  background: whitesmoke;
+  color: #242424;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  min-height: 50vh;
+}

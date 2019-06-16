@@ -21,4 +21,7 @@ public interface ReservationRepository extends JpaRepository<ReservationEntity, 
 
     @Query("SELECT r.presence FROM ReservationEntity r WHERE r.user.id = ?1 AND r.ride.id = ?2")
     Boolean getPresenceByUserIdAndRide(Long userId, Long rideId);
+
+    @Query("SELECT r FROM ReservationEntity r WHERE r.user.id = ?1 AND r.ride.id = ?2")
+    List<ReservationEntity> getReservationEntitiesByUserIdAndRideId(Long userId, Long rideId);
 }

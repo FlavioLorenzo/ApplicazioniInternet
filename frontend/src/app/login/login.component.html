@@ -1,4 +1,4 @@
-<form [formGroup]="form">
+<form [formGroup]="form" class="ai-form">
   <fieldset>
     <legend>Login</legend>
     <p>You have to login to access the booking service</p>
@@ -13,11 +13,10 @@
     </div>
   </fieldset>
   <div class="form-buttons">
-    <button class="button button-primary"
+    <button class="btn btn-warning"
             (click)="onLogin()">Login</button>
   </div>
-  <div class="form-buttons">
-    <button class="button button-primary"
-            (click)="onRegister()">Register</button>
+  <div class="ai-form-link">
+    <a routerLink="/register">Not registered yet? Click here to register!</a>
   </div>
 </form>

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {AuthService} from '../jwt-authentication/auth.service';
+import {AuthService} from '../services/auth.service';
 import {CurrentUser} from '../Models/currentUser';
 
 @Component({

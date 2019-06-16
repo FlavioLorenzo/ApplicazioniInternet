@@ -1,0 +1,27 @@
+<div>
+  <div class="row" id="ai-settings-bar">
+    <div class="col-12">
+      <div class="container">
+        <div class="ai-settings-elem">
+          <app-lines  [attendance]="attendance"></app-lines>
+        </div>
+        <div class="ai-settings-elem"><app-datepicker [attendance]="attendance" class="ai-datepicker"></app-datepicker></div>
+      </div>
+    </div>
+  </div>
+  <!-- TODO:
+  Qua c'è da fare una modifica.
+  Inizialmente avevo (Matteo) inserito selectedDate come un oggetto esterno al datapicker e appartenente al wrapper.
+  Siccome l'implementazione finale prevede che il componente attendance sia passato al datepicker che ne chiama i metodi
+  una volta selezionata la data, "selectedDate" si potrebbe togliere.
+  Al momento da errore se si toglie in quanto l'inizializzazione di attendance avviene ancora con questo selectedDate passato ma
+  di cui poi non ha bisogno.
+  -->
+  <div class="row" id="ai-attendance-div">
+    <div class="col-12">
+      <div class="container">
+        <app-attendance #attendance [date]='selectedDate'></app-attendance>
+      </div>
+    </div>
+  </div>
+</div>

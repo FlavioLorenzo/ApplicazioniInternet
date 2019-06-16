@@ -1,5 +1,5 @@
 import {Ride} from '../Models/Ride';
-
+/*
 export const RIDE1: Ride = {
   id: 1, date: '15/05/2019', direction: 'Andata',
   stopList: [
@@ -36,10 +36,12 @@ export const RIDE3: Ride = {
       passengers: []}
   ]
 };
-
+*/
 export const RIDES: Ride[] = [
-  RIDE1,
+ /* RIDE1,
   RIDE2,
-  RIDE3
+  RIDE3*/
 ];
+
+
 

@@ -5,17 +5,20 @@ import {
   ActivatedRouteSnapshot,
   RouterStateSnapshot
 } from '@angular/router';
-import { AuthService } from './auth.service';
+import { PostRegistrationService } from '../services/PostRegistration.service';
 
 @Injectable()
-export class AuthGuardService implements CanActivate {
+export class AuthGuard implements CanActivate {
 
-  constructor(public authenticationService: AuthService,
+  constructor(public postRegistrationService: PostRegistrationService,
               public router: Router) {}
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-
     return this.checkLogin(state.url);
+  }
+  checkValidDataRegistration()
+  {
+    this.postRegistrationService.getConfirmati();
   }
 
   checkLogin(url: string): boolean {

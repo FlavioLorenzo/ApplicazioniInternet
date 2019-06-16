@@ -21,18 +21,10 @@ export class PostRegistrationComponent implements OnInit {
   submitted = false;
 
   // authenticationService dovrebbe essere httpRegistrationService appena capisco come passarlo
-  constructor(private fb: FormBuilder,
-              private registrationService: RegistrationService,
+  constructor(private registrationService: RegistrationService,
               private router: Router
   ) {
-    this.form = this.fb.group({
-      first: ['', Validators.required, Validators.maxLength(20)],
-      last: ['', Validators.required, Validators.maxLength(20)],
-      phone: ['', Validators.required, Validators.minLength(2), Validators.maxLength(20)],
-      email: ['', Validators.required, Validators.email, Validators.maxLength(30)],
-      password: ['', Validators.required, Validators.minLength(4), Validators.maxLength(20)],
-      passwordConfirm: ['', Validators.required, Validators.minLength(4), Validators.maxLength(20)]
-    });
+
   }
 
   onRegister() {
@@ -43,6 +35,7 @@ export class PostRegistrationComponent implements OnInit {
       return;
     }
 
+    /*
     const val = this.form.value;
     console.log(val);
     if (val.first && val.last && val.phone && val.email && val.password && val.passwordConfirm) {
@@ -60,6 +53,8 @@ export class PostRegistrationComponent implements OnInit {
             console.log('Something went wrong');
           });
     }
+
+     */
   }
 
   ngOnInit(): void {

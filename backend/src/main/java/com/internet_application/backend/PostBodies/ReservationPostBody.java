@@ -11,4 +11,6 @@ public class ReservationPostBody {
     public Long leave_stop;
     @JsonProperty("direction")
     public Boolean direction;
+    @JsonProperty("presence")
+    public Boolean presence;
 }

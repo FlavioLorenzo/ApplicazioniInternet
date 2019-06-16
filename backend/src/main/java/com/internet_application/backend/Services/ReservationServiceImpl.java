@@ -90,16 +90,19 @@ public class ReservationServiceImpl implements ReservationService {
                 ArrayNode userArray = mapper.createArrayNode();
                 users.forEach((user) -> {
                     JsonNode userNode = mapper.createObjectNode();
+                    ((ObjectNode) userNode).put("userId", user.getId());
                     ((ObjectNode) userNode).put("username", user.getFirstName());
                     ((ObjectNode) userNode).put("picked",
-                            reservationRepository.getPresenceByUserIdAndRide(user.getId(), ride.getId()).booleanValue());
+                            reservationRepository.getPresenceByUserIdAndRide(user.getId(), ride.getId()));
+                    ((ObjectNode) userNode).put("reservationId",
+                            reservationRepository.getReservationEntitiesByUserIdAndRideId(user.getId(), ride.getId()).get(0).getId());
                     userArray.add(userNode);
                 });
                 ((ObjectNode) stopNode).set("passengers", userArray);
 
                 stopNodes.add(stopNode);
             });
-            ((ObjectNode) rideNode).set("Stop", stopNodes);
+            ((ObjectNode) rideNode).set("stopList", stopNodes);
             rootNode.add(rideNode);
 
         });
@@ -140,6 +143,7 @@ public class ReservationServiceImpl implements ReservationService {
         Long joinStopId = rpb.join_stop;
         Long leaveStopId = rpb.leave_stop;
         Long userId = rpb.id_user;
+        Boolean presence = (rpb.presence != null) ? rpb.presence : false;
 
         /* Check the busline exists */
         if (!busLineRepository.existsById(lineId))
@@ -182,8 +186,7 @@ public class ReservationServiceImpl implements ReservationService {
         r.setJoinStop(joinStop.getStop());
         r.setLeaveStop(leaveStop.getStop());
         r.setUser(user);
-        r.setPresence(false);
-
+        r.setPresence(presence);
         return r;
     }
 
