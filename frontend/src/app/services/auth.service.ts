@@ -34,11 +34,13 @@ export class AuthService {
         let cus = null;
         if (res) {
 
-          console.log('Redirect url is:', this.redirectUrl);
-
           if (this.redirectUrl) {
+            console.log('Redirect url is:', this.redirectUrl);
             this.router.navigate([this.redirectUrl]);
             this.redirectUrl = null;
+          } else {
+            console.log('Redirecting to home');
+            this.router.navigate(['/']);
           }
 
           cus = new CurrentUser(res.mail, res.token)

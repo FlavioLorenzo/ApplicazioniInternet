@@ -42,8 +42,7 @@ export class LoginComponent implements OnInit {
         .pipe(first())
         .subscribe(
           data => {
-            console.log('Redirecting to home');
-            this.router.navigate(['/']);
+            // Provo a fare il redirect dall'auth service
         },
         error => {
             console.error(error);
