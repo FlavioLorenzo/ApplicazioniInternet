@@ -31,6 +31,7 @@ import { AttendanceWrapperComponent } from './attendance-wrapper/attendance-wrap
 import {MatDialogModule, MatFormFieldModule, MatInputModule, MatNativeDateModule} from '@angular/material';
 import { DatepickerComponent } from './datepicker/datepicker.component';
 import {DialogBoxPickNotBookedUserComponent} from './attendance/dialog-box-pick-not-booked-user.component';
+import {RegisterComponent} from './register/register.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import {DialogBoxPickNotBookedUserComponent} from './attendance/dialog-box-pick-
     AttendanceComponent,
     HomeComponent,
     LoginComponent,
+    RegisterComponent,
     HeaderComponent,
     LogoutComponent,
     LinesComponent,
