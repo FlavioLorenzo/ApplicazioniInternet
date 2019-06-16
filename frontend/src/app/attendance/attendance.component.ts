@@ -107,7 +107,6 @@ export class AttendanceComponent implements OnInit {
   }
 
   private processRemainingUsers() {
-    console.log('actualUser before: ' + this.allUsers.length);
     const bookedUserIds: number[] = new Array();
     this.ride.stopList.forEach(busStop => {
         busStop.passengers.forEach(passenger => {
@@ -115,16 +114,12 @@ export class AttendanceComponent implements OnInit {
         });
       });
 
-    console.log(JSON.stringify(bookedUserIds));
     this.remainingUsers = this.allUsers.filter( (item) => {
       if (bookedUserIds.includes(item.id_user)) {
-        console.log('removing: ' + item.id_user);
         return false;
       }
       return true;
     });
-
-    console.log('actualUser after: ' + this.remainingUsers.length);
   }
 
   private queryAllUsersService() {
