@@ -31,7 +31,8 @@ export class JwtInterceptor implements HttpInterceptor {
           if (err.status !== 401) {
             return;
           }
-          this.router.navigate(['login']);
+          console.log(`Error 401 detected, redirecting to login`);
+          this.router.navigate(['/login']);
         }
       }));
     }
