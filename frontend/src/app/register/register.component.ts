@@ -17,13 +17,13 @@ import {first, take} from 'rxjs/operators';
 export class RegisterComponent implements OnInit {
   form: FormGroup;
   submitted = false;
-  let countErrors;
+  countErrors = 0;
 
   // authenticationService dovrebbe essere httpRegistrationService appena capisco come passarlo
   constructor(private fb: FormBuilder,
               private registrationService: RegistrationService,
               private router: Router
-  ){
+  ) {
     this.form = this.fb.group({
       first: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(256)]],
       last: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(256)]],
@@ -32,10 +32,9 @@ export class RegisterComponent implements OnInit {
       password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(32)]],
       passwordConfirm: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(32)]]
     });
-    countErrors = 0;
   }
 
-  onRegister(){
+  onRegister() {
     this.submitted = true;
     if (this.form.invalid) {
       const mexBox = document.getElementById('ai-mex-box');
@@ -44,16 +43,37 @@ export class RegisterComponent implements OnInit {
         mexBox.classList.add('ai-mex-box-error');
       }
 
+      const toRemove = document.getElementById('ai-email-already-used');
+      if (toRemove) {
+        mexBox.removeChild(toRemove);
+        count--;
+      }
 
       const node = document.createElement('div');
-      node.setAttribute('id', 'ai-email-already-used');
-      node.appendChild(document.createTextNode('This email is not valid or it already exists.'));
+      node.appendChild(document.createTextNode('There is an error in the form.'));
       mexBox.appendChild(node);
+      count++;
       return;
     }
 
     const val = this.form.value;
     if (val.password !== val.passwordConfirm) {
+      const mexBox = document.getElementById('ai-mex-box');
+
+      if (count === 0) {
+        mexBox.classList.add('ai-mex-box-error');
+      }
+
+      const toRemove = document.getElementById('ai-email-already-used');
+      if (toRemove) {
+        mexBox.removeChild(toRemove);
+        count--;
+      }
+
+      const node = document.createElement('div');
+      node.appendChild(document.createTextNode('There is an error in the form.'));
+      mexBox.appendChild(node);
+      count++;
       return;
     }
 
@@ -83,7 +103,10 @@ export class RegisterComponent implements OnInit {
           const mexBox = document.getElementById('ai-mex-box');
           if (toRemove) {
             mexBox.removeChild(toRemove);
-            mexBox.classList.remove('ai-mex-box-error');
+            count--;
+            if (count === 0) {
+              mexBox.classList.remove('ai-mex-box-error');
+            }
           }
         },
         error => {
@@ -93,11 +116,16 @@ export class RegisterComponent implements OnInit {
             return;
           }
 
-          mexBox.classList.add('ai-mex-box-error');
+          if (count === 0) {
+            mexBox.classList.add('ai-mex-box-error');
+          }
+
           const node = document.createElement('div');
           node.setAttribute('id', 'ai-email-already-used');
           node.appendChild(document.createTextNode('This email is not valid or it already exists.'));
           mexBox.appendChild(node);
+
+          count++;
         });
   }
 
