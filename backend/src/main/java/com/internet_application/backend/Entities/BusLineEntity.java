@@ -36,7 +36,6 @@ public class BusLineEntity {
     private String name;
 
     @JsonProperty("id_admin")
-    @Column(name="id_admin")
     @ManyToOne
     @JoinColumn(name = "id_admin", referencedColumnName = "id_user")
     private UserEntity admin;

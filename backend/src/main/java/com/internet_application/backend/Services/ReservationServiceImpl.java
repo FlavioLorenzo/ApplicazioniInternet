@@ -75,7 +75,12 @@ public class ReservationServiceImpl implements ReservationService {
                     throw new ResponseStatusException(HttpStatus.NOT_FOUND);
                 ((ObjectNode) stopNode).put("arrivaltime", lineStopList.get(0).getArrivalTime().toString());
 
-                // Set the passengers attribute.
+                // Set the passengers attribute. Since we only have one property for both joining and leaving
+                // users, the meaning of this attribute depends on the direction of the ride (forward - joining users /
+                // backward - leaving users)
+                users = reservationRepository.getAllUsersByStopIdAndRideId(stop.getId(), ride.getId());
+
+                /*
                 // We decide which list to use (joining/leaving users) based on the direction (Forth/Back)
                 if(ride.getDirection().booleanValue() == false) {
                     // Select all users departing from this stop
@@ -84,6 +89,7 @@ public class ReservationServiceImpl implements ReservationService {
                     // Select all users leaving from this stop
                     users = reservationRepository.getAllLeavingUsersByStopIdAndRideId(stop.getId(), ride.getId());
                 }
+                */
 
                 // Build a structure for each user that details his first name and whether or not the user is present
                 ArrayNode userArray = mapper.createArrayNode();
@@ -127,7 +133,6 @@ public class ReservationServiceImpl implements ReservationService {
 
         r.setRide(builtReservation.getRide());
         r.setStop(builtReservation.getStop());
-        r.setLeaveStop(builtReservation.getLeaveStop());
         r.setUser(builtReservation.getUser());
         r.setPresence(builtReservation.getPresence());
         reservationRepository.save(r);
@@ -139,8 +144,7 @@ public class ReservationServiceImpl implements ReservationService {
         /* Name convention for all the passed variables */
         Date d = MiscUtils.dateParser(date);
         Boolean dir = rpb.direction;
-        Long joinStopId = rpb.join_stop;
-        Long leaveStopId = rpb.leave_stop;
+        Long stopId = rpb.id_stop;
         Long userId = rpb.id_user;
         Boolean presence = (rpb.presence != null) ? rpb.presence : false;
 
@@ -161,29 +165,20 @@ public class ReservationServiceImpl implements ReservationService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         ride = rdQueryResult.get(0);
 
-        /* Check if the join stop is present on that line */
-        LineStopEntity joinStop;
+        /* Check if the stop is present on that line */
+        LineStopEntity stop;
 
-        List<LineStopEntity> lineStopList = lineStopRepository.getLineStopsWithLineIdAndStopIdAndDir(lineId, joinStopId, dir);
-
-        if (lineStopList.size() != 1)
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        joinStop = lineStopList.get(0);
-
-        /* Check if the leave stop is present on that line */
-        LineStopEntity leaveStop;
-        lineStopList =  lineStopRepository.getLineStopsWithLineIdAndStopIdAndDir(lineId, leaveStopId, dir);
+        List<LineStopEntity> lineStopList = lineStopRepository.getLineStopsWithLineIdAndStopIdAndDir(lineId, stopId, dir);
 
         if (lineStopList.size() != 1)
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        leaveStop = lineStopList.get(0);
+        stop = lineStopList.get(0);
 
         ReservationEntity r = new ReservationEntity();
         Long id = reservationRepository.getLastId().get(0);
         r.setId(id + 1);
         r.setRide(ride);
-        r.setStop(joinStop.getStop());
-        r.setLeaveStop(leaveStop.getStop());
+        r.setStop(stop.getStop());
         r.setUser(user);
         r.setPresence(presence);
         return r;

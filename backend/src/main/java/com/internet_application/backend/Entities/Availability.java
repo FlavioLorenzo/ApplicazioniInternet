@@ -17,13 +17,13 @@ public class Availability {
     @Setter
     private Long id;
 
-    @JsonProperty("id_ride")
+    @JsonProperty("ride")
     @ManyToOne
     @JoinColumn(name = "id_ride")
     @JsonBackReference("ride_availability")
     private RideEntity ride;
 
-    @JsonProperty("id_user")
+    @JsonProperty("user")
     @ManyToOne
     @JoinColumn(name = "id_user")
     @JsonBackReference

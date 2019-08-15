@@ -42,6 +42,10 @@ public class RideEntity {
     @JsonManagedReference("ride_reservation")
     private Set<ReservationEntity> reservations;
 
+    @OneToMany(mappedBy = "ride")
+    @JsonManagedReference("ride_availability")
+    private Set<Availability> availabilities;
+
     public BusLineEntity getLine() {
         return line;
     }
@@ -56,6 +60,14 @@ public class RideEntity {
 
     public void setReservation(Set<ReservationEntity> reservations) {
         this.reservations = reservations;
+    }
+
+    public Set<Availability> getAvailabilities() {
+        return availabilities;
+    }
+
+    public void setAvailabilities(Set<Availability> availabilities) {
+        this.availabilities = availabilities;
     }
 
     @Override
