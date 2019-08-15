@@ -8,11 +8,11 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "reservation")
-public class ReservationEntity {
+@Table(name = "availability")
+public class Availability {
     @Id
-    @JsonProperty("id_reservation")
-    @Column(name="id_reservation")
+    @JsonProperty("id_availability")
+    @Column(name="id_availability")
     @Getter
     @Setter
     private Long id;
@@ -20,7 +20,7 @@ public class ReservationEntity {
     @JsonProperty("id_ride")
     @ManyToOne
     @JoinColumn(name = "id_ride")
-    @JsonBackReference("ride_reservation")
+    @JsonBackReference("ride_availability")
     private RideEntity ride;
 
     @JsonProperty("id_user")
@@ -29,16 +29,24 @@ public class ReservationEntity {
     @JsonBackReference
     private UserEntity user;
 
-    @JsonProperty("id_stop")
+    @JsonProperty("stop")
     @ManyToOne
-    @JoinColumn(name = "id_stop")
+    @JoinColumn(name = "id_stop", referencedColumnName = "id_stop")
     private StopEntity stop;
 
-    @JsonProperty("presence")
+    // Whether the admin confirmed the shift
+    @JsonProperty("confirmed")
     @Column
     @Getter
     @Setter
-    private boolean presence; // 0 absent, 1 present
+    private boolean confirmed; // 0 not confirmed, 1 confirmed
+
+    // Whether the user viewed the confirmation
+    @JsonProperty("viewed")
+    @Column
+    @Getter
+    @Setter
+    private boolean viewed; // 0 not viewed, 1 viewed
 
     public StopEntity getStop() {
         return stop;
@@ -64,17 +72,14 @@ public class ReservationEntity {
         this.ride = ride;
     }
 
-    public boolean getPresence() {
-        return presence;
-    }
-
     @Override
     public String toString() {
-        String result =  "Reservation " + id + ":\n" +
+        String result =  "Availability " + id + ":\n" +
                 "\tRide: \n------------" + ride.toString() + "------------\n" +
                 "\tUser: \n------------" + user.toString() + "------------\n" +
                 "\tStop: \n------------" + stop.toString() + "------------\n" +
-                "\tPresent: \n------------" + presence + "------------\n";
+                "\tConfirmed: \n------------" + confirmed + "------------\n" +
+                "\tViewed: \n------------" + viewed + "------------\n";
         return result;
     }
 }

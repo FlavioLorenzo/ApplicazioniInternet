@@ -66,6 +66,14 @@ public class UserEntity {
 
     @OneToMany(mappedBy = "user")
     @JsonIgnore
+    private Set<Availability> availabilities;
+
+    @OneToMany(mappedBy = "admin")
+    @JsonIgnore
+    private Set<BusLineEntity> administeredBuslines;
+
+    @OneToMany(mappedBy = "user")
+    @JsonIgnore
     private Set<RecoverToken> recoverTokens;
 
     @JsonIgnore
@@ -92,6 +100,22 @@ public class UserEntity {
 
     public void setReservation(Set<ReservationEntity> reservations) {
         this.reservations = reservations;
+    }
+
+    public Set<Availability> getAvailabilities() {
+        return availabilities;
+    }
+
+    public void setAvailabilities(Set<Availability> availabilities) {
+        this.availabilities = availabilities;
+    }
+
+    public Set<BusLineEntity> getAdministeredBuslines() {
+        return administeredBuslines;
+    }
+
+    public void setAdministeredBuslines(Set<BusLineEntity> administeredBuslines) {
+        this.administeredBuslines = administeredBuslines;
     }
 
     public Set<RecoverToken> getRecoverTokens() {

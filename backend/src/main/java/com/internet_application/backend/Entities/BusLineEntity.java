@@ -29,18 +29,17 @@ public class BusLineEntity {
     private Long id;
 
     @NotBlank
-    @JsonProperty("line_name")
-    @Column(name="line_name")
+    @JsonProperty("name")
+    @Column(name="name")
     @Getter
     @Setter
     private String name;
 
-    @Email
-    @JsonProperty("admin_email")
-    @Column(name="admin_email")
-    @Getter
-    @Setter
-    private String adminEmail;
+    @JsonProperty("id_admin")
+    @Column(name="id_admin")
+    @ManyToOne
+    @JoinColumn(name = "id_admin", referencedColumnName = "id_user")
+    private UserEntity admin;
 
     @OneToMany(mappedBy = "line")
     @JsonIgnore
@@ -77,6 +76,12 @@ public class BusLineEntity {
     public void setRides(Set<RideEntity> rides) {
         this.rides = rides;
     }
+
+    public UserEntity getAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(UserEntity admin) { this.admin = admin; }
 
     @Override
     public String toString() {

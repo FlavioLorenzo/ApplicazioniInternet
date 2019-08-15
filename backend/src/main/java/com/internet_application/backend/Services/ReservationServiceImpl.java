@@ -9,7 +9,6 @@ import com.internet_application.backend.Repositories.BusLineRepository;
 import com.internet_application.backend.Repositories.LineStopRepository;
 import com.internet_application.backend.Repositories.ReservationRepository;
 import com.internet_application.backend.Repositories.RideRepository;
-import com.internet_application.backend.Serializers.UserSerializer;
 import com.internet_application.backend.Utils.MiscUtils;
 import com.internet_application.backend.PostBodies.ReservationPostBody;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -127,7 +126,7 @@ public class ReservationServiceImpl implements ReservationService {
         ReservationEntity builtReservation = buildReservation(lineId, date, rpb);
 
         r.setRide(builtReservation.getRide());
-        r.setJoinStop(builtReservation.getJoinStop());
+        r.setStop(builtReservation.getStop());
         r.setLeaveStop(builtReservation.getLeaveStop());
         r.setUser(builtReservation.getUser());
         r.setPresence(builtReservation.getPresence());
@@ -183,7 +182,7 @@ public class ReservationServiceImpl implements ReservationService {
         Long id = reservationRepository.getLastId().get(0);
         r.setId(id + 1);
         r.setRide(ride);
-        r.setJoinStop(joinStop.getStop());
+        r.setStop(joinStop.getStop());
         r.setLeaveStop(leaveStop.getStop());
         r.setUser(user);
         r.setPresence(presence);

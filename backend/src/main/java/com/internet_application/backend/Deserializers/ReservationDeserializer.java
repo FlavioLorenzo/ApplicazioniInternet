@@ -45,7 +45,7 @@ public class ReservationDeserializer extends JsonDeserializer<ReservationEntity>
         reservation.setId(id);
         reservation.setRide(ride);
         reservation.setUser(user);
-        reservation.setJoinStop(join_stop);
+        reservation.setStop(join_stop);
         reservation.setLeaveStop(leave_stop);
 
         return reservation;
