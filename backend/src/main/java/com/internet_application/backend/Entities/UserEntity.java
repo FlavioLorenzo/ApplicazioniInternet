@@ -94,11 +94,11 @@ public class UserEntity {
     @JsonIgnore
     public void setRole(RoleEntity role) { this.role = role; }
 
-    public Set<ReservationEntity> getReservation() {
+    public Set<ReservationEntity> getReservations() {
         return reservations;
     }
 
-    public void setReservation(Set<ReservationEntity> reservations) {
+    public void setReservations(Set<ReservationEntity> reservations) {
         this.reservations = reservations;
     }
 
