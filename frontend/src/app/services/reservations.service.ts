@@ -100,15 +100,15 @@ export class ReservationPostBody {
   // tslint:disable-next-line:variable-name
   id_user: number;
   // tslint:disable-next-line:variable-name
-  stop: number;
+  id_stop: number;
   direction: boolean;
   presence: boolean;
   constructor(userId: number,
-              stop: number,
+              stopId: number,
               direction: boolean,
               presence: boolean) {
     this.id_user = userId;
-    this.stop = stop;
+    this.id_stop = stopId;
     this.direction = direction;
     this.presence = presence;
   }

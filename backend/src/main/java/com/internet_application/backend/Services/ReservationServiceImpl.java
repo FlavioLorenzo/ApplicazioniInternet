@@ -124,12 +124,15 @@ public class ReservationServiceImpl implements ReservationService {
 
     public ReservationEntity updateReservation(Long lineId, String date, Long reservationId, ReservationPostBody rpb) throws ResponseStatusException {
         ReservationEntity r = em.find(ReservationEntity.class, reservationId);
+
         /*Check if the reservation already exists*/
         if(r == null){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
 
         ReservationEntity builtReservation = buildReservation(lineId, date, rpb);
+
+        System.out.println(builtReservation);
 
         r.setRide(builtReservation.getRide());
         r.setStop(builtReservation.getStop());
@@ -153,6 +156,7 @@ public class ReservationServiceImpl implements ReservationService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 
         UserEntity user = em.find(UserEntity.class, userId);
+
         /* Check the user exists */
         if (user == null)
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
@@ -169,7 +173,7 @@ public class ReservationServiceImpl implements ReservationService {
         LineStopEntity stop;
 
         List<LineStopEntity> lineStopList = lineStopRepository.getLineStopsWithLineIdAndStopIdAndDir(lineId, stopId, dir);
-
+        
         if (lineStopList.size() != 1)
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         stop = lineStopList.get(0);
