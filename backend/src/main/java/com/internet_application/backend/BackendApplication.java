@@ -4,10 +4,7 @@ package com.internet_application.backend;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.internet_application.backend.Deserializers.BusLineDeserializer;
-import com.internet_application.backend.Deserializers.LineStopDeserializer;
-import com.internet_application.backend.Deserializers.ReservationDeserializer;
-import com.internet_application.backend.Deserializers.RideDeserializer;
+import com.internet_application.backend.Deserializers.*;
 import com.internet_application.backend.Entities.*;
 import com.internet_application.backend.Repositories.*;
 import com.internet_application.backend.Services.UserService;
@@ -78,6 +75,9 @@ public class BackendApplication {
 
     private void loadStops() {
         ObjectMapper mapper = new ObjectMapper();
+        SimpleModule module = new SimpleModule();
+        module.addDeserializer(StopEntity.class, new StopDeserializer());
+        mapper.registerModule(module);
         TypeReference<List<StopEntity>> stopType = new TypeReference<List<StopEntity>>() {};
         InputStream is = TypeReference.class.getResourceAsStream("/data/stops.json");
         try {

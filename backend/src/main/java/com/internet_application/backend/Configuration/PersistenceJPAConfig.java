@@ -61,7 +61,8 @@ public class PersistenceJPAConfig {
 
     Properties additionalProperties() {
         Properties properties = new Properties();
-        properties.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQL95Dialect");
+        // properties.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQL95Dialect");
+        properties.setProperty("hibernate.dialect", "org.hibernate.spatial.dialect.postgis.PostgisDialect");
         properties.setProperty("hibernate.hbm2ddl.auto", "update"); // create / create-drop / update
         properties.setProperty("hibernate.show_sql", "true");
         // Set the initialization of the database to happen at every startup
