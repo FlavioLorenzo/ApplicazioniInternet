@@ -2,6 +2,8 @@ package com.internet_application.backend.Entities;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.internet_application.backend.Serializers.RideSerializer;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Type;
@@ -12,6 +14,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "ride")
+@JsonSerialize(using = RideSerializer.class)
 public class RideEntity {
     @Id
     @JsonProperty("id_ride")
