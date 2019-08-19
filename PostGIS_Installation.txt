@@ -1,0 +1,15 @@
+Per utilizzare PostGreSQL con supporto per i dati geografici (e avviare con successo l'applicativo Spring Boot) è necessario seguire i seguenti passi:
+
+- Avviare il programma Application Stack Builder installato assieme a PostGreSQL e, attraverso l'apposito menu, installare l'estensione di PostGreSql PostGIS
+- Utilizzando pgAdmin (oppure il prompt di comandi - psql) creare un nuovo database (aipolito) che conterrà l'estensione per dati spaziali (è sconsigliato installare l'estensione sul database di default)
+- Accedere al database aipolito ed eseguire i seguenti comandi:
+
+CREATE EXTENSION postgis;
+CREATE EXTENSION postgis_topology;
+CREATE EXTENSION postgis_sfcgal;
+CREATE EXTENSION fuzzystrmatch;
+CREATE EXTENSION address_standardizer;
+CREATE EXTENSION address_standardizer_data_us;
+CREATE EXTENSION postgis_tiger_geocoder;
+
+- Per maggiori informazioni, consultare la seguente guida: http://postgis.net/install/

@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.vividsolutions.jts.geom.Point;
 import lombok.Getter;
 import lombok.Setter;
-import org.postgis.Geometry;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -30,6 +29,7 @@ public class StopEntity {
     @Column
     @Getter
     @Setter
+    @JsonIgnore
     private Point gps;
 
     @OneToMany(mappedBy = "stop")

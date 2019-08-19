@@ -4,7 +4,7 @@ CREATE TABLE users(id_user SERIAL PRIMARY KEY, first_name VARCHAR(20), last_name
 
 CREATE TABLE busline(id_line SERIAL PRIMARY KEY, name VARCHAR(25) NOT NULL, id_admin INTEGER REFERENCES users (id_user));
 
-CREATE TABLE stop(id_stop SERIAL PRIMARY KEY, name VARCHAR(25) NOT NULL, gps GEOGRAPHY(POINT));
+CREATE TABLE stop(id_stop SERIAL PRIMARY KEY, name VARCHAR(25) NOT NULL, gps GEOGRAPHY(Point));
 
 CREATE TABLE busline_stop(id_busline_stop SERIAL PRIMARY KEY, id_line INTEGER REFERENCES busline (id_line), id_stop INTEGER REFERENCES stop (id_stop), arrival_time TIME NOT NULL, direction BOOLEAN NOT NULL);
 
