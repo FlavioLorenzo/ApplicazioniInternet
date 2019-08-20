@@ -48,6 +48,13 @@ public class Availability {
     @Setter
     private boolean viewed; // 0 not viewed, 1 viewed
 
+    @JsonProperty("locked")
+    @Column
+    @Getter
+    @Setter
+    private boolean locked; // 0 unlocked, 1 locked
+
+
     public StopEntity getStop() {
         return stop;
     }
