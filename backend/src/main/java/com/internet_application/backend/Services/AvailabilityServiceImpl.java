@@ -35,9 +35,9 @@ public class AvailabilityServiceImpl implements AvailabilityService {
 
         /* Check if the stop is present inside the ride */
         /* TODO Any better way to check this thing?? */
-        if (ride.getDirection() == 0 && !ride.getLine().getOutwordStops().contains(stop))
+        if (ride.getDirection() && !ride.getLine().getOutwordStops().contains(stop))
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        if (ride.getDirection() == 1 && !ride.getLine().getReturnStops().contains(stop))
+        if (!ride.getDirection() && !ride.getLine().getReturnStops().contains(stop))
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 
         Availability availability = new Availability();
@@ -45,7 +45,7 @@ public class AvailabilityServiceImpl implements AvailabilityService {
         availability.setUser(user);
         availability.setStop(stop);
         availability.setConfirmed(false);
-        availability.setViewd(false);
+        availability.setViewed(false);
         availability.setLocked(false);
         return availability;
     }

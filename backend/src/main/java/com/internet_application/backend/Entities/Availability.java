@@ -39,20 +39,20 @@ public class Availability {
     @Column
     @Getter
     @Setter
-    private boolean confirmed; // 0 not confirmed, 1 confirmed
+    private Boolean confirmed; // 0 not confirmed, 1 confirmed
 
     // Whether the user viewed the confirmation
     @JsonProperty("viewed")
     @Column
     @Getter
     @Setter
-    private boolean viewed; // 0 not viewed, 1 viewed
+    private Boolean viewed; // 0 not viewed, 1 viewed
 
     @JsonProperty("locked")
     @Column
     @Getter
     @Setter
-    private boolean locked; // 0 unlocked, 1 locked
+    private Boolean locked; // 0 unlocked, 1 locked
 
 
     public StopEntity getStop() {
