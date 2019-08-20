@@ -28,8 +28,6 @@ public class ReservationDeserializer extends JsonDeserializer<ReservationEntity>
         final Long id_user = node.get("id_user").asLong();
         final Long id_stop = node.get("id_stop").asLong();
 
-        System.out.println("Here" + id + id_ride + id_user + id_stop);
-
         RideEntity ride = new RideEntity();
         ride.setId(id_ride);
 

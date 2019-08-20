@@ -115,6 +115,17 @@ public class ReservationServiceImpl implements ReservationService {
         return rootNode;
     }
 
+    public List<ReservationEntity> getNReservationsByUserFromDate(Long lineId, Long userId, String date, Integer n) {
+        Date d = MiscUtils.dateParser(date);
+
+        int pageNumber = n.intValue();
+
+        List<ReservationEntity> reservations =
+                reservationRepository.getFirstNReservationsWithLineIdAndUserIdAndDate(lineId, userId, d, pageNumber*2);
+
+        return reservations;
+    }
+
     public ReservationEntity addReservation(Long lineId, String date, ReservationPostBody rpb) throws ResponseStatusException  {
         ReservationEntity r = buildReservation(lineId, date, rpb);
         reservationRepository.save(r);

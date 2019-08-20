@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
+
 @CrossOrigin()
 @RestController
 public class ReservationController {
@@ -55,5 +57,16 @@ public class ReservationController {
             throws ResponseStatusException {
         ReservationEntity reservation = reservationService.getReservation(lineId, date, res_id);
         return reservation;
+    }
+
+    @GetMapping("/reservations/{line_id}/{user_id}/{date}/{n}")
+    public List<ReservationEntity> getNReservationsByUserFromDate(@PathVariable(value="line_id") Long lineId,
+                                            @PathVariable(value="user_id") Long user_id,
+                                            @PathVariable(value="date") String date,
+                                            @PathVariable(value="n") Integer n)
+            throws ResponseStatusException {
+        List<ReservationEntity> reservations =
+                reservationService.getNReservationsByUserFromDate(lineId, user_id, date, n);
+        return reservations;
     }
 }
