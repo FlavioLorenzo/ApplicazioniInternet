@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.internet_application.backend.Entities.*;
+import com.internet_application.backend.Enums.RideBookingStatus;
 import com.internet_application.backend.Repositories.BusLineRepository;
 import com.internet_application.backend.Repositories.LineStopRepository;
 import com.internet_application.backend.Repositories.ReservationRepository;
@@ -14,6 +15,7 @@ import com.internet_application.backend.PostBodies.ReservationPostBody;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -24,7 +26,7 @@ import java.util.List;
 
 @SuppressWarnings("Duplicates")
 @Service
-@Transactional//(isolation = Isolation.SERIALIZABLE)
+@Transactional //(isolation = Isolation.SERIALIZABLE)
 public class ReservationServiceImpl implements ReservationService {
     @Autowired
     private ReservationRepository reservationRepository;
@@ -121,14 +123,26 @@ public class ReservationServiceImpl implements ReservationService {
         int pageNumber = n.intValue();
 
         List<ReservationEntity> reservations =
-                reservationRepository.getFirstNReservationsWithLineIdAndUserIdAndDate(lineId, userId, d, pageNumber*2);
+                reservationRepository.getFirstNReservationsWithLineIdAndUserIdAndDate(lineId, userId, d, pageNumber * 2);
 
         return reservations;
     }
 
-    public ReservationEntity addReservation(Long lineId, String date, ReservationPostBody rpb) throws ResponseStatusException  {
+    public ReservationEntity addReservation(Long lineId, String date, ReservationPostBody rpb) throws ResponseStatusException {
+
+        // Check if a reservation already exists for this user and ride
+        List<ReservationEntity> reservations = reservationRepository.getReservationEntitiesByUserIdAndLineIdAndDateAndDirection(
+                        rpb.id_user,
+                        lineId,
+                        MiscUtils.dateParser(date),
+                        rpb.direction);
+
+        if(reservations.size() > 0)
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A reservation for this user and ride already exists");
+
         ReservationEntity r = buildReservation(lineId, date, rpb);
-        reservationRepository.save(r);
+
+        r = reservationRepository.save(r);
 
         return r;
     }
@@ -137,13 +151,11 @@ public class ReservationServiceImpl implements ReservationService {
         ReservationEntity r = em.find(ReservationEntity.class, reservationId);
 
         /*Check if the reservation already exists*/
-        if(r == null){
+        if (r == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
 
         ReservationEntity builtReservation = buildReservation(lineId, date, rpb);
-
-        System.out.println(builtReservation);
 
         r.setRide(builtReservation.getRide());
         r.setStop(builtReservation.getStop());
@@ -176,15 +188,17 @@ public class ReservationServiceImpl implements ReservationService {
         RideEntity ride;
         List<RideEntity> rdQueryResult = rideRepository.getRidesWithLineIdAndDateAndDirection(lineId, d, dir);
 
-        if (rdQueryResult.size() != 1)
+        if (rdQueryResult.size() != 1 )
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         ride = rdQueryResult.get(0);
+        if (ride.getRideBookingStatus() == RideBookingStatus.TERMINATED)
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The selected ride is already terminated");
 
         /* Check if the stop is present on that line */
         LineStopEntity stop;
 
         List<LineStopEntity> lineStopList = lineStopRepository.getLineStopsWithLineIdAndStopIdAndDir(lineId, stopId, dir);
-        
+
         if (lineStopList.size() != 1)
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         stop = lineStopList.get(0);
@@ -210,13 +224,13 @@ public class ReservationServiceImpl implements ReservationService {
 
         // Since we have tons of useless data, we can also do some other completely unnecessary test to check if
         // the one who populated the DB (or made the request) was drunk
-        if(!(reservation.getRide().getLine().getId().equals(lineId) && reservation.getRide().getDate().equals(d)))
+        if (!(reservation.getRide().getLine().getId().equals(lineId) && reservation.getRide().getDate().equals(d)))
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
 
         return reservation;
     }
 
-    public void deleteReservation(Long lineId, String date, Long reservationId){
+    public void deleteReservation(Long lineId, String date, Long reservationId) {
         ReservationEntity res = getReservation(lineId, date, reservationId);
         em.remove(em.merge(res));
     }

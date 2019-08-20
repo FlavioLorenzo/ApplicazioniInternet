@@ -32,7 +32,6 @@ public class ReservationController {
         return reservationService.updateReservation(lineId, date, reservationId, rpb);
     }
 
-    // TODO Aggiungere controllo prenotazione gia` esistente
     @PostMapping("/reservations/{line_id}/{date}")
     public ReservationEntity postReservation(@PathVariable(value="line_id") Long lineId,
                                        @PathVariable(value="date") String date,

@@ -29,8 +29,12 @@ public class RideSerializer extends StdSerializer<RideEntity> {
         jgen.writeNumberField("id", value.getId());
         jgen.writeStringField("date", MiscUtils.dateToString(value.getDate()));
         jgen.writeBooleanField("direction", value.getDirection());
-        jgen.writeNumberField("lineId", value.getLine().getId());
         jgen.writeStringField("lineName", value.getLine().getName());
+        jgen.writeStringField("rideBookingStatus", value.getRideBookingStatus().getDescription());
+        if(value.getLatestStop() != null)
+            jgen.writeStringField("latestStop", value.getLatestStop().getName());
+        if(value.getLatestStopTime() != null)
+            jgen.writeStringField("latestStopTime", MiscUtils.timeToString(value.getLatestStopTime()));
         jgen.writeEndObject();
     }
 }

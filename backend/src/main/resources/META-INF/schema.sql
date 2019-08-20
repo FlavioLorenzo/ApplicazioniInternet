@@ -8,7 +8,7 @@ CREATE TABLE stop(id_stop SERIAL PRIMARY KEY, name VARCHAR(25) NOT NULL, gps VAR
 
 CREATE TABLE busline_stop(id_busline_stop SERIAL PRIMARY KEY, id_line INTEGER REFERENCES busline (id_line), id_stop INTEGER REFERENCES stop (id_stop), arrival_time TIME NOT NULL, direction BOOLEAN NOT NULL);
 
-CREATE TABLE ride(id_ride SERIAL PRIMARY KEY, id_line INTEGER REFERENCES busline (id_line), date DATE NOT NULL, direction BOOLEAN NOT NULL);
+CREATE TABLE ride(id_ride SERIAL PRIMARY KEY, id_line INTEGER REFERENCES busline (id_line), date DATE NOT NULL, direction BOOLEAN NOT NULL, ride_booking_status INTEGER NOT NULL, id_latest_stop INTEGER REFERENCES stop (id_stop), latest_stop_time TIME);
 
 CREATE TABLE reservation(id_reservation SERIAL PRIMARY KEY, id_ride INTEGER REFERENCES ride (id_ride), id_user INTEGER REFERENCES users (id_user), id_stop INTEGER REFERENCES stop (id_stop), presence BOOLEAN DEFAULT FALSE);
 

@@ -39,5 +39,4 @@ public interface RideRepository extends JpaRepository<RideEntity, Long> {
             "AND r.date = ?2 " +
             "AND r.direction = ?3")
     List<RideEntity> getRidesWithLineIdAndDateAndDirection(Long lineId, Date d, Boolean dir);
-
 }

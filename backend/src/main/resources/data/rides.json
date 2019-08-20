@@ -3,36 +3,46 @@
     "id_ride": 1,
     "date": "2019-06-13",
     "direction": 0,
-    "id_line": 1
+    "id_line": 1,
+    "ride_booking_status": 3,
+    "latest_stop_id": 4,
+    "latest_stop_time": "08:22:00"
   },
   {
     "id_ride": 2,
     "date": "2019-06-13",
     "direction": 1,
-    "id_line": 1
+    "id_line": 1,
+    "ride_booking_status": 2,
+    "latest_stop_id": 3,
+    "latest_stop_time": "15:13:00"
   },
   {
     "id_ride": 3,
     "date": "2019-06-14",
     "direction": 0,
-    "id_line": 1
+    "id_line": 1,
+    "ride_booking_status": 1
   },
   {
     "id_ride": 4,
     "date": "2019-06-14",
     "direction": 1,
-    "id_line": 1
+    "id_line": 1,
+    "ride_booking_status": 1
   },
   {
     "id_ride": 5,
     "date": "2019-06-14",
     "direction": 0,
-    "id_line": 2
+    "id_line": 2,
+    "ride_booking_status": 1
   },
   {
     "id_ride": 6,
     "date": "2019-06-14",
     "direction": 1,
-    "id_line": 2
+    "id_line": 2,
+    "ride_booking_status": 1
   }
 ]

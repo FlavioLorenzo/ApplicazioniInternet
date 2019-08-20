@@ -42,6 +42,10 @@ public class StopEntity {
     @JsonIgnore
     private Set<Availability> availabilities;
 
+    @OneToMany(mappedBy = "latestStop")
+    @JsonIgnore
+    private Set<RideEntity> ridesPresence;
+
     public Set<LineStopEntity> getLineStops() {
         return lineStops;
     }
@@ -64,6 +68,14 @@ public class StopEntity {
 
     public void setAvailabilities(Set<Availability> availabilities) {
         this.availabilities = availabilities;
+    }
+
+    public Set<RideEntity> getRidesPresence() {
+        return ridesPresence;
+    }
+
+    public void setRidesPresence(Set<RideEntity> ridesPresence) {
+        this.ridesPresence = ridesPresence;
     }
 
     @Override

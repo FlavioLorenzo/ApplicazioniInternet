@@ -142,6 +142,8 @@ public class BackendApplication {
         TypeReference<List<RideEntity>> rideType = new TypeReference<List<RideEntity>>() {};
         InputStream is = TypeReference.class.getResourceAsStream("/data/rides.json");
         try {
+            System.out.println("Rides list saved successfully");
+
             List<RideEntity> stateList = mapper.readValue(is, rideType);
             rideRepository.saveAll(stateList);
             System.out.println("Rides list saved successfully");
