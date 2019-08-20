@@ -20,6 +20,9 @@
           <a class="nav-link" routerLink="/attendance">Attendance</a>
         </li>
         <li class="nav-item" *ngIf='currentUser' routerLinkActive="active">
+          <a class="nav-link" routerLink="/users">Users</a>
+        </li>
+        <li class="nav-item" *ngIf='currentUser' routerLinkActive="active">
           <a class="nav-link" routerLink="/logout">Logout</a>
         </li>
       </ul>
