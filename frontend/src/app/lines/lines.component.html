@@ -2,7 +2,7 @@
   <mat-label>Select the line</mat-label>
   <select matNativeControl (change)="selectLine($event.target.value)">
     <option value="" selected></option>
-    <option *ngFor="let line of lines" [value]="line.id_line">{{line.line_name}}</option>
+    <option *ngFor="let line of lines" [value]="line.id_line">{{line.name}}</option>
   </select>
 </mat-form-field>
 

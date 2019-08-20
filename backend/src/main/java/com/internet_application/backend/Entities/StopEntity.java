@@ -19,8 +19,8 @@ public class StopEntity {
     @Setter
     private Long id;
 
-    @JsonProperty("stop_name")
-    @Column(name = "stop_name")
+    @JsonProperty("name")
+    @Column(name = "name")
     @Getter
     @Setter
     private String name;
@@ -34,13 +34,13 @@ public class StopEntity {
     @JsonManagedReference(value = "stop")
     private Set<LineStopEntity> lineStops;
 
-    @OneToMany(mappedBy = "joinStop")
+    @OneToMany(mappedBy = "stop")
     @JsonIgnore
-    private Set<ReservationEntity> joinReservation;
+    private Set<ReservationEntity> reservations;
 
-    @OneToMany(mappedBy = "leaveStop")
+    @OneToMany(mappedBy = "stop")
     @JsonIgnore
-    private Set<ReservationEntity> leaveReservation;
+    private Set<Availability> availabilities;
 
     public Set<LineStopEntity> getLineStops() {
         return lineStops;
@@ -50,20 +50,20 @@ public class StopEntity {
         this.lineStops = lineStops;
     }
 
-    public Set<ReservationEntity> getJoinReservation() {
-        return joinReservation;
+    public Set<ReservationEntity> getReservations() {
+        return reservations;
     }
 
-    public void setJoinReservation(Set<ReservationEntity> joinReservation) {
-        this.joinReservation = joinReservation;
+    public void setReservations(Set<ReservationEntity> reservations) {
+        this.reservations = reservations;
     }
 
-    public Set<ReservationEntity> getLeaveReservation() {
-        return leaveReservation;
+    public Set<Availability> getAvailabilities() {
+        return availabilities;
     }
 
-    public void setLeaveReservation(Set<ReservationEntity> leaveReservation) {
-        this.leaveReservation = leaveReservation;
+    public void setAvailabilities(Set<Availability> availabilities) {
+        this.availabilities = availabilities;
     }
 
     @Override

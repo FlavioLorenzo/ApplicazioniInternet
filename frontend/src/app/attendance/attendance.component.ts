@@ -30,7 +30,6 @@ export class AttendanceComponent implements OnInit {
 
   @Input() date: Date; // Linked to calendar component TODO: da rimuovere, in attendance-wrapper.component.html spiego il perchè
 
-
   constructor(private reservationsService: ReservationsService,
               private usersService: UsersService,
               public dialog: MatDialog) {
@@ -74,8 +73,7 @@ export class AttendanceComponent implements OnInit {
   }
 
   pickOrUnpick(ride: Ride, busStop: BusStop, passenger: User) {
-      const rpb = new ReservationPostBody(passenger.userId, busStop.id,
-        ride.stopList[ride.stopList.length - 1].id, !!this.direction, !passenger.picked);
+      const rpb = new ReservationPostBody(passenger.userId, busStop.id, !!this.direction, !passenger.picked);
 
       this.reservationsService.modifyReservation(
         this.lineId,
@@ -151,8 +149,7 @@ export class AttendanceComponent implements OnInit {
     dialogRef.componentInstance.update.subscribe(busStop => {
       const rpb = new ReservationPostBody(
         passenger.id_user,
-        (!!this.direction) ? this.ride.stopList[this.ride.stopList.length - 1].id : busStop.id,
-        (!!this.direction) ? busStop.id : this.ride.stopList[this.ride.stopList.length - 1].id,
+        busStop.id,
         !!this.direction,
         !passenger.picked);
       console.log('update: ' + JSON.stringify(rpb));

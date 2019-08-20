@@ -4,6 +4,7 @@ package com.internet_application.backend;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.internet_application.backend.Deserializers.BusLineDeserializer;
 import com.internet_application.backend.Deserializers.LineStopDeserializer;
 import com.internet_application.backend.Deserializers.ReservationDeserializer;
 import com.internet_application.backend.Deserializers.RideDeserializer;
@@ -49,11 +50,11 @@ public class BackendApplication {
     InitializingBean initDatabase() {
         return () -> {
             System.out.println("Initializing database...");
+            loadRoles();
+            loadUsers();
             loadBusLines();
             loadStops();
             loadLineStops();
-            loadRoles();
-            loadUsers();
             loadRides();
             loadReservations();
         };
@@ -61,6 +62,9 @@ public class BackendApplication {
 
     private void loadBusLines() {
         ObjectMapper mapper = new ObjectMapper();
+        SimpleModule module = new SimpleModule();
+        module.addDeserializer(BusLineEntity.class, new BusLineDeserializer());
+        mapper.registerModule(module);
         TypeReference<List<BusLineEntity>> busLineType = new TypeReference<List<BusLineEntity>>() {};
         InputStream is = TypeReference.class.getResourceAsStream("/data/bus_lines.json");
         try {

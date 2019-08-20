@@ -26,8 +26,9 @@ public class ReservationDeserializer extends JsonDeserializer<ReservationEntity>
         final Long id = node.get("id_reservation").asLong();
         final Long id_ride = node.get("id_ride").asLong();
         final Long id_user = node.get("id_user").asLong();
-        final Long join_stop_id = node.get("join_stop").asLong();
-        final Long leave_stop_id = node.get("leave_stop").asLong();
+        final Long id_stop = node.get("id_stop").asLong();
+
+        System.out.println("Here" + id + id_ride + id_user + id_stop);
 
         RideEntity ride = new RideEntity();
         ride.setId(id_ride);
@@ -35,18 +36,14 @@ public class ReservationDeserializer extends JsonDeserializer<ReservationEntity>
         UserEntity user = new UserEntity();
         user.setId(id_user);
 
-        StopEntity join_stop = new StopEntity();
-        join_stop.setId(join_stop_id);
-
-        StopEntity leave_stop = new StopEntity();
-        leave_stop.setId(leave_stop_id);
+        StopEntity stop = new StopEntity();
+        stop.setId(id_stop);
 
         ReservationEntity reservation = new ReservationEntity();
         reservation.setId(id);
         reservation.setRide(ride);
         reservation.setUser(user);
-        reservation.setJoinStop(join_stop);
-        reservation.setLeaveStop(leave_stop);
+        reservation.setStop(stop);
 
         return reservation;
     }
