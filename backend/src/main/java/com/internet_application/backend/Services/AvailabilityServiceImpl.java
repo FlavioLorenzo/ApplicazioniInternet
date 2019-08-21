@@ -33,12 +33,8 @@ public class AvailabilityServiceImpl implements AvailabilityService {
         if (ride == null || user == null || stop == null)
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 
-        /* Check if the stop is present inside the ride */
-        /* TODO Any better way to check this thing?? */
-        if (ride.getDirection() && !ride.getLine().getOutwordStops().contains(stop))
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        if (!ride.getDirection() && !ride.getLine().getReturnStops().contains(stop))
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        //TODO Check why the hack this control does not work
+        //isStopPresentInRide(ride, stop);
 
         Availability availability = new Availability();
         availability.setRide(ride);
@@ -47,6 +43,27 @@ public class AvailabilityServiceImpl implements AvailabilityService {
         availability.setConfirmed(false);
         availability.setViewed(false);
         availability.setLocked(false);
+        return availability;
+    }
+
+    public Availability modifyAvailability(Long AvailabilityId, Long rideId, Long stopId)
+        throws ResponseStatusException {
+        Availability availability = getAvailabilityWithId(AvailabilityId);
+        if (availability.getLocked())
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+
+        RideEntity ride = rideRepository.findById(rideId).orElse(null);
+        StopEntity stop = stopRepository.findById(stopId).orElse(null);
+
+        if (ride == null || stop == null)
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+
+        //TODO Check why the hack this control does not work
+        //isStopPresentInRide(ride, stop);
+
+        availability.setRide(ride);
+        availability.setStop(stop);
+        availabilityRepository.save(availability);
         return availability;
     }
 
@@ -111,5 +128,19 @@ public class AvailabilityServiceImpl implements AvailabilityService {
         availabilityRepository.delete(availability);
     }
 
-
+    // TODO NOT WORKING
+    /* Utility to check if the stop is present inside the ride */
+    private void isStopPresentInRide(RideEntity ride, StopEntity stop)
+            throws ResponseStatusException {
+        if (!ride.getDirection()) {
+            ride.getLine().getOutwordStops().forEach(lineStopEntity -> {
+                if (lineStopEntity.getStop().equals(stop)) return; });
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+        if (ride.getDirection()) {
+            ride.getLine().getOutwordStops().forEach(lineStopEntity -> {
+                if (lineStopEntity.getStop().equals(stop)) return; });
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+    }
 }

@@ -3,7 +3,10 @@ package com.internet_application.backend.Controllers;
 import com.internet_application.backend.Entities.Availability;
 import com.internet_application.backend.PostBodies.AvailabilityPostBody;
 import com.internet_application.backend.Services.AvailabilityService;
+import com.internet_application.backend.Services.BusLineService;
+import com.internet_application.backend.Services.RideService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -14,6 +17,10 @@ import java.util.List;
 public class AvailabilityController {
     @Autowired
     AvailabilityService availabilityService;
+    @Autowired
+    RideService rideService;
+    @Autowired
+    BusLineService busLineService;
 
     @GetMapping("/availabilities/{rideId}")
     public List<Availability> getAvailabilitiesForRideWithId(@PathVariable(value="rideId") Long rideId) {
@@ -31,6 +38,12 @@ public class AvailabilityController {
     @PostMapping("/availability")
     public Availability createAvailability(@RequestBody AvailabilityPostBody availabilityPostBody)
         throws ResponseStatusException {
+
+        if (availabilityPostBody.getRideId() == null ||
+            availabilityPostBody.getUserId() == null ||
+            availabilityPostBody.getStopId() == null)
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+
         Availability availability = availabilityService.buildAvailability(
                 availabilityPostBody.getRideId(),
                 availabilityPostBody.getUserId(),
@@ -44,12 +57,11 @@ public class AvailabilityController {
     public Availability putAvailability(@PathVariable(value="availabilityId") Long availabilityId,
                                         @RequestBody AvailabilityPostBody availabilityPostBody)
         throws ResponseStatusException {
-        availabilityService.deleteAvailabilityWithId(availabilityId);
-        return availabilityService.addAvailability(availabilityService.buildAvailability(
+        return availabilityService.modifyAvailability(
+                availabilityId,
                 availabilityPostBody.getRideId(),
-                availabilityPostBody.getUserId(),
                 availabilityPostBody.getStopId()
-        ));
+        );
     }
 
     /* Delete escort availability */

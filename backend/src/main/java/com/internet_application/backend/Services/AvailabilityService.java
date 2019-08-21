@@ -7,6 +7,8 @@ import java.util.List;
 public interface AvailabilityService {
     Availability buildAvailability(Long rideId, Long userId, Long stopId);
 
+    public Availability modifyAvailability(Long AvailabilityId, Long rideId, Long stopId);
+
     Availability addAvailability(Availability availability);
 
     Availability setConfirmedStatusOfAvailability(Long availabilityId, Boolean confirmedStatus);

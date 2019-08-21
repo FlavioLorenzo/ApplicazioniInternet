@@ -12,7 +12,7 @@ CREATE TABLE ride(id_ride SERIAL PRIMARY KEY, id_line INTEGER REFERENCES busline
 
 CREATE TABLE reservation(id_reservation SERIAL PRIMARY KEY, id_ride INTEGER REFERENCES ride (id_ride), id_user INTEGER REFERENCES users (id_user), id_stop INTEGER REFERENCES stop (id_stop), presence BOOLEAN DEFAULT FALSE);
 
-CREATE TABLE availability(id_availability SERIAL PRIMARY KEY, id_ride INTEGER REFERENCES ride (id_ride), id_user INTEGER REFERENCES users (id_user), id_stop INTEGER REFERENCES stop (id_stop), confirmed BOOLEAN DEFAULT FALSE, viewed BOOLEAN DEFAULT FALSE);
+CREATE TABLE availability(id_availability SERIAL PRIMARY KEY, id_ride INTEGER REFERENCES ride (id_ride), id_user INTEGER REFERENCES users (id_user), id_stop INTEGER REFERENCES stop (id_stop), confirmed BOOLEAN DEFAULT FALSE, viewed BOOLEAN DEFAULT FALSE, locked BOOLEAN DEFAULT FALSE);
 
 CREATE TABLE confirmation_token(id_token SERIAL PRIMARY KEY, confirmation_token VARCHAR(255), creation_date DATE, id_user INTEGER REFERENCES users (id_user));
 

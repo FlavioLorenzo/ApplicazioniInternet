@@ -11,6 +11,7 @@ import javax.persistence.*;
 @Table(name = "availability")
 public class Availability {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonProperty("id_availability")
     @Column(name="id_availability")
     @Getter
