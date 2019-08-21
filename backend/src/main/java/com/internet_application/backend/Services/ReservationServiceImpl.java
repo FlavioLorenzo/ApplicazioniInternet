@@ -191,17 +191,16 @@ public class ReservationServiceImpl implements ReservationService {
         if (rdQueryResult.size() != 1 )
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         ride = rdQueryResult.get(0);
-        if (ride.getRideBookingStatus() == RideBookingStatus.TERMINATED)
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The selected ride is already terminated");
 
         /* Check if the stop is present on that line */
         LineStopEntity stop;
-
         List<LineStopEntity> lineStopList = lineStopRepository.getLineStopsWithLineIdAndStopIdAndDir(lineId, stopId, dir);
 
         if (lineStopList.size() != 1)
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         stop = lineStopList.get(0);
+
+        isReservationValid(stop, ride);
 
         ReservationEntity r = new ReservationEntity();
         Long id = reservationRepository.getLastId().get(0);
@@ -232,6 +231,50 @@ public class ReservationServiceImpl implements ReservationService {
 
     public void deleteReservation(Long lineId, String date, Long reservationId) {
         ReservationEntity res = getReservation(lineId, date, reservationId);
+
+        isReservationValid(res);
+
         em.remove(em.merge(res));
+    }
+
+    /**
+     * Check if a reservation is still valid
+     * @param res The reservation to be checked for validity
+     * @return True - If the reservation is still valid. If not, it will throw an exception.
+     */
+    private boolean isReservationValid(ReservationEntity res) {
+        RideEntity ride = res.getRide();
+
+        LineStopEntity lineStop = lineStopRepository.getLineStopsWithLineIdAndStopIdAndDir(
+                ride.getLine().getId(),
+                res.getStop().getId(),
+                ride.getDirection()).get(0);
+
+        return isReservationValid(lineStop, ride);
+    }
+
+    /**
+     * Check if a reservation for the given RideEntity is still valid, based on the LineStopEntity provided as input
+     * @param stopToCheck The LineStopEntity to be checked for validity
+     * @param ride The RideEntity to which the reservation is linked
+     * @return True - If the reservation is still valid; If not, it will throw an exception.
+     */
+    private boolean isReservationValid(LineStopEntity stopToCheck, RideEntity ride) {
+        // Check if the ride is already terminated
+        if (ride.getRideBookingStatus() == RideBookingStatus.TERMINATED)
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The selected ride is already terminated");
+
+        // Check if the ride has already passed through a specific stop
+        if (ride.getRideBookingStatus() == RideBookingStatus.IN_PROGRESS) {
+            Date arrivalTime = stopToCheck.getArrivalTime();
+            Date latestStopArrivalTime = lineStopRepository
+                    .getLineStopsWithLineIdAndStopIdAndDir(ride.getLine().getId(), ride.getLatestStop().getId(), ride.getDirection())
+                    .get(0).getArrivalTime();
+
+            if(latestStopArrivalTime.equals(arrivalTime) || latestStopArrivalTime.after(arrivalTime))
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The selected ride has already passed from this stop");
+        }
+
+        return true;
     }
 }
