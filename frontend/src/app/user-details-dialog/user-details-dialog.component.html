@@ -1,0 +1,20 @@
+<h2 mat-dialog-title>{{user.first_name}} {{user.last_name}}</h2>
+
+<mat-dialog-content>
+    <div><span class="">User type</span> {{user.role | roleLabel}}</div>
+    <div><span class="">Email</span> {{user.email}}</div>
+    <div><span class="">Phone</span> {{user.phone}}</div>
+    <div *ngIf="user.role.name === 'ROLE_USER'">
+        <strong>Figli registrati:</strong> 
+        <ul>
+            <li *ngFor="let child of userChildren">
+              <span>{{child.first_name}} {{child.last_name}}</span>
+            </li>
+          </ul>
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+    <button class="mat-raised-button"(click)="close()">Close</button>
+    <button *ngIf="isUserEdited" class="mat-raised-button mat-primary"(click)="save()">Save</button>
+</mat-dialog-actions>

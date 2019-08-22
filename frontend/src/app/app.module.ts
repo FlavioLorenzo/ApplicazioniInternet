@@ -8,6 +8,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatSelectModule} from '@angular/material/select';
+import {MatButtonModule} from '@angular/material/button';
 
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
@@ -37,6 +38,11 @@ import { DatepickerComponent } from './datepicker/datepicker.component';
 import {DialogBoxPickNotBookedUserComponent} from './attendance/dialog-box-pick-not-booked-user.component';
 import {RegisterComponent} from './register/register.component';
 import { UserListComponent } from './user-list/user-list.component';
+import { UserDetailsDialogComponent } from './user-details-dialog/user-details-dialog.component';
+import { LabelRolePipe } from './role-label.pipe';
+import { UserRegistrationComponent } from './user-registration/user-registration.component';
+import { UserScreenComponent } from './user-screen/user-screen.component';
+
 
 @NgModule({
   declarations: [
@@ -51,9 +57,13 @@ import { UserListComponent } from './user-list/user-list.component';
     AttendanceWrapperComponent,
     DatepickerComponent,
     DialogBoxPickNotBookedUserComponent,
-    UserListComponent
+    UserListComponent,
+    UserDetailsDialogComponent,
+    LabelRolePipe,
+    UserRegistrationComponent,
+    UserScreenComponent,
   ],
-  entryComponents: [DialogBoxPickNotBookedUserComponent],
+  entryComponents: [DialogBoxPickNotBookedUserComponent, UserDetailsDialogComponent],
   imports: [
     BrowserModule,
     MatListModule,
@@ -69,6 +79,7 @@ import { UserListComponent } from './user-list/user-list.component';
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
+    MatButtonModule,
     MatDialogModule,
     FormsModule,
     MatTableModule,

@@ -8,6 +8,7 @@ import {LogoutComponent} from './logout/logout.component';
 import {AttendanceWrapperComponent} from './attendance-wrapper/attendance-wrapper.component';
 import {RegisterComponent} from './register/register.component';
 import { UserListComponent } from './user-list/user-list.component';
+import { UserScreenComponent } from './user-screen/user-screen.component';
 
 
 const appRoutes: Routes = [
@@ -36,7 +37,7 @@ const appRoutes: Routes = [
   },
   {
     path: 'users',
-    component: UserListComponent,
+    component: UserScreenComponent,
     canActivate: [AuthGuard]
   },
   { // Otherwise redirect to home

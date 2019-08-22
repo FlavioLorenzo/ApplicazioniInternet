@@ -23,4 +23,18 @@ export class UsersService {
      );
   }
 
+  public getChildForUser(userId): Observable<any> {
+    return Observable.create(observer => {
+      setTimeout(() => {
+        let children = [
+          {first_name:"balwant.padwal",last_name:"pune"},
+          {first_name:"test",last_name:"mumbai"}]
+    
+        observer.next(children);
+        observer.complete();
+      }, 500);
+    
+    });
+  }
+
 }
