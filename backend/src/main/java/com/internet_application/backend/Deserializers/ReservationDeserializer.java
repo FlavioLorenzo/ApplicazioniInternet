@@ -6,10 +6,7 @@ import com.fasterxml.jackson.core.ObjectCodec;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.internet_application.backend.Entities.ReservationEntity;
-import com.internet_application.backend.Entities.RideEntity;
-import com.internet_application.backend.Entities.StopEntity;
-import com.internet_application.backend.Entities.UserEntity;
+import com.internet_application.backend.Entities.*;
 
 import java.io.IOException;
 
@@ -25,14 +22,14 @@ public class ReservationDeserializer extends JsonDeserializer<ReservationEntity>
 
         final Long id = node.get("id_reservation").asLong();
         final Long id_ride = node.get("id_ride").asLong();
-        final Long id_user = node.get("id_user").asLong();
+        final Long id_child = node.get("id_child").asLong();
         final Long id_stop = node.get("id_stop").asLong();
 
         RideEntity ride = new RideEntity();
         ride.setId(id_ride);
 
-        UserEntity user = new UserEntity();
-        user.setId(id_user);
+        ChildEntity child = new ChildEntity();
+        child.setId(id_child);
 
         StopEntity stop = new StopEntity();
         stop.setId(id_stop);
@@ -40,7 +37,7 @@ public class ReservationDeserializer extends JsonDeserializer<ReservationEntity>
         ReservationEntity reservation = new ReservationEntity();
         reservation.setId(id);
         reservation.setRide(ride);
-        reservation.setUser(user);
+        reservation.setChild(child);
         reservation.setStop(stop);
 
         return reservation;

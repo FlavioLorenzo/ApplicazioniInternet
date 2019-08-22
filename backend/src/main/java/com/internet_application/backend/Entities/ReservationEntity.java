@@ -23,11 +23,11 @@ public class ReservationEntity {
     @JsonBackReference("ride_reservation")
     private RideEntity ride;
 
-    @JsonProperty("id_user")
+    @JsonProperty("id_child")
     @ManyToOne
-    @JoinColumn(name = "id_user")
+    @JoinColumn(name = "id_child")
     @JsonBackReference
-    private UserEntity user;
+    private ChildEntity child;
 
     @JsonProperty("id_stop")
     @ManyToOne
@@ -48,12 +48,12 @@ public class ReservationEntity {
         this.stop = stop;
     }
 
-    public UserEntity getUser() {
-        return user;
+    public ChildEntity getChild() {
+        return child;
     }
 
-    public void setUser(UserEntity user) {
-        this.user = user;
+    public void setChild(ChildEntity child) {
+        this.child = child;
     }
 
     public RideEntity getRide() {
@@ -72,7 +72,7 @@ public class ReservationEntity {
     public String toString() {
         String result =  "Reservation " + id + ":\n" +
                 "\tRide: \n------------" + ride.toString() + "------------\n" +
-                "\tUser: \n------------" + user.toString() + "------------\n" +
+                "\tChild: \n------------" + child.toString() + "------------\n" +
                 "\tStop: \n------------" + stop.toString() + "------------\n" +
                 "\tPresent: \n------------" + presence + "------------\n";
         return result;

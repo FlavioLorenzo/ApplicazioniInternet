@@ -68,7 +68,7 @@ public class ReservationServiceImpl implements ReservationService {
             // For each stop
             stops.forEach((stop) -> {
                 JsonNode stopNode = mapper.createObjectNode();
-                List<UserEntity> users;
+                List<ChildEntity> children;
 
                 // Set the id and name of the stop
                 ((ObjectNode) stopNode).put("id", stop.getId().longValue());
@@ -81,34 +81,24 @@ public class ReservationServiceImpl implements ReservationService {
                 ((ObjectNode) stopNode).put("arrivaltime", lineStopList.get(0).getArrivalTime().toString());
 
                 // Set the passengers attribute. Since we only have one property for both joining and leaving
-                // users, the meaning of this attribute depends on the direction of the ride (forward - joining users /
-                // backward - leaving users)
-                users = reservationRepository.getAllUsersByStopIdAndRideId(stop.getId(), ride.getId());
+                // children, the meaning of this attribute depends on the direction of the ride (forward - joining children /
+                // backward - leaving children)
+                children = reservationRepository.getAllChildrenByStopIdAndRideId(stop.getId(), ride.getId());
 
-                /*
-                // We decide which list to use (joining/leaving users) based on the direction (Forth/Back)
-                if(ride.getDirection().booleanValue() == false) {
-                    // Select all users departing from this stop
-                    users = reservationRepository.getAllJoiningUsersByStopIdAndRideId(stop.getId(), ride.getId());
-                } else {
-                    // Select all users leaving from this stop
-                    users = reservationRepository.getAllLeavingUsersByStopIdAndRideId(stop.getId(), ride.getId());
-                }
-                */
-
-                // Build a structure for each user that details his first name and whether or not the user is present
-                ArrayNode userArray = mapper.createArrayNode();
-                users.forEach((user) -> {
-                    JsonNode userNode = mapper.createObjectNode();
-                    ((ObjectNode) userNode).put("userId", user.getId());
-                    ((ObjectNode) userNode).put("username", user.getFirstName());
-                    ((ObjectNode) userNode).put("picked",
-                            reservationRepository.getPresenceByUserIdAndRide(user.getId(), ride.getId()));
-                    ((ObjectNode) userNode).put("reservationId",
-                            reservationRepository.getReservationsByUserIdAndRideId(user.getId(), ride.getId()).get(0).getId());
-                    userArray.add(userNode);
+                // Build a structure for each child that details his first name and whether or not the child is present
+                ArrayNode childArray = mapper.createArrayNode();
+                children.forEach((child) -> {
+                    JsonNode childNode = mapper.createObjectNode();
+                    ((ObjectNode) childNode).put("childId", child.getId());
+                    ((ObjectNode) childNode).put("firstName", child.getFirstName());
+                    ((ObjectNode) childNode).put("lastName", child.getLastName());
+                    ((ObjectNode) childNode).put("picked",
+                            reservationRepository.getPresenceByChildIdAndRide(child.getId(), ride.getId()));
+                    ((ObjectNode) childNode).put("reservationId",
+                            reservationRepository.getReservationsByChildIdAndRideId(child.getId(), ride.getId()).get(0).getId());
+                    childArray.add(childNode);
                 });
-                ((ObjectNode) stopNode).set("passengers", userArray);
+                ((ObjectNode) stopNode).set("passengers", childArray);
 
                 stopNodes.add(stopNode);
             });
@@ -120,27 +110,27 @@ public class ReservationServiceImpl implements ReservationService {
         return rootNode;
     }
 
-    public List<ReservationEntity> getNReservationsByUserFromDate(Long lineId, Long userId, String date, Integer n) {
+    public List<ReservationEntity> getNReservationsByChildFromDate(Long lineId, Long childId, String date, Integer n) {
         Date d = DateUtils.dateParser(date);
 
         int pageNumber = n.intValue();
 
         List<ReservationEntity> reservations =
-                reservationRepository.getFirstNReservationsWithLineIdAndUserIdAndDate(lineId, userId, d, pageNumber * 2);
+                reservationRepository.getFirstNReservationsWithLineIdAndChildIdAndDate(lineId, childId, d, pageNumber * 2);
 
         return reservations;
     }
 
     public ReservationEntity addReservation(Long lineId, String date, ReservationPostBody rpb) throws ResponseStatusException {
 
-        // Check if a reservation already exists for this user and time
-        List<ReservationEntity> reservations = reservationRepository.getReservationsByUserIdAndDateAndDirection(
-                        rpb.id_user,
+        // Check if a reservation already exists for this child and time
+        List<ReservationEntity> reservations = reservationRepository.getReservationsByChildIdAndDateAndDirection(
+                        rpb.id_child,
                         DateUtils.dateParser(date),
                         rpb.direction);
 
         if(reservations.size() > 0)
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A reservation for this user and time already exists");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A reservation for this child and time already exists");
 
         ReservationEntity r = buildReservation(lineId, date, rpb);
 
@@ -161,7 +151,7 @@ public class ReservationServiceImpl implements ReservationService {
 
         r.setRide(builtReservation.getRide());
         r.setStop(builtReservation.getStop());
-        r.setUser(builtReservation.getUser());
+        r.setChild(builtReservation.getChild());
         r.setPresence(builtReservation.getPresence());
         reservationRepository.save(r);
 
@@ -173,17 +163,17 @@ public class ReservationServiceImpl implements ReservationService {
         Date d = DateUtils.dateParser(date);
         Boolean dir = rpb.direction;
         Long stopId = rpb.id_stop;
-        Long userId = rpb.id_user;
+        Long childId = rpb.id_child;
         Boolean presence = (rpb.presence != null) ? rpb.presence : false;
 
         /* Check the busline exists */
         if (!busLineRepository.existsById(lineId))
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 
-        UserEntity user = em.find(UserEntity.class, userId);
+        ChildEntity child = em.find(ChildEntity.class, childId);
 
-        /* Check the user exists */
-        if (user == null)
+        /* Check the child exists */
+        if (child == null)
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 
         /* Check if a ride is available */
@@ -206,7 +196,7 @@ public class ReservationServiceImpl implements ReservationService {
         r.setId(id + 1);
         r.setRide(ride);
         r.setStop(stop.getStop());
-        r.setUser(user);
+        r.setChild(child);
         r.setPresence(presence);
         return r;
     }

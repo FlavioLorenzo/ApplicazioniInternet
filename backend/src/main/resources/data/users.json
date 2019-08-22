@@ -43,14 +43,5 @@
     "email": "u5@example.it",
     "password": "password",
     "password_confirm": "password"
-  },
-  {
-    "id_user": 5,
-    "first_name": "u5",
-    "last_name": "u5ln",
-    "phone": "1234",
-    "email": "u5@example.it",
-    "password": "password",
-    "password_confirm": "password"
   }
 ]

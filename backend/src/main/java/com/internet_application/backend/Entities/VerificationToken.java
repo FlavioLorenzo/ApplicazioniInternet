@@ -11,16 +11,16 @@ public class VerificationToken {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_token")
+    //@Column(name = "id_token")
     private Long id;
-    @Column(name = "verification_token")
+    //@Column(name = "verification_token")
     private String token;
     private String status;
-    @Column(name = "expired_date")
+    //@Column(name = "expired_date")
     private LocalDateTime expiredDateTime;
-    @Column(name = "issued_date")
+    //@Column(name = "issued_date")
     private LocalDateTime issuedDateTime;
-    @Column(name = "confirmed_date")
+    //@Column(name = "confirmed_date")
     private LocalDateTime confirmedDateTime;
 
     @OneToOne(cascade = CascadeType.ALL)

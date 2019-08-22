@@ -4,12 +4,10 @@ package com.internet_application.backend;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.internet_application.backend.Deserializers.BusLineDeserializer;
-import com.internet_application.backend.Deserializers.LineStopDeserializer;
-import com.internet_application.backend.Deserializers.ReservationDeserializer;
-import com.internet_application.backend.Deserializers.RideDeserializer;
+import com.internet_application.backend.Deserializers.*;
 import com.internet_application.backend.Entities.*;
 import com.internet_application.backend.Repositories.*;
+import com.internet_application.backend.Services.ChildService;
 import com.internet_application.backend.Services.UserService;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +34,8 @@ public class BackendApplication {
     @Autowired
     private UserService userService;
     @Autowired
+    private ChildService childService;
+    @Autowired
     private RoleRepository roleRepository;
     @Autowired
     private RideRepository rideRepository;
@@ -52,6 +52,7 @@ public class BackendApplication {
             System.out.println("Initializing database...");
             loadRoles();
             loadUsers();
+            loadChildren();
             loadBusLines();
             loadStops();
             loadLineStops();
@@ -129,6 +130,22 @@ public class BackendApplication {
             List<UserEntity> stateList = mapper.readValue(is, userType);
             userService.saveAll(stateList);
             System.out.println("Users saved successfully");
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private void loadChildren() {
+        ObjectMapper mapper = new ObjectMapper();
+        SimpleModule module = new SimpleModule();
+        module.addDeserializer(ChildEntity.class, new ChildDeserializer());
+        mapper.registerModule(module);
+        TypeReference<List<ChildEntity>> childType = new TypeReference<List<ChildEntity>>() {};
+        InputStream is = TypeReference.class.getResourceAsStream("/data/children.json");
+        try {
+            List<ChildEntity> stateList = mapper.readValue(is, childType);
+            childService.saveAll(stateList);
+            System.out.println("Children saved successfully");
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }

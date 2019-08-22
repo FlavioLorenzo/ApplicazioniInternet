@@ -58,14 +58,14 @@ public class ReservationController {
         return reservation;
     }
 
-    @GetMapping("/reservations/{line_id}/{user_id}/{date}/{n}")
+    @GetMapping("/reservations/{line_id}/{child_id}/{date}/{n}")
     public List<ReservationEntity> getNReservationsByUserFromDate(@PathVariable(value="line_id") Long lineId,
-                                            @PathVariable(value="user_id") Long user_id,
+                                            @PathVariable(value="child_id") Long child_id,
                                             @PathVariable(value="date") String date,
                                             @PathVariable(value="n") Integer n)
             throws ResponseStatusException {
         List<ReservationEntity> reservations =
-                reservationService.getNReservationsByUserFromDate(lineId, user_id, date, n);
+                reservationService.getNReservationsByChildFromDate(lineId, child_id, date, n);
         return reservations;
     }
 }
