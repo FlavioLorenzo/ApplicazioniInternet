@@ -5,10 +5,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.internet_application.backend.Entities.RideEntity;
-import com.internet_application.backend.Utils.MiscUtils;
+import com.internet_application.backend.Utils.DateUtils;
 
 import java.io.IOException;
-import java.util.List;
 
 public class RideSerializer extends StdSerializer<RideEntity> {
 
@@ -27,14 +26,14 @@ public class RideSerializer extends StdSerializer<RideEntity> {
 
         jgen.writeStartObject();
         jgen.writeNumberField("id", value.getId());
-        jgen.writeStringField("date", MiscUtils.dateToString(value.getDate()));
+        jgen.writeStringField("date", DateUtils.dateToString(value.getDate()));
         jgen.writeBooleanField("direction", value.getDirection());
         jgen.writeStringField("lineName", value.getLine().getName());
         jgen.writeStringField("rideBookingStatus", value.getRideBookingStatus().getDescription());
         if(value.getLatestStop() != null)
             jgen.writeStringField("latestStop", value.getLatestStop().getName());
         if(value.getLatestStopTime() != null)
-            jgen.writeStringField("latestStopTime", MiscUtils.timeToString(value.getLatestStopTime()));
+            jgen.writeStringField("latestStopTime", DateUtils.timeToString(value.getLatestStopTime()));
         jgen.writeEndObject();
     }
 }

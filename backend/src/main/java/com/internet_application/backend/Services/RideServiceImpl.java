@@ -1,24 +1,18 @@
 package com.internet_application.backend.Services;
 
-import com.internet_application.backend.Entities.BusLineEntity;
 import com.internet_application.backend.Entities.LineStopEntity;
 import com.internet_application.backend.Entities.RideEntity;
 import com.internet_application.backend.Entities.StopEntity;
 import com.internet_application.backend.Enums.RideBookingStatus;
-import com.internet_application.backend.Repositories.BusLineRepository;
 import com.internet_application.backend.Repositories.RideRepository;
-import com.internet_application.backend.Utils.MiscUtils;
+import com.internet_application.backend.Utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -32,7 +26,7 @@ public class RideServiceImpl implements RideService {
     private EntityManager em;
 
     public List<RideEntity> getNRidesFromDate(Long lineId, String date, Integer n){
-        Date d = MiscUtils.dateParser(date);
+        Date d = DateUtils.dateParser(date);
 
         int pageNumber = n.intValue();
 
@@ -63,11 +57,29 @@ public class RideServiceImpl implements RideService {
         /* Check if it isn't too late to close the stop */
         isRidePassedOrEnded(lineStop, ride);
 
-        // Todo: Add check if the date associated with the ride is not the current one
-
         ride.setLatestStop(stop);
         ride.setLatestStopTime(new Date());
 
+        return rideRepository.save(ride);
+    }
+
+    public RideEntity openRide(Long rideId) {
+        RideEntity ride = em.find(RideEntity.class, rideId);
+
+        /* Check if the ride already exists*/
+        if (ride == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Ride not found");
+        }
+
+        // Check if the ride is started
+        if (ride.getRideBookingStatus() != RideBookingStatus.NOT_STARTED)
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The selected ride is already started");
+
+        // Check if the expected day of the ride is today
+        if(!DateUtils.isToday(ride.getDate()))
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The ride cannot be started yet");
+
+        ride.setRideBookingStatus(RideBookingStatus.IN_PROGRESS);
         return rideRepository.save(ride);
     }
 
@@ -81,6 +93,9 @@ public class RideServiceImpl implements RideService {
 
         isRideStarted(ride);
         isRideEnded(ride);
+
+        if(ride.getLatestStop() == null)
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The selected ride has not reached its last destination");
 
         LineStopEntity lineStop =
                 lineStopService.getLineStopWithLineIdAndStopIdAndDir(ride.getLine().getId(), ride.getLatestStop().getId(), ride.getDirection());
@@ -123,13 +138,15 @@ public class RideServiceImpl implements RideService {
 
         // Check if the ride has already passed through a specific stop
         if (ride.getRideBookingStatus() == RideBookingStatus.IN_PROGRESS) {
-            Date arrivalTime = stopToCheck.getArrivalTime();
-            Date latestStopArrivalTime = lineStopService
-                    .getLineStopWithLineIdAndStopIdAndDir(ride.getLine().getId(), ride.getLatestStop().getId(), ride.getDirection())
-                    .getArrivalTime();
+            if(ride.getLatestStop() != null) {
+                Date arrivalTime = stopToCheck.getArrivalTime();
+                Date latestStopArrivalTime = lineStopService
+                        .getLineStopWithLineIdAndStopIdAndDir(ride.getLine().getId(), ride.getLatestStop().getId(), ride.getDirection())
+                        .getArrivalTime();
 
-            if(latestStopArrivalTime.equals(arrivalTime) || latestStopArrivalTime.after(arrivalTime))
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The selected ride has already passed from this stop");
+                if (latestStopArrivalTime.equals(arrivalTime) || latestStopArrivalTime.after(arrivalTime))
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The selected ride has already passed from this stop");
+            }
         }
 
         return true;

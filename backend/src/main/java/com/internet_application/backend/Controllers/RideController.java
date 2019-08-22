@@ -36,6 +36,12 @@ public class RideController {
         return rideService.closeStop(rideId, stopId);
     }
 
+    @PutMapping("/rides/{rideId}/open")
+    public RideEntity putOpenRide(
+            @PathVariable(value="rideId") Long rideId) {
+        return rideService.openRide(rideId);
+    }
+
     @PutMapping("/rides/{rideId}/close")
     public RideEntity putCloseRide(
             @PathVariable(value="rideId") Long rideId) {

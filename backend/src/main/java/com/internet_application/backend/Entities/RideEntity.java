@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.internet_application.backend.Enums.RideBookingStatus;
 import com.internet_application.backend.Serializers.RideSerializer;
-import com.internet_application.backend.Utils.MiscUtils;
+import com.internet_application.backend.Utils.DateUtils;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Type;
@@ -109,7 +109,7 @@ public class RideEntity {
                 "\tline: \n" + line.toString() + "\n" +
                 "\tbookingStatus: \n" + rideBookingStatus.getDescription() + "\n" +
                 "\tlatest stop: \n" + latestStop.toString() + "\n" +
-                "\tlatest_stop_time: \n" + MiscUtils.timeToString(latestStopTime);
+                "\tlatest_stop_time: \n" + DateUtils.timeToString(latestStopTime);
         return result;
     }
 }

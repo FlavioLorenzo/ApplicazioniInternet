@@ -5,17 +5,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.internet_application.backend.Entities.*;
-import com.internet_application.backend.Enums.RideBookingStatus;
 import com.internet_application.backend.Repositories.BusLineRepository;
 import com.internet_application.backend.Repositories.LineStopRepository;
 import com.internet_application.backend.Repositories.ReservationRepository;
 import com.internet_application.backend.Repositories.RideRepository;
+import com.internet_application.backend.Utils.DateUtils;
 import com.internet_application.backend.Utils.MiscUtils;
 import com.internet_application.backend.PostBodies.ReservationPostBody;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -45,7 +44,7 @@ public class ReservationServiceImpl implements ReservationService {
     private EntityManager em;
 
     public JsonNode getAllReservationForLineAndData(Long lineId, String date) {
-        Date d = MiscUtils.dateParser(date);
+        Date d = DateUtils.dateParser(date);
 
         List<RideEntity> rides = rideRepository.getAllRidesWithLineIdAndDate(lineId, d);
 
@@ -58,7 +57,7 @@ public class ReservationServiceImpl implements ReservationService {
             JsonNode rideNode = mapper.createObjectNode();
 
             ((ObjectNode) rideNode).put("id", ride.getId().longValue());
-            ((ObjectNode) rideNode).put("date", MiscUtils.dateToString(d));
+            ((ObjectNode) rideNode).put("date", DateUtils.dateToString(d));
 
             // Translate the direction into a human comprehensible information and add it to the JsonNode
             ((ObjectNode) rideNode).put("direction", MiscUtils.directionBoolToString(ride.getDirection().booleanValue()));
@@ -106,7 +105,7 @@ public class ReservationServiceImpl implements ReservationService {
                     ((ObjectNode) userNode).put("picked",
                             reservationRepository.getPresenceByUserIdAndRide(user.getId(), ride.getId()));
                     ((ObjectNode) userNode).put("reservationId",
-                            reservationRepository.getReservationEntitiesByUserIdAndRideId(user.getId(), ride.getId()).get(0).getId());
+                            reservationRepository.getReservationsByUserIdAndRideId(user.getId(), ride.getId()).get(0).getId());
                     userArray.add(userNode);
                 });
                 ((ObjectNode) stopNode).set("passengers", userArray);
@@ -122,7 +121,7 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     public List<ReservationEntity> getNReservationsByUserFromDate(Long lineId, Long userId, String date, Integer n) {
-        Date d = MiscUtils.dateParser(date);
+        Date d = DateUtils.dateParser(date);
 
         int pageNumber = n.intValue();
 
@@ -134,15 +133,14 @@ public class ReservationServiceImpl implements ReservationService {
 
     public ReservationEntity addReservation(Long lineId, String date, ReservationPostBody rpb) throws ResponseStatusException {
 
-        // Check if a reservation already exists for this user and ride
-        List<ReservationEntity> reservations = reservationRepository.getReservationEntitiesByUserIdAndLineIdAndDateAndDirection(
+        // Check if a reservation already exists for this user and time
+        List<ReservationEntity> reservations = reservationRepository.getReservationsByUserIdAndDateAndDirection(
                         rpb.id_user,
-                        lineId,
-                        MiscUtils.dateParser(date),
+                        DateUtils.dateParser(date),
                         rpb.direction);
 
         if(reservations.size() > 0)
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A reservation for this user and ride already exists");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A reservation for this user and time already exists");
 
         ReservationEntity r = buildReservation(lineId, date, rpb);
 
@@ -172,7 +170,7 @@ public class ReservationServiceImpl implements ReservationService {
 
     private ReservationEntity buildReservation(Long lineId, String date, ReservationPostBody rpb) {
         /* Name convention for all the passed variables */
-        Date d = MiscUtils.dateParser(date);
+        Date d = DateUtils.dateParser(date);
         Boolean dir = rpb.direction;
         Long stopId = rpb.id_stop;
         Long userId = rpb.id_user;
@@ -214,7 +212,7 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     public ReservationEntity getReservation(Long lineId, String date, Long reservationId) {
-        Date d = MiscUtils.dateParser(date);
+        Date d = DateUtils.dateParser(date);
 
         ReservationEntity reservation = em.find(ReservationEntity.class, reservationId);
 

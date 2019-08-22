@@ -9,6 +9,7 @@ import java.util.List;
 public interface RideService {
     List<RideEntity> getNRidesFromDate(Long lineId, String date, Integer n);
     RideEntity closeStop(Long rideId, Long stopId);
+    RideEntity openRide(Long rideId);
     RideEntity closeRide(Long rideId);
     boolean isRideEnded(RideEntity ride);
     boolean isRideStarted(RideEntity ride);
