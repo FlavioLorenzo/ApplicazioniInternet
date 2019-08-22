@@ -17,3 +17,5 @@ CREATE TABLE availability(id_availability SERIAL PRIMARY KEY, id_ride INTEGER RE
 CREATE TABLE confirmation_token(id_token SERIAL PRIMARY KEY, confirmation_token VARCHAR(255), creation_date DATE, id_user INTEGER REFERENCES users (id_user));
 
 CREATE TABLE recover_token(id_token SERIAL PRIMARY KEY, recover_token VARCHAR(255), creation_date DATE, id_user INTEGER REFERENCES users (id_user), is_valid BOOLEAN);
+
+CREATE TABLE verification_token(id_token SERIAL PRIMARY KEY, verification_token VARCHAR(255), status VARCHAR(255), expired_date DATE, issued_date DATE, confirmed_date DATE, id_user INTEGER REFERENCES users (id_user));
