@@ -4,15 +4,13 @@ import com.internet_application.backend.Entities.BusLineEntity;
 import com.internet_application.backend.Entities.LineStopEntity;
 import com.internet_application.backend.Entities.RideEntity;
 import com.internet_application.backend.Entities.StopEntity;
+import com.internet_application.backend.PostBodies.ReservationPostBody;
 import com.internet_application.backend.Repositories.LineStopRepository;
 import com.internet_application.backend.Repositories.StopRepository;
 import com.internet_application.backend.Services.BusLineService;
 import com.internet_application.backend.Services.RideService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -29,5 +27,18 @@ public class RideController {
             @PathVariable(value="date") String date,
             @PathVariable(value="n") Integer n) {
         return rideService.getNRidesFromDate(lineId, date, n);
+    }
+
+    @PutMapping("/rides/{rideId}/close/{stopId}")
+    public RideEntity putCloseStop(
+            @PathVariable(value="rideId") Long rideId,
+            @PathVariable(value="stopId") Long stopId) {
+        return rideService.closeStop(rideId, stopId);
+    }
+
+    @PutMapping("/rides/{rideId}/close")
+    public RideEntity putCloseRide(
+            @PathVariable(value="rideId") Long rideId) {
+        return rideService.closeRide(rideId);
     }
 }
