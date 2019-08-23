@@ -14,4 +14,11 @@ public interface LineStopRepository extends JpaRepository<LineStopEntity, Long> 
             "AND ls.stop.id = ?2 " +
             "AND ls.direction = ?3")
     List<LineStopEntity> getLineStopsWithLineIdAndStopIdAndDir(Long lineId, Long stopId, Boolean dir);
+
+    @Query("SELECT COUNT(ls2) FROM LineStopEntity ls1, LineStopEntity ls2 " +
+            "WHERE ls1.id = ?1 " +
+            "AND ls2.line.id = ?2 " +
+            "AND ls2.direction = ?3 " +
+            "AND ls1.arrivalTime < ls2.arrivalTime")
+    Integer countLineStopsAfterProvidedOne(Long lineStopId, Long lineId, Boolean dir);
 }

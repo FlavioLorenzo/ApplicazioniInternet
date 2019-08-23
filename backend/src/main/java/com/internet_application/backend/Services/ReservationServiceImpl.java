@@ -9,6 +9,7 @@ import com.internet_application.backend.Repositories.BusLineRepository;
 import com.internet_application.backend.Repositories.LineStopRepository;
 import com.internet_application.backend.Repositories.ReservationRepository;
 import com.internet_application.backend.Repositories.RideRepository;
+import com.internet_application.backend.Utils.DateUtils;
 import com.internet_application.backend.Utils.MiscUtils;
 import com.internet_application.backend.PostBodies.ReservationPostBody;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,7 @@ import java.util.List;
 
 @SuppressWarnings("Duplicates")
 @Service
-@Transactional//(isolation = Isolation.SERIALIZABLE)
+@Transactional //(isolation = Isolation.SERIALIZABLE)
 public class ReservationServiceImpl implements ReservationService {
     @Autowired
     private ReservationRepository reservationRepository;
@@ -34,12 +35,16 @@ public class ReservationServiceImpl implements ReservationService {
     private LineStopRepository lineStopRepository;
     @Autowired
     private BusLineRepository busLineRepository;
+    @Autowired
+    private RideService rideService;
+    @Autowired
+    private LineStopService lineStopService;
 
     @PersistenceContext
     private EntityManager em;
 
     public JsonNode getAllReservationForLineAndData(Long lineId, String date) {
-        Date d = MiscUtils.dateParser(date);
+        Date d = DateUtils.dateParser(date);
 
         List<RideEntity> rides = rideRepository.getAllRidesWithLineIdAndDate(lineId, d);
 
@@ -52,7 +57,7 @@ public class ReservationServiceImpl implements ReservationService {
             JsonNode rideNode = mapper.createObjectNode();
 
             ((ObjectNode) rideNode).put("id", ride.getId().longValue());
-            ((ObjectNode) rideNode).put("date", MiscUtils.dateToString(d));
+            ((ObjectNode) rideNode).put("date", DateUtils.dateToString(d));
 
             // Translate the direction into a human comprehensible information and add it to the JsonNode
             ((ObjectNode) rideNode).put("direction", MiscUtils.directionBoolToString(ride.getDirection().booleanValue()));
@@ -63,7 +68,7 @@ public class ReservationServiceImpl implements ReservationService {
             // For each stop
             stops.forEach((stop) -> {
                 JsonNode stopNode = mapper.createObjectNode();
-                List<UserEntity> users;
+                List<ChildEntity> children;
 
                 // Set the id and name of the stop
                 ((ObjectNode) stopNode).put("id", stop.getId().longValue());
@@ -76,34 +81,24 @@ public class ReservationServiceImpl implements ReservationService {
                 ((ObjectNode) stopNode).put("arrivaltime", lineStopList.get(0).getArrivalTime().toString());
 
                 // Set the passengers attribute. Since we only have one property for both joining and leaving
-                // users, the meaning of this attribute depends on the direction of the ride (forward - joining users /
-                // backward - leaving users)
-                users = reservationRepository.getAllUsersByStopIdAndRideId(stop.getId(), ride.getId());
+                // children, the meaning of this attribute depends on the direction of the ride (forward - joining children /
+                // backward - leaving children)
+                children = reservationRepository.getAllChildrenByStopIdAndRideId(stop.getId(), ride.getId());
 
-                /*
-                // We decide which list to use (joining/leaving users) based on the direction (Forth/Back)
-                if(ride.getDirection().booleanValue() == false) {
-                    // Select all users departing from this stop
-                    users = reservationRepository.getAllJoiningUsersByStopIdAndRideId(stop.getId(), ride.getId());
-                } else {
-                    // Select all users leaving from this stop
-                    users = reservationRepository.getAllLeavingUsersByStopIdAndRideId(stop.getId(), ride.getId());
-                }
-                */
-
-                // Build a structure for each user that details his first name and whether or not the user is present
-                ArrayNode userArray = mapper.createArrayNode();
-                users.forEach((user) -> {
-                    JsonNode userNode = mapper.createObjectNode();
-                    ((ObjectNode) userNode).put("userId", user.getId());
-                    ((ObjectNode) userNode).put("username", user.getFirstName());
-                    ((ObjectNode) userNode).put("picked",
-                            reservationRepository.getPresenceByUserIdAndRide(user.getId(), ride.getId()));
-                    ((ObjectNode) userNode).put("reservationId",
-                            reservationRepository.getReservationEntitiesByUserIdAndRideId(user.getId(), ride.getId()).get(0).getId());
-                    userArray.add(userNode);
+                // Build a structure for each child that details his first name and whether or not the child is present
+                ArrayNode childArray = mapper.createArrayNode();
+                children.forEach((child) -> {
+                    JsonNode childNode = mapper.createObjectNode();
+                    ((ObjectNode) childNode).put("childId", child.getId());
+                    ((ObjectNode) childNode).put("firstName", child.getFirstName());
+                    ((ObjectNode) childNode).put("lastName", child.getLastName());
+                    ((ObjectNode) childNode).put("picked",
+                            reservationRepository.getPresenceByChildIdAndRide(child.getId(), ride.getId()));
+                    ((ObjectNode) childNode).put("reservationId",
+                            reservationRepository.getReservationsByChildIdAndRideId(child.getId(), ride.getId()).get(0).getId());
+                    childArray.add(childNode);
                 });
-                ((ObjectNode) stopNode).set("passengers", userArray);
+                ((ObjectNode) stopNode).set("passengers", childArray);
 
                 stopNodes.add(stopNode);
             });
@@ -115,9 +110,31 @@ public class ReservationServiceImpl implements ReservationService {
         return rootNode;
     }
 
-    public ReservationEntity addReservation(Long lineId, String date, ReservationPostBody rpb) throws ResponseStatusException  {
+    public List<ReservationEntity> getNReservationsByChildFromDate(Long lineId, Long childId, String date, Integer n) {
+        Date d = DateUtils.dateParser(date);
+
+        int pageNumber = n.intValue();
+
+        List<ReservationEntity> reservations =
+                reservationRepository.getFirstNReservationsWithLineIdAndChildIdAndDate(lineId, childId, d, pageNumber * 2);
+
+        return reservations;
+    }
+
+    public ReservationEntity addReservation(Long lineId, String date, ReservationPostBody rpb) throws ResponseStatusException {
+
+        // Check if a reservation already exists for this child and time
+        List<ReservationEntity> reservations = reservationRepository.getReservationsByChildIdAndDateAndDirection(
+                        rpb.id_child,
+                        DateUtils.dateParser(date),
+                        rpb.direction);
+
+        if(reservations.size() > 0)
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A reservation for this child and time already exists");
+
         ReservationEntity r = buildReservation(lineId, date, rpb);
-        reservationRepository.save(r);
+
+        r = reservationRepository.save(r);
 
         return r;
     }
@@ -126,17 +143,15 @@ public class ReservationServiceImpl implements ReservationService {
         ReservationEntity r = em.find(ReservationEntity.class, reservationId);
 
         /*Check if the reservation already exists*/
-        if(r == null){
+        if (r == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
 
         ReservationEntity builtReservation = buildReservation(lineId, date, rpb);
 
-        System.out.println(builtReservation);
-
         r.setRide(builtReservation.getRide());
         r.setStop(builtReservation.getStop());
-        r.setUser(builtReservation.getUser());
+        r.setChild(builtReservation.getChild());
         r.setPresence(builtReservation.getPresence());
         reservationRepository.save(r);
 
@@ -145,51 +160,49 @@ public class ReservationServiceImpl implements ReservationService {
 
     private ReservationEntity buildReservation(Long lineId, String date, ReservationPostBody rpb) {
         /* Name convention for all the passed variables */
-        Date d = MiscUtils.dateParser(date);
+        Date d = DateUtils.dateParser(date);
         Boolean dir = rpb.direction;
         Long stopId = rpb.id_stop;
-        Long userId = rpb.id_user;
+        Long childId = rpb.id_child;
         Boolean presence = (rpb.presence != null) ? rpb.presence : false;
 
         /* Check the busline exists */
         if (!busLineRepository.existsById(lineId))
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 
-        UserEntity user = em.find(UserEntity.class, userId);
+        ChildEntity child = em.find(ChildEntity.class, childId);
 
-        /* Check the user exists */
-        if (user == null)
+        /* Check the child exists */
+        if (child == null)
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 
         /* Check if a ride is available */
         RideEntity ride;
         List<RideEntity> rdQueryResult = rideRepository.getRidesWithLineIdAndDateAndDirection(lineId, d, dir);
 
-        if (rdQueryResult.size() != 1)
+        if (rdQueryResult.size() != 1 )
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         ride = rdQueryResult.get(0);
 
         /* Check if the stop is present on that line */
-        LineStopEntity stop;
+        LineStopEntity stop = lineStopService.getLineStopWithLineIdAndStopIdAndDir(lineId, stopId, dir);
 
-        List<LineStopEntity> lineStopList = lineStopRepository.getLineStopsWithLineIdAndStopIdAndDir(lineId, stopId, dir);
-        
-        if (lineStopList.size() != 1)
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        stop = lineStopList.get(0);
+        /* Check if the reservation is valid (i.e. the ride to which the reservation refers is not terminated or has
+           already passed through the desired stop ) */
+        rideService.isRidePassedOrEnded(stop, ride);
 
         ReservationEntity r = new ReservationEntity();
         Long id = reservationRepository.getLastId().get(0);
         r.setId(id + 1);
         r.setRide(ride);
         r.setStop(stop.getStop());
-        r.setUser(user);
+        r.setChild(child);
         r.setPresence(presence);
         return r;
     }
 
     public ReservationEntity getReservation(Long lineId, String date, Long reservationId) {
-        Date d = MiscUtils.dateParser(date);
+        Date d = DateUtils.dateParser(date);
 
         ReservationEntity reservation = em.find(ReservationEntity.class, reservationId);
 
@@ -199,14 +212,34 @@ public class ReservationServiceImpl implements ReservationService {
 
         // Since we have tons of useless data, we can also do some other completely unnecessary test to check if
         // the one who populated the DB (or made the request) was drunk
-        if(!(reservation.getRide().getLine().getId().equals(lineId) && reservation.getRide().getDate().equals(d)))
+        if (!(reservation.getRide().getLine().getId().equals(lineId) && reservation.getRide().getDate().equals(d)))
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
 
         return reservation;
     }
 
-    public void deleteReservation(Long lineId, String date, Long reservationId){
+    public void deleteReservation(Long lineId, String date, Long reservationId) {
         ReservationEntity res = getReservation(lineId, date, reservationId);
+
+        isReservationValid(res);
+
         em.remove(em.merge(res));
+    }
+
+    /**
+     * Check if a reservation is still valid
+     * @param res The reservation to be checked for validity
+     * @return True - If the reservation is still valid. If not, it will throw an exception.
+     */
+    private boolean isReservationValid(ReservationEntity res) {
+        RideEntity ride = res.getRide();
+
+        LineStopEntity lineStop = lineStopService.getLineStopWithLineIdAndStopIdAndDir(
+            ride.getLine().getId(),
+            res.getStop().getId(),
+            ride.getDirection()
+        );
+
+        return rideService.isRidePassedOrEnded(lineStop, ride);
     }
 }

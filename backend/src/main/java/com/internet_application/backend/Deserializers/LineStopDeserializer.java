@@ -9,10 +9,11 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.internet_application.backend.Entities.BusLineEntity;
 import com.internet_application.backend.Entities.LineStopEntity;
 import com.internet_application.backend.Entities.StopEntity;
+import com.internet_application.backend.Utils.DateUtils;
 
 import java.io.IOException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @SuppressWarnings("Duplicates")
 public class LineStopDeserializer extends JsonDeserializer<LineStopEntity> {
@@ -27,10 +28,8 @@ public class LineStopDeserializer extends JsonDeserializer<LineStopEntity> {
         final Long id = node.get("id_busline_stop").asLong();
         final Long id_line = node.get("id_line").asLong();
         final Long id_stop = node.get("id_stop").asLong();
-        final String arrival_time = node.get("arrival_time").asText();
+        final Date arrival_time = DateUtils.timeParser(node.get("arrival_time").asText());
         final Boolean direction = node.get("direction").asBoolean();
-
-        System.out.println(id + id_line + id_stop + arrival_time + direction);
 
         SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");
 
@@ -42,15 +41,11 @@ public class LineStopDeserializer extends JsonDeserializer<LineStopEntity> {
 
         LineStopEntity lineStop = new LineStopEntity();
 
-        try {
-            lineStop.setId(id);
-            lineStop.setStop(stop);
-            lineStop.setLine(line);
-            lineStop.setDirection(direction);
-            lineStop.setArrivalTime(df.parse(arrival_time));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        lineStop.setId(id);
+        lineStop.setStop(stop);
+        lineStop.setLine(line);
+        lineStop.setDirection(direction);
+        lineStop.setArrivalTime(arrival_time);
 
         return lineStop;
     }

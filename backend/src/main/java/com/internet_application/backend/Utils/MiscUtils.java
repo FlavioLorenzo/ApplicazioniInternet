@@ -5,24 +5,11 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 @SuppressWarnings("Duplicates")
 public class MiscUtils {
-    public static Date dateParser(String date) throws ResponseStatusException {
-        SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd");
-        try {
-            Date d = ft.parse(date);
-            return d;
-        } catch (ParseException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    public static String dateToString(Date date) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        return dateFormat.format(date);
-    }
 
     /**
      * Translate the direction into a human comprehensible information

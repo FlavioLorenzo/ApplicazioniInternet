@@ -7,7 +7,12 @@ export const environment = {
   apiUrl: 'http://localhost:8080',
   reservationsUrl: '/reservations',
   linesUrl: '/lines',
-  usersUrl: '/users'
+  usersUrl: '/users',
+  availabilitiesUrl: '/availabilities',
+  availabilityUrl: '/availability',
+  confirmedAvailabilityUrl: '/confirmed',
+  viewedAvailabilityUrl: '/viewed',
+  lockedAvailabilityUrl: '/locked'
 };
 
 /*

@@ -55,14 +55,14 @@ public class UserEntity {
     @JoinColumn(name = "id_role", referencedColumnName = "id_role")
     private RoleEntity role;
 
+    @OneToMany(mappedBy = "parent")
+    @JsonIgnore
+    private Set<ChildEntity> children;
+
     @Column
     @Getter
     @Setter
     private Boolean enabled;
-
-    @OneToMany(mappedBy = "user")
-    @JsonIgnore
-    private Set<ReservationEntity> reservations;
 
     @OneToMany(mappedBy = "user")
     @JsonIgnore
@@ -94,12 +94,12 @@ public class UserEntity {
     @JsonIgnore
     public void setRole(RoleEntity role) { this.role = role; }
 
-    public Set<ReservationEntity> getReservations() {
-        return reservations;
+    public Set<ChildEntity> getChildren() {
+        return children;
     }
 
-    public void setReservations(Set<ReservationEntity> reservations) {
-        this.reservations = reservations;
+    public void setChildren(Set<ChildEntity> children) {
+        this.children = children;
     }
 
     public Set<Availability> getAvailabilities() {

@@ -2,6 +2,8 @@ package com.internet_application.backend.Repositories;
 
 import com.internet_application.backend.Entities.RideEntity;
 import com.internet_application.backend.Entities.StopEntity;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -15,6 +17,16 @@ public interface RideRepository extends JpaRepository<RideEntity, Long> {
             "WHERE r.line.id = ?1 " +
             "AND r.date = ?2")
     List<RideEntity> getAllRidesWithLineIdAndDate(Long lineId, Date date);
+
+    @Query("SELECT r FROM RideEntity r " +
+            "WHERE r.line.id = ?1 " +
+            "AND r.date >= ?2 " +
+            "ORDER BY r.date ASC")
+    List<RideEntity> getTopRidesWithLineIdAndDate(Long lineId, Date date, Pageable pageable);
+
+    default List<RideEntity> findTopNRidesWithLineIdAndDate(Long lineId, Date date, int n) {
+        return getTopRidesWithLineIdAndDate(lineId, date, PageRequest.of(0, n));
+    }
 
     @Query("SELECT s FROM StopEntity s, LineStopEntity ls " +
             "WHERE s.id = ls.stop " +
