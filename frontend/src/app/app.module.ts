@@ -33,7 +33,7 @@ import {RegistrationService} from './services/registration.service';
 
 import { LinesComponent } from './lines/lines.component';
 import { AttendanceWrapperComponent } from './attendance-wrapper/attendance-wrapper.component';
-import {MatDialogModule, MatFormFieldModule, MatInputModule, MatNativeDateModule, MatTableModule, MatSortModule} from '@angular/material';
+import {MatDialogModule, MatFormFieldModule, MatInputModule, MatNativeDateModule, MatTableModule, MatSortModule, MatCheckboxModule} from '@angular/material';
 import { DatepickerComponent } from './datepicker/datepicker.component';
 import {DialogBoxPickNotBookedUserComponent} from './attendance/dialog-box-pick-not-booked-user.component';
 import {RegisterComponent} from './register/register.component';
@@ -42,6 +42,7 @@ import { UserDetailsDialogComponent } from './user-details-dialog/user-details-d
 import { LabelRolePipe } from './role-label.pipe';
 import { UserRegistrationComponent } from './user-registration/user-registration.component';
 import { UserScreenComponent } from './user-screen/user-screen.component';
+import { LineSelectorComponent } from './line-selector/line-selector.component';
 
 
 @NgModule({
@@ -62,6 +63,7 @@ import { UserScreenComponent } from './user-screen/user-screen.component';
     LabelRolePipe,
     UserRegistrationComponent,
     UserScreenComponent,
+    LineSelectorComponent,
   ],
   entryComponents: [DialogBoxPickNotBookedUserComponent, UserDetailsDialogComponent],
   imports: [
@@ -83,7 +85,8 @@ import { UserScreenComponent } from './user-screen/user-screen.component';
     MatDialogModule,
     FormsModule,
     MatTableModule,
-    MatSortModule
+    MatSortModule,
+    MatCheckboxModule
   ],
   providers: [
     AuthService,

@@ -14,8 +14,7 @@ export class UserListComponent implements OnInit {
   userList;
   displayedColumns: string[] = ['first_name', 'last_name', 'phone', 'email', 'role'];
 
-//@ViewChild(MatSort, {static: true}) sort: MatSort; This doesn't not compile
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatSort, {static: true}) sort: MatSort;
 
   constructor(private usersService: UsersService, private dialog: MatDialog) { 
   }
@@ -24,6 +23,7 @@ export class UserListComponent implements OnInit {
 
     this.usersService.getAllusers().subscribe(users => {
 
+      /*
       this.userList = new MatTableDataSource(users);
 
       console.log(JSON.stringify(users));
@@ -32,6 +32,7 @@ export class UserListComponent implements OnInit {
       setTimeout(() => {
         this.userList.sort = this.sort;
       });
+      */
     });
   }
 

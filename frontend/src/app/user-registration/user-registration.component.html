@@ -15,17 +15,20 @@
       
         <mat-form-field>
           <mat-label>User type</mat-label>
-          <mat-select [(ngModel)]="selectedValue">
+          <mat-select [(ngModel)]="selectedValue" name="selectedValue">
             <mat-option *ngFor="let type of userTypes" [value]="type.id" >
               {{type.name}}
             </mat-option>
           </mat-select>
         </mat-form-field>
+
+        <app-line-selector *ngIf="selectedValue === 'companion'"
+        [checkableLines]="[{id_line:1, name:'prova'},{id_line:2, name:'prova2'}]"
+        [allLines]="[]"
+        ></app-line-selector>
+
+
   </form>
  
-  
-  <div *ngIf="selectedValue === 'user'">
-
-  </div>
 
 </div>

@@ -1,0 +1,13 @@
+.fixedItem {
+    border: 1px solid white;
+    margin: 2px;
+    padding: 4px;
+    border-radius: 3px;
+}
+
+.checkboxItem {
+    border: 1px solid white;
+    margin: 2px;
+    padding: 4px;
+    border-radius: 3px;
+}
