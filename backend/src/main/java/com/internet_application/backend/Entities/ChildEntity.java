@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
 import java.util.Set;
 
 @Entity
@@ -38,7 +37,7 @@ public class ChildEntity {
     @Setter
     private String phone;
 
-    @OneToMany(mappedBy = "child")
+    @OneToMany(mappedBy = "child",cascade=CascadeType.REMOVE)
     @JsonIgnore
     private Set<ReservationEntity> reservations;
 
