@@ -5,7 +5,7 @@ import {ReservationPostBody, ReservationsService} from '../services/reservations
 import {UsersService} from '../services/users.service';
 import {Ride} from '../Models/Ride';
 import {BusStop} from '../Models/BusLineStop';
-import {MatDialog} from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import {DialogBoxPickNotBookedUserComponent} from './dialog-box-pick-not-booked-user.component';
 
 @Component({

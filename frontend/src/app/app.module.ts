@@ -8,13 +8,13 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatSelectModule} from '@angular/material/select';
-import {MatButtonModule} from '@angular/material/button';
+import {MatButtonModule} from '@angular/material/button'; 
 
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
 import {HTTP_INTERCEPTORS} from '@angular/common/http';
 
-import { JwtInterceptor } from 'src/app/helpers/jwt.interceptor';
+import { JwtInterceptor } from './helpers/jwt.interceptor';
 import { AuthService } from './services/auth.service';
 import { AuthGuard as AuthGuard } from './guards/auth.guard';
 
@@ -33,7 +33,13 @@ import {RegistrationService} from './services/registration.service';
 
 import { LinesComponent } from './lines/lines.component';
 import { AttendanceWrapperComponent } from './attendance-wrapper/attendance-wrapper.component';
-import {MatDialogModule, MatFormFieldModule, MatInputModule, MatNativeDateModule, MatTableModule, MatSortModule, MatCheckboxModule} from '@angular/material';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSortModule } from '@angular/material/sort';
+import { MatTableModule } from '@angular/material/table';
 import { DatepickerComponent } from './datepicker/datepicker.component';
 import {DialogBoxPickNotBookedUserComponent} from './attendance/dialog-box-pick-not-booked-user.component';
 import {RegisterComponent} from './register/register.component';
@@ -43,6 +49,9 @@ import { LabelRolePipe } from './role-label.pipe';
 import { UserRegistrationComponent } from './user-registration/user-registration.component';
 import { UserScreenComponent } from './user-screen/user-screen.component';
 import { LineSelectorComponent } from './line-selector/line-selector.component';
+import { ChildrenScreenComponent } from './children-screen/children-screen.component';
+import { ChildrenListComponent } from './children-list/children-list.component';
+import { ChildrenRegistrationComponent } from './children-registration/children-registration.component';
 
 
 @NgModule({
@@ -64,6 +73,9 @@ import { LineSelectorComponent } from './line-selector/line-selector.component';
     UserRegistrationComponent,
     UserScreenComponent,
     LineSelectorComponent,
+    ChildrenScreenComponent,
+    ChildrenListComponent,
+    ChildrenRegistrationComponent,
   ],
   entryComponents: [DialogBoxPickNotBookedUserComponent, UserDetailsDialogComponent],
   imports: [

@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {AttendanceComponent} from '../attendance/attendance.component';
-import {MatDatepickerInputEvent} from '@angular/material';
+import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 
 @Component({
   selector: 'app-datepicker',

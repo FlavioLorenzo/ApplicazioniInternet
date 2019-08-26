@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {FormControl, FormGroupDirective, NgForm, Validators} from '@angular/forms';
+import {FormControl, FormGroupDirective, NgForm, Validators, FormGroup, FormBuilder} from '@angular/forms';
 import {ErrorStateMatcher} from '@angular/material/core';
 
 
@@ -23,6 +23,10 @@ export class UserRegistrationComponent implements OnInit {
     Validators.email,
   ]);
 
+  selectFormControl = new FormControl('', [
+    Validators.required
+  ]);
+
   matcher = new MyErrorStateMatcher();
 
   userTypes = [
@@ -30,9 +34,18 @@ export class UserRegistrationComponent implements OnInit {
     { id: "companion", name: "Accompagnatore" }
   ]
 
-  constructor() { }
+  selectedValue;
+
+  constructor() {
+
+   }
 
   ngOnInit() {
+    
+  }
+
+  onSendRegistration(){
+    console.log(`Registering ${this.selectFormControl.value} with mail ${this.emailFormControl.value}`);
   }
 
 }

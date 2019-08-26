@@ -1,6 +1,7 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import { UsersService } from '../services/users.service';
-import { MatSort, MatDialogConfig, MatDialog } from '@angular/material';
+import { MatDialogConfig, MatDialog } from '@angular/material/dialog';
+import { MatSort } from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import { UserDetailsDialogComponent } from '../user-details-dialog/user-details-dialog.component';
 
@@ -22,8 +23,7 @@ export class UserListComponent implements OnInit {
   ngOnInit() {
 
     this.usersService.getAllusers().subscribe(users => {
-
-      /*
+ 
       this.userList = new MatTableDataSource(users);
 
       console.log(JSON.stringify(users));
@@ -32,7 +32,7 @@ export class UserListComponent implements OnInit {
       setTimeout(() => {
         this.userList.sort = this.sort;
       });
-      */
+      
     });
   }
 

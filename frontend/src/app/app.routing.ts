@@ -9,6 +9,8 @@ import {AttendanceWrapperComponent} from './attendance-wrapper/attendance-wrappe
 import {RegisterComponent} from './register/register.component';
 import { UserListComponent } from './user-list/user-list.component';
 import { UserScreenComponent } from './user-screen/user-screen.component';
+import { ChildrenListComponent } from './children-list/children-list.component';
+import { ChildrenScreenComponent } from './children-screen/children-screen.component';
 
 
 const appRoutes: Routes = [
@@ -38,6 +40,11 @@ const appRoutes: Routes = [
   {
     path: 'users',
     component: UserScreenComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'children',
+    component: ChildrenScreenComponent,
     canActivate: [AuthGuard]
   },
   { // Otherwise redirect to home

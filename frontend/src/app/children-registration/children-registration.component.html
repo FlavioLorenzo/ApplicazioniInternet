@@ -1,0 +1,26 @@
+<div class="container">
+    <h1>Child registration</h1>
+  
+    <form class="registration-form">
+        <mat-form-field>
+            <input matInput placeholder="First name" [formControl]="firstNameFormControl"
+                   [errorStateMatcher]="matcher">
+            <mat-error *ngIf="firstNameFormControl.hasError('required')">
+              First name is <strong>required</strong>
+            </mat-error>
+        </mat-form-field>
+        <mat-form-field>
+            <input matInput placeholder="Last name" [formControl]="lastNameFormControl"
+                   [errorStateMatcher]="matcher">
+            <mat-error *ngIf="lastNameFormControl.hasError('required')">
+              Last name is <strong>required</strong>
+            </mat-error>
+        </mat-form-field>
+        
+          
+          <button mat-raised-button (click)="onSendRegistration()">SEND</button>
+  
+    </form>
+   
+  
+  </div>

@@ -1,7 +1,7 @@
 <div class="container">
   <h1>User registration</h1>
 
-  <form class="example-form">
+  <form class="registration-form">
       <mat-form-field class="example-full-width">
           <input matInput placeholder="Email" [formControl]="emailFormControl"
                  [errorStateMatcher]="matcher">
@@ -15,18 +15,21 @@
       
         <mat-form-field>
           <mat-label>User type</mat-label>
-          <mat-select [(ngModel)]="selectedValue" name="selectedValue">
+          <mat-select name="selectedValue" [formControl]="selectFormControl">
             <mat-option *ngFor="let type of userTypes" [value]="type.id" >
               {{type.name}}
             </mat-option>
           </mat-select>
+          <mat-error *ngIf="selectFormControl.hasError('required')">
+              Select is <strong>required</strong>
+            </mat-error>
         </mat-form-field>
 
-        <app-line-selector *ngIf="selectedValue === 'companion'"
+        <app-line-selector *ngIf="selectFormControl.value === 'companion'"
         [checkableLines]="[{id_line:1, name:'prova'},{id_line:2, name:'prova2'}]"
-        [allLines]="[]"
-        ></app-line-selector>
+        [allLines]="[]"></app-line-selector>
 
+        <button mat-raised-button (click)="onSendRegistration()">SEND</button>
 
   </form>
  
