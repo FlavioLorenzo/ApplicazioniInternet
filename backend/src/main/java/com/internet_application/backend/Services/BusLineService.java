@@ -8,5 +8,7 @@ import java.util.List;
 public interface BusLineService {
     List<BusLineEntity> getAllBusLines();
 
-    List<List<LineStopEntity>> getBusLineWithName(Long lineId);
+    List<List<LineStopEntity>> getBusLineTimeTableWithName(Long lineId);
+
+    BusLineEntity getBuslineById(Long lineId);
 }

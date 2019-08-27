@@ -1,0 +1,16 @@
+<h1 mat-dialog-title>Stop selection</h1>
+<div mat-dialog-content>
+  <p>Select a different stop:</p>
+
+  <app-select-available-stops [rideId]="ride.id" (stopSelected)="onStopSelected($event)"></app-select-available-stops>
+</div>
+<div mat-dialog-actions>
+  <div class="row ai-dialog-button-container">
+    <div class="col-6 ai-dialog-button-div">
+      <button mat-button class="btn btn-danger ai-dialog-button" (click)="onUndoClick()">Undo</button>
+    </div>
+    <div class="col-6 ai-dialog-button-div">
+      <button mat-button class="btn btn-success ai-dialog-button" (click)="onModifyClick(selectedStop)" cdkFocusInitial>Modify</button>
+    </div>
+  </div>
+</div>

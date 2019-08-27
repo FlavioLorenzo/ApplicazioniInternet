@@ -33,7 +33,6 @@ export class AuthService {
       .pipe(map(res =>  {
         let cus = null;
         if (res) {
-
           if (this.redirectUrl) {
             console.log('Redirect url is:', this.redirectUrl);
             this.router.navigate([this.redirectUrl]);
@@ -43,7 +42,7 @@ export class AuthService {
             this.router.navigate(['/']);
           }
 
-          cus = new CurrentUser(res.mail, res.token)
+          cus = new CurrentUser(res.mail, res.token);
           localStorage.setItem('currentUser', JSON.stringify(cus));
           this.currentUserSubject.next(cus);
         }

@@ -1,0 +1,7 @@
+<mat-form-field>
+  <mat-label>Select the stop</mat-label>
+  <select matNativeControl (change)="onSelectStop($event.target.value)">
+    <option value="" selected></option>
+    <option *ngFor="let stop of stops" [value]="stop.stopId">{{stop.stopName}} - {{stop.arrivalTime}}</option>
+  </select>
+</mat-form-field>

@@ -29,6 +29,7 @@ import {ReservationsService} from './services/reservations.service';
 import {LinesService} from './services/lines.service';
 import {UsersService} from './services/users.service';
 import {RegistrationService} from './services/registration.service';
+import {StopService} from './services/stop.service';
 
 import { LinesComponent } from './lines/lines.component';
 import { AttendanceWrapperComponent } from './attendance-wrapper/attendance-wrapper.component';
@@ -36,6 +37,13 @@ import {MatDialogModule, MatFormFieldModule, MatInputModule, MatNativeDateModule
 import { DatepickerComponent } from './datepicker/datepicker.component';
 import {DialogBoxPickNotBookedUserComponent} from './attendance/dialog-box-pick-not-booked-user.component';
 import {RegisterComponent} from './register/register.component';
+import { ReservationComponent } from './reservation/reservation.component';
+import { SelectLinesComponent } from './select-lines/select-lines.component';
+import { SelectionComponent } from './reservation/selection/selection.component';
+import { ReservationRideDisplayComponent } from './reservation/reservation-ride-display/reservation-ride-display.component';
+import { ReservationRideComponent } from './reservation/reservation-ride-display/reservation-ride/reservation-ride.component';
+import { ModifyStopPopupComponent } from './reservation/reservation-ride-display/modify-stop-popup/modify-stop-popup.component';
+import { SelectAvailableStopsComponent } from './select-available-stops/select-available-stops.component';
 
 @NgModule({
   declarations: [
@@ -49,9 +57,16 @@ import {RegisterComponent} from './register/register.component';
     LinesComponent,
     AttendanceWrapperComponent,
     DatepickerComponent,
-    DialogBoxPickNotBookedUserComponent
+    DialogBoxPickNotBookedUserComponent,
+    ReservationComponent,
+    SelectLinesComponent,
+    SelectionComponent,
+    ReservationRideDisplayComponent,
+    ReservationRideComponent,
+    ModifyStopPopupComponent,
+    SelectAvailableStopsComponent
   ],
-  entryComponents: [DialogBoxPickNotBookedUserComponent],
+  entryComponents: [DialogBoxPickNotBookedUserComponent, ModifyStopPopupComponent],
   imports: [
     BrowserModule,
     MatListModule,
@@ -82,7 +97,8 @@ import {RegisterComponent} from './register/register.component';
     LinesService,
     UsersService,
     RegistrationService,
-    MatDatepickerModule
+    MatDatepickerModule,
+    StopService
   ],
   bootstrap: [AppComponent]
 })

@@ -15,7 +15,6 @@ export class LinesComponent implements OnInit {
 
   constructor(private linesService: LinesService) {}
 
-
   ngOnInit() {
     this.linesService.getAllLines()
       .subscribe(
@@ -34,8 +33,4 @@ export class LinesComponent implements OnInit {
     console.log(idLine);
     this.attendance.changeLine(idLine);
   }
-
-
-
-
 }

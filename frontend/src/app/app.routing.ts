@@ -7,6 +7,9 @@ import {AuthGuard as AuthGuard} from './guards/auth.guard';
 import {LogoutComponent} from './logout/logout.component';
 import {AttendanceWrapperComponent} from './attendance-wrapper/attendance-wrapper.component';
 import {RegisterComponent} from './register/register.component';
+import {ReservationComponent} from './reservation/reservation.component';
+import {SelectionComponent} from "./reservation/selection/selection.component";
+import {ReservationRideDisplayComponent} from "./reservation/reservation-ride-display/reservation-ride-display.component";
 
 const appRoutes: Routes = [
   /*{
@@ -17,6 +20,15 @@ const appRoutes: Routes = [
   {
     path: 'attendance',
     component: AttendanceWrapperComponent ,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'reservation',
+    component: ReservationComponent,
+    children: [
+      { path: '', component: SelectionComponent },
+      { path: 'line/:id/:from', component: ReservationRideDisplayComponent }
+    ],
     canActivate: [AuthGuard]
   },
   {

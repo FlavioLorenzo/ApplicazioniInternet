@@ -25,4 +25,19 @@ export class LinesService {
      );
   }
 
+  getLineNameFromId(lineId: number): Observable<any> {
+    return this.http.get<any>(
+      environment.apiUrl +
+      environment.linesUrl +
+      '/' + lineId
+    )
+      .pipe(
+        retry(1),
+        catchError(err => {
+          console.error(err.message);
+          console.log('Error is handled');
+          return throwError('Error thrown from catchError');
+        })
+      );
+  }
 }
