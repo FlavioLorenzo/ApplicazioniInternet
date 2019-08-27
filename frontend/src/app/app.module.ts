@@ -52,6 +52,7 @@ import { LineSelectorComponent } from './line-selector/line-selector.component';
 import { ChildrenScreenComponent } from './children-screen/children-screen.component';
 import { ChildrenListComponent } from './children-list/children-list.component';
 import { ChildrenRegistrationComponent } from './children-registration/children-registration.component';
+import { ConfirmRegistrationComponent } from './confirm-registration/confirm-registration.component';
 
 
 @NgModule({
@@ -76,6 +77,7 @@ import { ChildrenRegistrationComponent } from './children-registration/children-
     ChildrenScreenComponent,
     ChildrenListComponent,
     ChildrenRegistrationComponent,
+    ConfirmRegistrationComponent,
   ],
   entryComponents: [DialogBoxPickNotBookedUserComponent, UserDetailsDialogComponent],
   imports: [

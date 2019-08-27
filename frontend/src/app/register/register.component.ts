@@ -19,6 +19,8 @@ export class RegisterComponent implements OnInit {
   submitted = false;
   countErrors = 0;
 
+  isLoading = true
+
   // authenticationService dovrebbe essere httpRegistrationService appena capisco come passarlo
   constructor(private fb: FormBuilder,
               private registrationService: RegistrationService,
@@ -132,6 +134,9 @@ export class RegisterComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    setTimeout(() => {
+      this.isLoading = false;
+    }, 1000);
   }
 
 }

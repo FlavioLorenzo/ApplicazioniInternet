@@ -9,7 +9,7 @@ import { MatSort, MatTableDataSource } from '@angular/material';
 export class ChildrenListComponent implements OnInit {
 
   childrenList;
-  displayedColumns: string[] = ['first_name', 'last_name'];
+  displayedColumns: string[] = ['first_name', 'last_name', 'delete'];
 
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 
@@ -29,6 +29,10 @@ export class ChildrenListComponent implements OnInit {
       setTimeout(() => {
         this.childrenList.sort = this.sort;
       });
+  }
+
+  onDeleteChild(child){
+    console.log(`Deleting ${JSON.stringify(child)}`);
   }
 
 }

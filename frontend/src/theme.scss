@@ -1,4 +1,5 @@
 @import '~@angular/material/theming';
+@import url("https://fonts.googleapis.com/icon?family=Material+Icons");
 @include mat-core();
 
 $my-app-primary: mat-palette($mat-yellow);
@@ -8,6 +9,7 @@ $my-app-warn:    mat-palette($mat-deep-orange);
 $my-app-theme: mat-light-theme($my-app-primary, $my-app-accent, $my-app-warn);
 
 @include angular-material-theme($my-app-theme);
+
 
 .mat-form-field-empty.mat-form-field-label {
     color: white;
