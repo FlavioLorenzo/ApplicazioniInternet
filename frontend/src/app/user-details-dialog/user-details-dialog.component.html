@@ -5,15 +5,24 @@
     <div><span class="">User type</span> {{user.role | roleLabel}}</div>
     <div><span class="">Email</span> {{user.email}}</div>
     <div><span class="">Phone</span> {{user.phone}}</div>
+    <mat-spinner *ngIf="isLoading"></mat-spinner>
     <div *ngIf="user.role.name === 'ROLE_USER'">
         <strong>Figli registrati:</strong> 
-        <mat-spinner *ngIf="isLoading"></mat-spinner>
+      
         <ul *ngIf="!isLoading">
             <li *ngFor="let child of userChildren">
               <span>{{child.first_name}} {{child.last_name}}</span>
             </li>
           </ul>
     </div>
+    <div *ngIf="user.role.name !== 'ROLE_USER'">
+      <strong>Linee amministrate:</strong>
+      <ul *ngIf="!isLoading">
+        <app-line-selector *ngIf="selectFormControl.value === 'companion'"
+        [checkableLines]="[{id_line:1, name:'prova'},{id_line:2, name:'prova2'}]"
+        [allLines]="[{id_line:3, name:'prova3'}]"></app-line-selector>
+      </ul>
+  </div>
 </mat-dialog-content>
 
 <mat-dialog-actions>
