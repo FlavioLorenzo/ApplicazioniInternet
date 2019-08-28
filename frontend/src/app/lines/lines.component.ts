@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {LinesService} from '../services/lines.service';
-import {AttendanceComponent} from '../attendance/attendance.component';
+import {AttendanceComponent} from '../attendance-page/attendance-display/attendance/attendance.component';
 
 @Component({
   selector: 'app-lines',

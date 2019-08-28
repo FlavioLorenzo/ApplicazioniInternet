@@ -1,25 +1,24 @@
 package com.internet_application.backend.Services;
 
-import com.internet_application.backend.Entities.Availability;
+import com.internet_application.backend.Entities.AvailabilityEntity;
 
 import java.util.List;
 
 public interface AvailabilityService {
-    Availability buildAvailability(Long rideId, Long userId, Long stopId);
+    AvailabilityEntity buildAvailability(Long rideId, Long userId, Long stopId);
 
-    public Availability modifyAvailability(Long AvailabilityId, Long rideId, Long stopId);
+    AvailabilityEntity modifyAvailability(Long AvailabilityId, Long rideId, Long stopId);
 
-    Availability addAvailability(Availability availability);
+    AvailabilityEntity addAvailability(AvailabilityEntity availability);
 
-    Availability setConfirmedStatusOfAvailability(Long availabilityId, Boolean confirmedStatus);
+    AvailabilityEntity setStatusOfAvailability(Long availabilityId, Integer status);
 
-    Availability setViewedStatusOfAvailability(Long availabilityId, Boolean viewedStatus);
+    List<AvailabilityEntity> getAllAvailabilitiesForRideWithId(Long rideId);
 
-    Availability setLockedStatusOfAvailability(Long availabilityId, Boolean lockedStatus);
+    AvailabilityEntity getAvailabilityWithId(Long availabilityId);
 
-    List<Availability> getAllAvailabilitiesForRideWithId(Long rideId);
-
-    Availability getAvailabilityWithId(Long availabilityId);
+    List<AvailabilityEntity> getNAvailabilitiesByUserFromDate(Long lineId, Long userId, String date, Integer n);
 
     void deleteAvailabilityWithId(Long availabilityId);
+
 }

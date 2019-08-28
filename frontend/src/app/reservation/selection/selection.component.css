@@ -1,14 +1,1 @@
-.ai-small-content-container {
-  background-color: whitesmoke;
-  border-radius: 10px;
-  color: #242424;
-  margin: 1rem auto 0 auto;
-  padding: 1rem;
-  width: 300px;
-}
 
-@media screen and (max-width: 400px) {
-  .ai-small-content-container {
-    width: 95%;
-  }
-}

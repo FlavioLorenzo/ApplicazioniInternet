@@ -1,8 +1,8 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {ReservationPostBody, ReservationsService} from '../../../services/reservations.service';
 import {MatDialog} from '@angular/material';
-import {ModifyStopPopupComponent} from '../modify-stop-popup/modify-stop-popup.component';
-import {RidesContainer, RideWithReservation} from '../../rides-container';
+import {ModifyStopPopupComponent} from '../../../modify-stop-popup/modify-stop-popup.component';
+import {RidesWithReservationContainer, RideWithReservation} from '../../rides-with-reservation-container';
 import {DateUtilsService} from '../../../services/date-utils.service';
 
 @Component({
@@ -11,7 +11,7 @@ import {DateUtilsService} from '../../../services/date-utils.service';
   styleUrls: ['./reservation-ride.component.css']
 })
 export class ReservationRideComponent implements OnInit {
-  @Input() ride: RidesContainer;
+  @Input() ride: RidesWithReservationContainer;
   @Output() reservationChange = new EventEmitter<any>();
 
   constructor(private dialog: MatDialog, private reservationService: ReservationsService,
@@ -131,7 +131,7 @@ export class ReservationRideComponent implements OnInit {
 
       const dialogRef = this.dialog.open(ModifyStopPopupComponent, {
         width: '250px',
-        data: {ride: toModify}
+        data: {rideId: toModify.id, selectedStop: toModify.reservation.stopId}
       });
 
       dialogRef.afterClosed().subscribe(() => {

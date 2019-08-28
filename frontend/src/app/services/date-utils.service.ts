@@ -8,8 +8,27 @@ export class DateUtilsService {
   constructor() { }
 
   fromPrintFormatToSendFormat(date: string): string {
-    let date_elems: Array<string> = date.split('/');
+    const dateElems: Array<string> = date.split('/');
 
-    return date_elems[2] + '-' + date_elems[1] + '-' + date_elems[0];
+    return dateElems[2] + '-' + dateElems[1] + '-' + dateElems[0];
+  }
+
+  getCurrentDate(): string {
+    const date: Date = new Date();
+
+    const day = date.getDate();
+    let dayString = '';
+    if (day < 10) {
+      dayString = '0';
+    }
+    dayString += day.toString();
+    const month = date.getMonth();
+    let monthString = '';
+    if (month < 10) {
+      monthString = '0';
+    }
+    monthString += month.toString();
+
+    return date.getFullYear().toString() + '-' + monthString + '-' + dayString;
   }
 }

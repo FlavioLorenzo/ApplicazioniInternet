@@ -1,6 +1,6 @@
 package com.internet_application.backend.Controllers;
 
-import com.internet_application.backend.Entities.Availability;
+import com.internet_application.backend.Entities.AvailabilityEntity;
 import com.internet_application.backend.PostBodies.AvailabilityPostBody;
 import com.internet_application.backend.Services.AvailabilityService;
 import com.internet_application.backend.Services.BusLineService;
@@ -23,20 +23,31 @@ public class AvailabilityController {
     BusLineService busLineService;
 
     @GetMapping("/availabilities/{rideId}")
-    public List<Availability> getAvailabilitiesForRideWithId(@PathVariable(value="rideId") Long rideId) {
+    public List<AvailabilityEntity> getAvailabilitiesForRideWithId(@PathVariable(value="rideId") Long rideId) {
         return availabilityService.getAllAvailabilitiesForRideWithId(rideId);
     }
 
     /* Get single availability */
     @GetMapping("/availability/{availabilityId}")
-    public Availability getAvailabilityWithId(@PathVariable(value="availabilityId") Long availabilityId)
+    public AvailabilityEntity getAvailabilityWithId(@PathVariable(value="availabilityId") Long availabilityId)
         throws ResponseStatusException {
         return availabilityService.getAvailabilityWithId(availabilityId);
     }
 
+    @GetMapping("/availabilities/{line_id}/{user_id}/{date}/{n}")
+    public List<AvailabilityEntity> getNReservationsByUserFromDate(@PathVariable(value="line_id") Long lineId,
+                                                                   @PathVariable(value="user_id") Long userId,
+                                                                   @PathVariable(value="date") String date,
+                                                                   @PathVariable(value="n") Integer n)
+            throws ResponseStatusException {
+        List<AvailabilityEntity> availabilities =
+                availabilityService.getNAvailabilitiesByUserFromDate(lineId, userId, date, n);
+        return availabilities;
+    }
+
     /* Create escort availability */
     @PostMapping("/availability")
-    public Availability createAvailability(@RequestBody AvailabilityPostBody availabilityPostBody)
+    public AvailabilityEntity createAvailability(@RequestBody AvailabilityPostBody availabilityPostBody)
         throws ResponseStatusException {
 
         if (availabilityPostBody.getRideId() == null ||
@@ -44,7 +55,7 @@ public class AvailabilityController {
             availabilityPostBody.getStopId() == null)
         throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
 
-        Availability availability = availabilityService.buildAvailability(
+        AvailabilityEntity availability = availabilityService.buildAvailability(
                 availabilityPostBody.getRideId(),
                 availabilityPostBody.getUserId(),
                 availabilityPostBody.getStopId()
@@ -54,8 +65,8 @@ public class AvailabilityController {
 
     /* Modify escort availability */
     @PutMapping("/availability/{availabilityId}")
-    public Availability putAvailability(@PathVariable(value="availabilityId") Long availabilityId,
-                                        @RequestBody AvailabilityPostBody availabilityPostBody)
+    public AvailabilityEntity putAvailability(@PathVariable(value="availabilityId") Long availabilityId,
+                                              @RequestBody AvailabilityPostBody availabilityPostBody)
         throws ResponseStatusException {
         return availabilityService.modifyAvailability(
                 availabilityId,
@@ -72,26 +83,10 @@ public class AvailabilityController {
     }
 
     /* Assign availability */
-    @PutMapping("/availability/{availabilityId}/confirmed")
+    @PutMapping("/availability/{availabilityId}/{statusCode}")
     public void PutConfirmationStatusAvailability(@PathVariable(value="availabilityId") Long availabilityId,
-                                       @RequestBody Boolean status)
+                @PathVariable(value="statusCode") Integer status)
             throws ResponseStatusException {
-        availabilityService.setConfirmedStatusOfAvailability(availabilityId, status);
-    }
-
-    /* Availability viewed */
-    @PutMapping("/availability/{availabilityId}/viewed")
-    public void PutViewedStatusAvailability(@PathVariable(value="availabilityId") Long availabilityId,
-                                            @RequestBody Boolean status)
-            throws ResponseStatusException {
-        availabilityService.setViewedStatusOfAvailability(availabilityId, status);
-    }
-
-    /* Availability locked */
-    @PutMapping("/availability/{availabilityId}/locked")
-    public void PutLockedAvailability(@PathVariable(value="availabilityId") Long availabilityId,
-                                            @RequestBody Boolean status)
-            throws ResponseStatusException {
-        availabilityService.setLockedStatusOfAvailability(availabilityId, status);
+        availabilityService.setStatusOfAvailability(availabilityId, status);
     }
 }

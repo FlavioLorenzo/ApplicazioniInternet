@@ -1,0 +1,98 @@
+.ai-ride-container {
+  background-color: whitesmoke;
+  border-radius: 10px;
+  color: #242424;
+  margin: 1rem auto 0 auto;
+}
+
+.ai-ride-header {
+  border-bottom: 1px solid #38240052;
+  padding: 1rem;
+}
+
+.ai-ride-element {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+.ai-ride-element:hover {
+  cursor: pointer;
+}
+
+/* Container for the info about the stop and arrival time*/
+
+.ai-availability-detail-box {
+  background-color: white;
+  border: 1px solid #a0a0a0;
+  border-radius: 7px;
+  color: #5d5d5d;
+  font-size: 0.95rem;
+  margin-top: 0.25rem;
+  padding: 0.4rem;
+  position: relative;
+}
+
+.ai-availability-detail-modify {
+  position: absolute;
+  right: 2px;
+  top: 2px;
+}
+
+.ai-ride-status {
+  font-size: 0.8rem;
+}
+
+.ai-ride-status div {
+  margin: 0.25rem 0;
+}
+
+/* Status signals */
+.circle-signal {
+  border: 1px solid #7b7b7b;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 0.2rem;
+  height: 10px;
+  width: 10px;
+}
+
+.locked-signal {
+  background-color: #eb0000;
+}
+
+.open-signal, .confirmed-signal {
+  background-color: #10f200;
+}
+
+.new-signal {
+  background-color: #ffc937;
+}
+
+/* Selected signal */
+.ai-select-button-container {
+  position: relative;
+  height: 100%;
+  margin-left: 1.75rem;
+  margin-right: 0.2rem;
+}
+
+.ai-select-button {
+  border: 1px solid #7b7b7b;
+  border-radius: 50%;
+  display: inline-block;
+  height: 30px;
+  width: 30px;
+
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+}
+
+.ai-selected-button-class {
+  background-color: #ffc937;
+}
+
+hr {
+  margin-top: 0rem;
+  margin-bottom: 0rem;
+}

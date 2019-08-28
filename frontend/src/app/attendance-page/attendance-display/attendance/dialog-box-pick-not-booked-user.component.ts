@@ -1,8 +1,8 @@
 import {Component, EventEmitter, Inject, Output} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
-import {Ride} from '../Models/Ride';
-import {User} from '../Models/User';
-import {BusStop} from '../Models/BusLineStop';
+import {Ride} from '../../../Models/Ride';
+import {User} from '../../../Models/User';
+import {BusStop} from '../../../Models/BusLineStop';
 
 @Component({
   selector: 'app-dialog-box-pick-not-booked-user',

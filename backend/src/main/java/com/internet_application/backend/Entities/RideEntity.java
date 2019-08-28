@@ -46,6 +46,12 @@ public class RideEntity {
     @Setter
     private RideBookingStatus rideBookingStatus;
 
+    @JsonProperty("locked")
+    @Column
+    @Getter
+    @Setter
+    private Boolean locked; // 0 unlocked, 1 locked
+
     @ManyToOne
     @JoinColumn(name = "id_latest_stop")
     private StopEntity latestStop;
@@ -67,7 +73,7 @@ public class RideEntity {
 
     @OneToMany(mappedBy = "ride")
     @JsonManagedReference("ride_availability")
-    private Set<Availability> availabilities;
+    private Set<AvailabilityEntity> availabilities;
 
     public BusLineEntity getLine() {
         return line;
@@ -93,11 +99,11 @@ public class RideEntity {
         this.reservations = reservations;
     }
 
-    public Set<Availability> getAvailabilities() {
+    public Set<AvailabilityEntity> getAvailabilities() {
         return availabilities;
     }
 
-    public void setAvailabilities(Set<Availability> availabilities) {
+    public void setAvailabilities(Set<AvailabilityEntity> availabilities) {
         this.availabilities = availabilities;
     }
 

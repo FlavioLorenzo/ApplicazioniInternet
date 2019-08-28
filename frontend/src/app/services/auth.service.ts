@@ -42,7 +42,7 @@ export class AuthService {
             this.router.navigate(['/']);
           }
 
-          cus = new CurrentUser(res.mail, res.token);
+          cus = new CurrentUser(res.id, res.mail, res.token);
           localStorage.setItem('currentUser', JSON.stringify(cus));
           this.currentUserSubject.next(cus);
         }

@@ -14,19 +14,19 @@
 }
 
 .ai-top-route {
-  background-image: url("../../assets/images/image_route_top.png");
+  background-image: url("../../../../assets/images/image_route_top.png");
 }
 
 .ai-bottom-route {
-  background-image: url("../../assets/images/image_route_bottom.png");
+  background-image: url("../../../../assets/images/image_route_bottom.png");
 }
 
 .ai-middle-route {
-  background-image: url("../../assets/images/image_route_middle.png");
+  background-image: url("../../../../assets/images/image_route_middle.png");
 }
 
 .ai-fill-route {
-  background-image: url("../../assets/images/image_route_line.png");
+  background-image: url("../../../../assets/images/image_route_line.png");
   background-position: center;
   background-repeat: repeat-y;
   background-size: contain;

@@ -40,7 +40,7 @@ public class StopEntity {
 
     @OneToMany(mappedBy = "stop")
     @JsonIgnore
-    private Set<Availability> availabilities;
+    private Set<AvailabilityEntity> availabilities;
 
     @OneToMany(mappedBy = "latestStop")
     @JsonIgnore
@@ -62,11 +62,11 @@ public class StopEntity {
         this.reservations = reservations;
     }
 
-    public Set<Availability> getAvailabilities() {
+    public Set<AvailabilityEntity> getAvailabilities() {
         return availabilities;
     }
 
-    public void setAvailabilities(Set<Availability> availabilities) {
+    public void setAvailabilities(Set<AvailabilityEntity> availabilities) {
         this.availabilities = availabilities;
     }
 

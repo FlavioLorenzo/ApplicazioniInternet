@@ -1,4 +1,4 @@
-import {Ride} from '../Models/Ride';
+import {Ride} from '../../../Models/Ride';
 /*
 export const RIDE1: Ride = {
   id: 1, date: '15/05/2019', direction: 'Andata',

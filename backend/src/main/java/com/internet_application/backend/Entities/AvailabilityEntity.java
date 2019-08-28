@@ -2,6 +2,10 @@ package com.internet_application.backend.Entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.internet_application.backend.Enums.RideBookingStatus;
+import com.internet_application.backend.Enums.ShiftStatus;
+import com.internet_application.backend.Serializers.AvailabilitySerializer;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,7 +13,8 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "availability")
-public class Availability {
+@JsonSerialize(using = AvailabilitySerializer.class)
+public class AvailabilityEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonProperty("id_availability")
@@ -35,26 +40,11 @@ public class Availability {
     @JoinColumn(name = "id_stop", referencedColumnName = "id_stop")
     private StopEntity stop;
 
-    // Whether the admin confirmed the shift
-    @JsonProperty("confirmed")
-    @Column
+    @JsonProperty("shiftStatus")
+    @Column(name="shift_status")
     @Getter
     @Setter
-    private Boolean confirmed; // 0 not confirmed, 1 confirmed
-
-    // Whether the user viewed the confirmation
-    @JsonProperty("viewed")
-    @Column
-    @Getter
-    @Setter
-    private Boolean viewed; // 0 not viewed, 1 viewed
-
-    @JsonProperty("locked")
-    @Column
-    @Getter
-    @Setter
-    private Boolean locked; // 0 unlocked, 1 locked
-
+    private ShiftStatus shiftStatus;
 
     public StopEntity getStop() {
         return stop;
@@ -82,12 +72,11 @@ public class Availability {
 
     @Override
     public String toString() {
-        String result =  "Availability " + id + ":\n" +
+        String result =  "AvailabilityEntity " + id + ":\n" +
                 "\tRide: \n------------" + ride.toString() + "------------\n" +
                 "\tUser: \n------------" + user.toString() + "------------\n" +
                 "\tStop: \n------------" + stop.toString() + "------------\n" +
-                "\tConfirmed: \n------------" + confirmed + "------------\n" +
-                "\tViewed: \n------------" + viewed + "------------\n";
+                "\tShift Status: \n------------" + shiftStatus.getDescription() + "------------\n";
         return result;
     }
 }

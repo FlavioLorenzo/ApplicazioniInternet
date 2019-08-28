@@ -1,4 +1,4 @@
-export class RidesContainer {
+export class RidesWithReservationContainer {
   // tslint:disable-next-line:variable-name
   date: string;
   forthRide: RideWithReservation;
@@ -20,6 +20,7 @@ export class RideWithReservation {
   lineId: number;
   lineName: string;
   rideBookingStatus: string;
+  locked: boolean;
   latestStop: string;
   latestStopTime: string;
   reservation: ReservationOfRide;
@@ -29,13 +30,15 @@ export class RideWithReservation {
               direction: boolean,
               lineId: number,
               lineName: string,
-              rideBookingStatus: string) {
+              rideBookingStatus: string,
+              locked: boolean) {
     this.id = id;
     this.date = date;
     this.direction = direction;
     this.lineId = lineId;
     this.lineName = lineName;
     this.rideBookingStatus = rideBookingStatus;
+    this.locked = locked;
   }
 }
 

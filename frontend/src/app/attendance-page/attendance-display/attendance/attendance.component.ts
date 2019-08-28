@@ -1,12 +1,14 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {RIDES} from './mock-buslines';
-import {User} from '../Models/User';
-import {ReservationPostBody, ReservationsService} from '../services/reservations.service';
-import {UsersService} from '../services/users.service';
-import {Ride} from '../Models/Ride';
-import {BusStop} from '../Models/BusLineStop';
+
 import {MatDialog} from '@angular/material';
 import {DialogBoxPickNotBookedUserComponent} from './dialog-box-pick-not-booked-user.component';
+import {ReservationPostBody, ReservationsService} from '../../../services/reservations.service';
+import {UsersService} from '../../../services/users.service';
+import {User} from '../../../Models/User';
+import {BusStop} from '../../../Models/BusLineStop';
+import {RIDES} from './mock-buslines';
+import {Ride} from '../../../Models/Ride';
+import {DateUtilsService} from '../../../services/date-utils.service';
 
 @Component({
   selector: 'app-attendance',
@@ -14,6 +16,9 @@ import {DialogBoxPickNotBookedUserComponent} from './dialog-box-pick-not-booked-
   styleUrls: ['./attendance.component.css']
 })
 export class AttendanceComponent implements OnInit {
+  @Input() date: string;
+  @Input() lineId: number;
+
   rides = RIDES;
   direction = 0;
   ride = this.rides[this.direction];
@@ -24,19 +29,10 @@ export class AttendanceComponent implements OnInit {
   loadedUsers = false;
   loadedLine = false;
 
-  lineId: number;
-
-  isValid: boolean; // If is not valid shows empty screen
-
-  @Input() date: Date; // Linked to calendar component TODO: da rimuovere, in attendance-wrapper.component.html spiego il perchè
-
   constructor(private reservationsService: ReservationsService,
               private usersService: UsersService,
+              private dateService: DateUtilsService,
               public dialog: MatDialog) {
-    this.direction = 0;
-    // TODO replace with selected value
-    this.lineId = 1;
-    this.isValid = true;
   }
 
   ngOnInit() {
@@ -45,19 +41,14 @@ export class AttendanceComponent implements OnInit {
   }
 
   queryReservationService() {
-    this.isValid = false;
     this.reservationsService
       .getReservationsForLineAndDay(this.lineId,
-        this.date.toISOString().split('T')[0])
+        this.date)
       .subscribe(
         (data) => {
           this.rides = data;
           this.ride = this.rides[this.direction];
           this.pageNumber = this.rides.length;
-          console.log(JSON.stringify(data));
-          this.isValid = true; // TODO: IS VALID DOVREBBE ESSERE SE DATA NON E' VUOTO: QUELLO CHE SUCCEDE ORA
-                               // TODO: E' CHE NEL CASO LA RISPOSTA SIA VUOTA VIENE CHIAMATO L'ERRORE. IN REALTÀ L'ERRORE DOVREBBE
-                               // TODO: ESSERE CHIAMATO SOLO QUANDO EFFETTIVAMENTE C'È UN ERRORE
           this.loadedLine = true;
           if (this.loadedUsers && this.ride) {
             console.log('Calling processRemainingUsers from query reservations');
@@ -66,7 +57,6 @@ export class AttendanceComponent implements OnInit {
         },
         (error) => {
           console.log(error);
-          this.isValid = false;
           },
         () => console.log('Done loading reservations')
       );
@@ -77,7 +67,7 @@ export class AttendanceComponent implements OnInit {
 
       this.reservationsService.modifyReservation(
         this.lineId,
-        this.date.toISOString().split('T')[0],
+        this.date,
         passenger.reservationId,
         rpb
       ).subscribe((data) => {
@@ -156,7 +146,7 @@ export class AttendanceComponent implements OnInit {
 
       this.reservationsService.createReservation(
         this.lineId,
-        this.date.toISOString().split('T')[0],
+        this.date,
         rpb
       ).subscribe(() => {
           passenger.picked = !passenger.picked;

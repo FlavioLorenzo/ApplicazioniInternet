@@ -4,8 +4,7 @@ import {StopService} from '../../services/stop.service';
 import {ReservationsService} from '../../services/reservations.service';
 import {LinesService} from '../../services/lines.service';
 import {forkJoin} from 'rxjs';
-import {ReservationOfRide, RidesContainer} from '../rides-container';
-import {Ride} from "../../Models/Ride";
+import {ReservationOfRide, RidesWithReservationContainer} from '../rides-with-reservation-container';
 
 @Component({
   selector: 'app-reservation-ride-display',
@@ -17,7 +16,7 @@ export class ReservationRideDisplayComponent implements OnInit {
   lineName: string;
   fromDate: string;
   rides: any;
-  ridesContainer: Array<RidesContainer> = [];
+  ridesContainer: Array<RidesWithReservationContainer> = [];
 
   constructor(private route: ActivatedRoute, private router: Router,
               private stopService: StopService, private reservationService: ReservationsService,
@@ -78,7 +77,7 @@ export class ReservationRideDisplayComponent implements OnInit {
           this.ridesContainer[pos].backRide = toAdd;
         }
       } else {
-        let newRide: RidesContainer = {
+        let newRide: RidesWithReservationContainer = {
           date: toAdd.date,
           forthRide: undefined,
           backRide: undefined
@@ -93,9 +92,11 @@ export class ReservationRideDisplayComponent implements OnInit {
         this.ridesContainer.push(newRide);
       }
     }
+
+    console.log(this.ridesContainer);
   }
 
-  getPositionInContainer(ridesContainer: Array<RidesContainer>, date: string): number {
+  getPositionInContainer(ridesContainer: Array<RidesWithReservationContainer>, date: string): number {
     for (let i = 0; i < ridesContainer.length; i++) {
       if (ridesContainer[i].date === date) {
         return i;
