@@ -1,5 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatSort, MatTableDataSource } from '@angular/material';
+import { ChildrenService } from '../services/children.service';
+import { Child } from '../Models/Child';
 
 @Component({
   selector: 'app-children-list',
@@ -8,31 +10,31 @@ import { MatSort, MatTableDataSource } from '@angular/material';
 })
 export class ChildrenListComponent implements OnInit {
 
-  childrenList;
-  displayedColumns: string[] = ['first_name', 'last_name', 'delete'];
+  childrenList: MatTableDataSource<Child> = null;
+  displayedColumns: string[] = ['first_name', 'last_name', 'phone', 'delete'];
 
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 
-  constructor() { 
+  constructor(private childrenService: ChildrenService) { 
   }
 
-  ngOnInit() {
-
-    const children = [
-      {first_name: 'Matteo', last_name: 'Bucci'},
-      {first_name: 'Matteo', last_name: 'Bucci'},
-      {first_name: 'Matteo', last_name: 'Bucci'}
-    ]
-
-    this.childrenList = new MatTableDataSource(children);
-
+  ngOnInit() { 
+    this.childrenService.getChildrenForUser(0).subscribe(childrenList => {
+      this.childrenList = new MatTableDataSource(childrenList);
       setTimeout(() => {
         this.childrenList.sort = this.sort;
       });
+    });
   }
 
-  onDeleteChild(child){
-    console.log(`Deleting ${JSON.stringify(child)}`);
+  onDeleteChild(child: Child){
+    console.log(`Pressed deleteChild with ${JSON.stringify(child)}`);
+    this.childrenService.deleteChild(child).subscribe(childrenList=>{
+      this.childrenList = new MatTableDataSource(childrenList);
+      setTimeout(() => {
+        this.childrenList.sort = this.sort;
+      });
+    });
   }
 
 }
