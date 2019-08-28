@@ -52,7 +52,8 @@ public class SecurityJavaConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.OPTIONS,"/**").permitAll()
                 .antMatchers("/login", "/register", "/confirm-account", "/recover", "/recover/**",
                         "/check-email", "/reservations/**", "/rides/**", "/availability/**", "/availability**", "/availabilities/**",
-                        "/children**", "/children/**", "/child/**")
+                        "/children**", "/children/**", "/child/**", "/token-info**", "/token-info/**", "/complete-registration**",
+                        "/complete-registration/**")
                     .permitAll()
                 //.antMatchers("/reservations")
                     //.hasRole("USER")

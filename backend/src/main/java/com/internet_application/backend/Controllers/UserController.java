@@ -61,7 +61,7 @@ public class UserController {
     @ResponseBody
     public ResponseEntity register(@RequestBody @Valid RegistrationPostBody rpb) {
         try {
-            userService.register(rpb.getEmail(), rpb.getPassword(), rpb.getConfirmPassword(), rpb.getFirstName(), rpb.getLastName());
+            userService.register(rpb.getEmail(), rpb.getFirstName(), rpb.getLastName(), rpb.getRoleName());
             return ResponseEntity.status(HttpStatus.OK).body("");
         } catch (Exception e) {
             if(e instanceof ResponseStatusException){
@@ -73,14 +73,24 @@ public class UserController {
         }
     }
 
-    @GetMapping("/confirm-account")
+    @GetMapping("/token-info/{token}")
     @ResponseBody
-    public void confirmAccount(@RequestParam String token, HttpServletResponse httpServletResponse)
-        throws IOException {
-        userService.confirmAccount(token);
-        httpServletResponse.sendRedirect("http://localhost:4200/login");
+    public UserEntity confirmAccount(@PathVariable(value="token") String token)
+        throws ResponseStatusException {
+        return userService.getAccountConfirmationInfo(token);
+    }
 
-        // return ResponseEntity.status(HttpStatus.OK).body("ok");
+    @PostMapping("/complete-registration/{token}")
+    @ResponseBody
+    public void completeAccount(@PathVariable(value="token") String token,
+                                @RequestBody @Valid CompleteUserPostBody completeUserPostBody)
+        throws ResponseStatusException {
+        userService.completeAccount(
+                token,
+                completeUserPostBody.getPassword(),
+                completeUserPostBody.getConfirmPassword(),
+                completeUserPostBody.getPhone()
+        );
     }
 
     @PostMapping("/recover")

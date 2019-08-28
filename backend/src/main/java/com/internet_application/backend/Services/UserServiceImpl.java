@@ -19,6 +19,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -54,15 +55,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void register(String email, String password, String confirmPassword, String firstName, String lastName) {
-
-        //Annotations do must of the work. I just check password matching and that the email is not used
-        if(!password.matches(confirmPassword)){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Password must match");
-        }
-
+    public void register(String email, String firstName, String lastName, String roleName) {
         if(userRepository.findByEmail(email) != null){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Mail already exists");
+        }
+        RoleEntity role = roleRepository.findByName(roleName);
+        if (role == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Role not supported");
         }
 
         UserEntity user = new UserEntity();
@@ -70,42 +69,64 @@ public class UserServiceImpl implements UserService {
         user.setLastName(lastName);
         user.setEmail(email);
         user.setEnabled(false);
-        user.setPassword(password); //This will be encoded in the save method
+        user.setRole(role);
+        user.setPassword(UUID.randomUUID().toString());
         save(user);
 
         ConfirmationToken confirmationToken = new ConfirmationToken();
+        confirmationToken.createToken();
         confirmationToken.setUser(user);
         confirmationToken.setCreationDate(new Date());
-        confirmationToken.createToken();
-
         confirmationTokenRepository.save(confirmationToken);
 
-        SimpleMailMessage mailMessage = new SimpleMailMessage();
-        mailMessage.setTo(user.getEmail());
-        mailMessage.setSubject("Complete Registration!");
-        mailMessage.setFrom("prova123@test.it");
-        mailMessage.setText("To confirm your account, please click here : "
-                +"http://localhost:8080/confirm-account?token="+confirmationToken.getConfirmationToken());
+        try {
+            SimpleMailMessage mailMessage = new SimpleMailMessage();
+            mailMessage.setTo(user.getEmail());
+            mailMessage.setSubject("Complete Registration!");
+            mailMessage.setFrom("prova123@test.it");
+            mailMessage.setText("To confirm your account, please click here : "
+                    + "http://localhost:4200/confirm-account/" + confirmationToken.getConfirmationToken());
 
-        emailSenderService.sendEmail(mailMessage);
+            emailSenderService.sendEmail(mailMessage);
+        }
+        catch(Exception ex) {
+            confirmationTokenRepository.delete(confirmationToken);
+            userRepository.delete(user);
+            throw ex;
+        }
+    }
 
+    /* Returns the user give the confirmation token */
+    @Override
+    public UserEntity getAccountConfirmationInfo(String token) {
+        /* Check the confirmation token exists and it is still valid */
+        ConfirmationToken ct = confirmationTokenRepository.findByConfirmationToken(token);
+        if (ct == null ||
+                !ct.getConfirmationToken().equals(token) ||
+                !isStillValid(ct.getCreationDate()))
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        /* Return the user if it is not enabled yet */
+        UserEntity user = ct.getUser();
+        if (user.getEnabled() == true) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
+        return user;
     }
 
     // TODO we may want to change the response if the token is invalid or the user was already confirmed
     @Override
-    public void confirmAccount(String token) {
-        ConfirmationToken ct = confirmationTokenRepository.findByConfirmationToken(token);
-        if (ct == null ||
-            !ct.getConfirmationToken().equals(token) ||
-            !isStillValid(ct.getCreationDate()))
-            throw new BadCredentialsException("Bad token");
-        UserEntity user = ct.getUser();
-        if (user.getEnabled() == true) {
-            throw new BadCredentialsException("User already confirmed");
-        } else {
-            user.setEnabled(true);
-            userRepository.save(user);
+    public void completeAccount(String token, String password, String confirmPassword, String phone) {
+        UserEntity user = getAccountConfirmationInfo(token);
+        if (password == null ||
+                confirmPassword == null ||
+                phone == null ||
+                !password.matches(confirmPassword)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
+        user.setPassword(password);
+        user.setPhone(phone);
+        user.setEnabled(true);
+        save(user);
     }
 
     @Override

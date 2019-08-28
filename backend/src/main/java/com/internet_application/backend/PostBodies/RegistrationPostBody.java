@@ -15,16 +15,6 @@ public class RegistrationPostBody {
     @Size(min=4, max=255)
     private String email;
 
-    @JsonProperty("password")
-    @NotBlank(message = "Password is mandatory")
-    @Size(min=8, max=32, message = "Size must be between 6 and 32 characters long")
-    private String password;
-
-    @JsonProperty("confirm_password")
-    @NotBlank(message = "Confirm password is mandatory")
-    @Size(min=8, max=32, message = "Size must be between 6 and 32 characters long")
-    private String confirmPassword;
-
     @JsonProperty("first_name")
     @NotBlank(message = "First name is mandatory")
     @Size(min=4, max=255)
@@ -34,5 +24,10 @@ public class RegistrationPostBody {
     @NotBlank(message = "Last name is mandatory")
     @Size(min=4, max=255)
     private String lastName;
+
+    @JsonProperty("role")
+    @NotBlank(message = "Role is mandatory")
+    @Size(min=1, max=255)
+    private String roleName;
 
 }
