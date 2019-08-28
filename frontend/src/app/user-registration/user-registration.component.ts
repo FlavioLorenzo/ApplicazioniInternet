@@ -1,7 +1,9 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import {FormControl, FormGroupDirective, NgForm, Validators, FormGroup, FormBuilder} from '@angular/forms';
 import {ErrorStateMatcher} from '@angular/material/core';
 import { Line } from '../Models/Line';
+import { MatSnackBar } from '@angular/material';
+import { LineSelectorComponent } from '../line-selector/line-selector.component';
 
 
 /** Error when invalid control is dirty, touched, or submitted. */
@@ -21,16 +23,14 @@ export class UserRegistrationComponent implements OnInit {
 
   @Input() myLines: Array<Line>;
 
-  emailFormControl = new FormControl('', [
-    Validators.required,
-    Validators.email,
-  ]);
-
-  selectFormControl = new FormControl('', [
-    Validators.required
-  ]);
-
+  emailFormControl = new FormControl('', [Validators.required, Validators.email]);
+  selectFormControl = new FormControl('', [Validators.required]);
+  firstNameFormControl = new FormControl('', [Validators.required]);
+  lastNameFormControl = new FormControl('', [Validators.required]);
   matcher = new MyErrorStateMatcher();
+
+  isLoading = false; // Load indicator
+
 
   userTypes = [
     { id: "user", name : "Genitore" },
@@ -39,16 +39,48 @@ export class UserRegistrationComponent implements OnInit {
 
   selectedValue;
 
-  constructor() {
+  @ViewChild(LineSelectorComponent, {static: false})
+  private lineSelectorComponent: LineSelectorComponent;
+
+  constructor(private snackBar: MatSnackBar) {
 
    }
 
   ngOnInit() {
-    
+
   }
 
-  onSendRegistration(){
-    console.log(`Registering ${this.selectFormControl.value} with mail ${this.emailFormControl.value}`);
+  onSendRegistration() {
+
+    if(this.lastNameFormControl.valid && this.firstNameFormControl.valid && this.emailFormControl.valid && this.selectFormControl.valid){
+      const firstName = this.firstNameFormControl.value;
+      const lastName = this.lastNameFormControl.value;
+      const email = this.emailFormControl.value;
+      const role = this.selectFormControl.value;
+
+      this.isLoading = true; // Load indicator
+
+      const selectedLines = this.lineSelectorComponent.getSelectedLines()
+
+      console.log(`Registering ${firstName} ${lastName} ${email} ${role}`);
+
+      setTimeout(()=>{
+        this.isLoading = false;
+        this.clearForm();
+        this.snackBar.open("Utente creato con successo");
+      }, 1000);
+    }else{
+      console.log('Check the data');
+    }
+
+  }
+
+
+  clearForm() {
+    this.lastNameFormControl.setValue('');
+    this.firstNameFormControl.setValue('');
+    this.emailFormControl.setValue('');
+    this.selectFormControl.setValue('');
   }
 
 }

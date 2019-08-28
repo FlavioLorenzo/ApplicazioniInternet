@@ -58,3 +58,16 @@ label {
 .ai-dialog-button-container {
   margin-bottom: 1rem;
 }
+
+
+.main-container {
+  background: whitesmoke;
+  color: #242424;
+  margin-top: 1rem;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+.line-selector {
+  display: inline-block;
+}

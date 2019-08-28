@@ -1,34 +1,37 @@
-<div class="container">
-  <h1>User list</h1>
-  <table mat-table [dataSource]="userList" matSort class="mat-elevation-z8">
-  
-    <ng-container matColumnDef="first_name">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>First name</th>
-      <td mat-cell *matCellDef="let element"> {{element.first_name}} </td>
-    </ng-container>
-  
-    <ng-container matColumnDef="last_name">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Last Name</th>
-      <td mat-cell *matCellDef="let element"> {{element.last_name}} </td>
-    </ng-container>
-  
-    <ng-container matColumnDef="email">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Email</th>
-      <td mat-cell *matCellDef="let element"> {{element.email}} </td>
-    </ng-container>
-  
-    <ng-container matColumnDef="phone">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Phone number</th>
-      <td mat-cell *matCellDef="let element"> {{element.phone}} </td>
-    </ng-container>
-  
-    <ng-container matColumnDef="role">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Role</th>
-      <td mat-cell *matCellDef="let element"> {{element.role | roleLabel}} </td>
-    </ng-container>
-  
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="onUserPressed(row)"></tr>
-  </table>
-  
+<div class="main-container">
+    <div class="container">
+        <h1>User list</h1>
+        <table mat-table [dataSource]="userList" matSort class="mat-elevation-z8">
+        
+          <ng-container matColumnDef="first_name">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>First name</th>
+            <td mat-cell *matCellDef="let element"> {{element.first_name}} </td>
+          </ng-container>
+        
+          <ng-container matColumnDef="last_name">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Last Name</th>
+            <td mat-cell *matCellDef="let element"> {{element.last_name}} </td>
+          </ng-container>
+        
+          <ng-container matColumnDef="email">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Email</th>
+            <td mat-cell *matCellDef="let element"> {{element.email}} </td>
+          </ng-container>
+        
+          <ng-container matColumnDef="phone">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Phone number</th>
+            <td mat-cell *matCellDef="let element"> {{element.phone}} </td>
+          </ng-container>
+        
+          <ng-container matColumnDef="role">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Role</th>
+            <td mat-cell *matCellDef="let element"> {{element.role | roleLabel}} </td>
+          </ng-container>
+        
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="onUserPressed(row)"></tr>
+        </table>
+        
+      </div>
+      
 </div>
