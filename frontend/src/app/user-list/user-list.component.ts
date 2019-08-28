@@ -47,6 +47,7 @@ export class UserListComponent implements OnInit {
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.data = user;
+    dialogConfig.minWidth = '400px';
 
     this.dialog.open(UserDetailsDialogComponent, dialogConfig);
 }

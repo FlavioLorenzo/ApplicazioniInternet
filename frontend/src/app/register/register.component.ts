@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {Router} from '@angular/router';
+import {Router, ActivatedRoute} from '@angular/router';
 import {RegistrationPostBody, RegistrationService} from '../services/registration.service';
 import {first, take} from 'rxjs/operators';
 
@@ -21,10 +21,13 @@ export class RegisterComponent implements OnInit {
 
   isLoading = true
 
+  pendingActivationCode: string; //The code used to complete the user
+
   // authenticationService dovrebbe essere httpRegistrationService appena capisco come passarlo
   constructor(private fb: FormBuilder,
               private registrationService: RegistrationService,
-              private router: Router
+              private router: Router,
+              private route: ActivatedRoute
   ) {
     this.form = this.fb.group({
       first: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(256)]],
@@ -134,9 +137,20 @@ export class RegisterComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    setTimeout(() => {
-      this.isLoading = false;
-    }, 1000);
+
+    console.log(JSON.stringify(this.route.snapshot.paramMap));
+
+    this.pendingActivationCode = this.route.snapshot.paramMap.get("code")
+
+    if(this.pendingActivationCode){
+      console.log(`Code retrieved ${this.pendingActivationCode}. Start loading...`);
+        setTimeout(() => {
+          this.isLoading = false;
+        }, 1000);
+    }else{
+      console.log(`Code not present. Going to homepage`);
+      this.router.navigate(['/']);
+    }
   }
 
 }
