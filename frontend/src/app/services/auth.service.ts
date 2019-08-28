@@ -14,7 +14,6 @@ export class AuthService {
   public redirectUrl: string; // store the URL so we can redirect after logging in
 
   constructor(private http: HttpClient, private router: Router) {
-    console.log('NEW ISTANCE OF AUTH SERVICE');
     this.currentUserSubject = new BehaviorSubject<CurrentUser>
     (JSON.parse(localStorage.getItem('currentUser')));
     this.currentUser = this.currentUserSubject.asObservable();
@@ -43,7 +42,8 @@ export class AuthService {
             this.router.navigate(['/']);
           }
 
-          cus = new CurrentUser(res.mail, res.token, res.user_id); //If is true
+          //TODO: E' necessario sapere UID e ROLE
+          cus = new CurrentUser(res.mail, res.token, res.id_user); //If is true
           localStorage.setItem('currentUser', JSON.stringify(cus));
           this.currentUserSubject.next(cus);
         }

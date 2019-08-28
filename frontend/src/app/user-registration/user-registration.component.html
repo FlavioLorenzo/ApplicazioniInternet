@@ -26,7 +26,7 @@
         </mat-form-field>
 
         <app-line-selector *ngIf="selectFormControl.value === 'companion'"
-        [checkableLines]="[{id_line:1, name:'prova'},{id_line:2, name:'prova2'}]"
+        [checkableLines]="myLines"
         [allLines]="[]"></app-line-selector>
 
         <button mat-raised-button (click)="onSendRegistration()">SEND</button>

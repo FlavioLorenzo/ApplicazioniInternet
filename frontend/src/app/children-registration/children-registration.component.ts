@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Validators, FormControl } from '@angular/forms';
+import { MatSnackBar } from '@angular/material';
+import { ChildrenService } from '../services/children.service';
 
 @Component({
   selector: 'app-children-registration',
@@ -8,24 +10,49 @@ import { Validators, FormControl } from '@angular/forms';
 })
 export class ChildrenRegistrationComponent implements OnInit {
 
-  firstNameFormControl = new FormControl('', [
-    Validators.required,
-  ]);
+  isLoading = false;
 
-  lastNameFormControl = new FormControl('', [
-    Validators.required,
-  ]);
+  firstNameFormControl = new FormControl('', [Validators.required]);
+  lastNameFormControl = new FormControl('', [Validators.required]);
+  phoneFormControl = new FormControl('', []);
 
-  constructor() {
+  constructor(private snackBar: MatSnackBar, private childrenService: ChildrenService) {
 
    }
 
   ngOnInit() {
-    
   }
 
   onSendRegistration(){
-    console.log(`Registering ${this.firstNameFormControl.value} ${this.lastNameFormControl.value}`);
+
+    if(this.lastNameFormControl.valid && this.firstNameFormControl.valid){
+      const firstName = this.firstNameFormControl.value;
+      const lastName = this.lastNameFormControl.value;
+      const phone = this.phoneFormControl.value;
+
+      this.isLoading = true; // Load indicator
+
+
+
+      console.log(`Registering ${firstName} ${lastName} ${phone}`);
+
+      this.childrenService.registerChild(1, firstName, lastName, phone).subscribe( result => {
+        this.isLoading = false;
+        this.clearForm();
+        this.snackBar.open("Figlio creato con successo");
+      });
+
+    }else{
+      console.log('Check the data');
+    }
+
+
+  }
+
+  clearForm() {
+    this.lastNameFormControl.setValue('');
+    this.firstNameFormControl.setValue('');
+    this.phoneFormControl.setValue('');
   }
 
 }

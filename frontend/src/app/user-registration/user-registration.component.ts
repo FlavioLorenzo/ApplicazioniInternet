@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import {FormControl, FormGroupDirective, NgForm, Validators, FormGroup, FormBuilder} from '@angular/forms';
 import {ErrorStateMatcher} from '@angular/material/core';
+import { Line } from '../Models/Line';
 
 
 /** Error when invalid control is dirty, touched, or submitted. */
@@ -17,6 +18,8 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
   styleUrls: ['./user-registration.component.css']
 })
 export class UserRegistrationComponent implements OnInit {
+
+  @Input() myLines: Array<Line>;
 
   emailFormControl = new FormControl('', [
     Validators.required,

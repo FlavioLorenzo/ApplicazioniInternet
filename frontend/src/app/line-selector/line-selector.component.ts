@@ -17,9 +17,12 @@ export class LineSelectorComponent implements OnInit {
   ngOnInit() {
     this.fixedLines = this.allLines.filter(currentLine => {
       const index = this.checkableLines.map(it=>it.id_line).indexOf(currentLine.id_line);
-      console.log(`Looking for ${JSON.stringify(currentLine.id_line)}. Index = ${index}`);
       return index < 0;
     });
+  }
+
+  isLineInCommon(lineId){
+    return this.allLines.map(it => it.id_line).indexOf(lineId) > 0;
   }
 
 }

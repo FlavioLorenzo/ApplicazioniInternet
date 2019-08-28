@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {catchError, retry} from 'rxjs/operators';
+import {catchError, retry, map} from 'rxjs/operators';
 import {environment} from '../../environments/environment';
 import {Observable, throwError} from 'rxjs';
 
@@ -14,6 +14,20 @@ export class UsersService {
       environment.apiUrl +
       environment.usersUrl)
       .pipe(
+        //TODO: THIS IS JUST A DEBUG THING
+        map(it => {
+          it.forEach(user => {
+            if (user.id_user === 2){
+              user.role.role_id = 2;
+              user.role.name = 'ROLE_COMPANION';
+            }
+            if (user.id_user === 3){
+              user.role.role_id = 2;
+              user.role.name = 'ROLE_ADMIN';
+            }
+          });
+          return it;
+        }),
         retry(3),
         catchError(err => {
           console.error(err.message);

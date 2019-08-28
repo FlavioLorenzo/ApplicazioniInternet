@@ -1,5 +1,5 @@
 <div>
   <span>Amministratore delle linee: </span>
-  <mat-checkbox class="checkboxItem" *ngFor="let line of checkableLines" [id]="line.id" >{{line.name}}</mat-checkbox>
+  <mat-checkbox class="checkboxItem" *ngFor="let line of checkableLines" [id]="line.id_line" [checked]="isLineInCommon(line.id_line)">{{line.name}}</mat-checkbox>
   <span class="fixedItem" *ngFor="let line of fixedLines">{{line.name}}</span>
 </div>

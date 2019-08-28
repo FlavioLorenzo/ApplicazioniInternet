@@ -25,7 +25,7 @@ export class ChildrenService {
      });
   }
 
-  public registerChild(userId: string, firstName: string, lastName: string, phone: string): Observable<any> {
+  public registerChild(userId: number, firstName: string, lastName: string, phone: string): Observable<any> {
     return Observable.create(observer => {
       setTimeout(() => {
         const maxIndex = Math.max.apply(null, this.children.map(it =>  it.child_id))

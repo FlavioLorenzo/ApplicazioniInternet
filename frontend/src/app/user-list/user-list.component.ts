@@ -1,9 +1,10 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild, Input} from '@angular/core';
 import { UsersService } from '../services/users.service';
 import { MatDialogConfig, MatDialog } from '@angular/material/dialog';
 import { MatSort } from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import { UserDetailsDialogComponent } from '../user-details-dialog/user-details-dialog.component';
+import { Line } from '../Models/Line';
 
 @Component({
   selector: 'app-user-list',
@@ -14,6 +15,7 @@ export class UserListComponent implements OnInit {
 
   userList;
   displayedColumns: string[] = ['first_name', 'last_name', 'phone', 'email', 'role'];
+  @Input() myLines: Array<Line>;
 
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 
@@ -46,7 +48,10 @@ export class UserListComponent implements OnInit {
 
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
-    dialogConfig.data = user;
+    dialogConfig.data = {
+      user,
+      myLines: this.myLines
+    }
     dialogConfig.minWidth = '400px';
 
     this.dialog.open(UserDetailsDialogComponent, dialogConfig);

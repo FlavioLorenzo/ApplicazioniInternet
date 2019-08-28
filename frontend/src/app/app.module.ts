@@ -52,7 +52,7 @@ import { LineSelectorComponent } from './line-selector/line-selector.component';
 import { ChildrenScreenComponent } from './children-screen/children-screen.component';
 import { ChildrenListComponent } from './children-list/children-list.component';
 import { ChildrenRegistrationComponent } from './children-registration/children-registration.component';
-import { MatProgressSpinnerModule } from '@angular/material';
+import { MatProgressSpinnerModule, MatSnackBarModule, MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material';
 
 
 @NgModule({
@@ -100,7 +100,8 @@ import { MatProgressSpinnerModule } from '@angular/material';
     MatTableModule,
     MatSortModule,
     MatCheckboxModule,
-    MatProgressSpinnerModule  
+    MatProgressSpinnerModule,
+    MatSnackBarModule
   ],
   providers: [
     AuthService,
@@ -114,7 +115,8 @@ import { MatProgressSpinnerModule } from '@angular/material';
     LinesService,
     UsersService,
     RegistrationService,
-    MatDatepickerModule
+    MatDatepickerModule,
+    {provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: {duration: 2000}}
   ],
   bootstrap: [AppComponent]
 })
