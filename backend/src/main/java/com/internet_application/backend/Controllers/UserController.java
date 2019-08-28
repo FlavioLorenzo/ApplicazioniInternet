@@ -49,7 +49,9 @@ public class UserController {
             roles.add(u.getRole().getName());
             String token = jwtTokenProvider.createToken(mail, new ArrayList<String>(/*u.getRole().getName()*/)/*u.getRoles()*/);
             Map<Object, Object> model = new HashMap<>();
+            model.put("id", u.getId());
             model.put("mail", mail);
+            model.put("role", u.getRole());
             model.put("token", token);
             return ResponseEntity.ok(model);
         } catch (Exception e) {
