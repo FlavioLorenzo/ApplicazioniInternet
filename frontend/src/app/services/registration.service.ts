@@ -40,6 +40,12 @@ export class RegistrationService {
       requestOptions)
       .pipe(retry(3));
   }
+
+  checkCode(code: string) {
+    //TODO: TO IMPLEMENT
+  }
+
+
 }
 
 export class RegistrationPostBody {

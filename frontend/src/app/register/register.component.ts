@@ -20,6 +20,8 @@ export class RegisterComponent implements OnInit {
   countErrors = 0;
 
   isLoading = true
+  hasError = true
+  registrationCompleted = false
 
   pendingActivationCode: string; //The code used to complete the user
 
