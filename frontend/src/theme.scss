@@ -2,9 +2,9 @@
 @import url("https://fonts.googleapis.com/icon?family=Material+Icons");
 @include mat-core();
 
-$my-app-primary: mat-palette($mat-yellow);
-$my-app-accent:  mat-palette($mat-yellow, 500, 900, A100);
-$my-app-warn:    mat-palette($mat-deep-orange);
+$my-app-primary: mat-palette($mat-deep-purple);
+$my-app-accent:  mat-palette($mat-blue, 500, 900, A100);
+$my-app-warn:    mat-palette($mat-red);
 
 $my-app-theme: mat-light-theme($my-app-primary, $my-app-accent, $my-app-warn);
 
@@ -12,12 +12,12 @@ $my-app-theme: mat-light-theme($my-app-primary, $my-app-accent, $my-app-warn);
 
 
 .mat-form-field-empty.mat-form-field-label {
-    color: white;
+    color: black;
 }
 .mat-select-value{
-    color : white;
+    color : black;
 }
 
 input.mat-input-element {
-    color: white;
+    color: black;
 }

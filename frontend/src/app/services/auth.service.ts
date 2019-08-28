@@ -43,7 +43,7 @@ export class AuthService {
             this.router.navigate(['/']);
           }
 
-          cus = new CurrentUser(res.mail, res.token)
+          cus = new CurrentUser(res.mail, res.token, res.user_id); //If is true
           localStorage.setItem('currentUser', JSON.stringify(cus));
           this.currentUserSubject.next(cus);
         }

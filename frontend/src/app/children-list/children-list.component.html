@@ -1,5 +1,6 @@
-<div class="container">
-    <h1>Children list</h1>
+<div class="main-container">
+  <div class="container">
+    <h2>Children list</h2>
     <table mat-table [dataSource]="childrenList" matSort class="mat-elevation-z8">
     
       <ng-container matColumnDef="first_name">
@@ -30,5 +31,9 @@
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
     
-  </div>
+  </div>  
+</div>
+
+
+
   

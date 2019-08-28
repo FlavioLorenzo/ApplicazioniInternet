@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatSort, MatTableDataSource } from '@angular/material';
 import { ChildrenService } from '../services/children.service';
 import { Child } from '../Models/Child';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-children-list',
@@ -15,26 +16,34 @@ export class ChildrenListComponent implements OnInit {
 
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 
-  constructor(private childrenService: ChildrenService) { 
+  constructor(private childrenService: ChildrenService, private authService: AuthService) {}
+
+  ngOnInit() {
+
+    // Query the user children
+    this.childrenService.getChildrenForUser(this.authService.currentUserValue.userId)
+      .subscribe(childrenList => this.setDataSource(childrenList));
+
   }
 
-  ngOnInit() { 
-    this.childrenService.getChildrenForUser(0).subscribe(childrenList => {
-      this.childrenList = new MatTableDataSource(childrenList);
-      setTimeout(() => {
-        this.childrenList.sort = this.sort;
-      });
-    });
+  onDeleteChild(child: Child) {
+
+    // Browser confirm dialog
+    if (confirm(`Confirm to delete child ${child.first_name} + ${child.last_name}? This operation can't be undone.`)) {
+     // Delete child from service
+      this.childrenService.deleteChild(child)
+      .subscribe(childrenList => this.setDataSource(childrenList));
+    }
+
   }
 
-  onDeleteChild(child: Child){
-    console.log(`Pressed deleteChild with ${JSON.stringify(child)}`);
-    this.childrenService.deleteChild(child).subscribe(childrenList=>{
-      this.childrenList = new MatTableDataSource(childrenList);
-      setTimeout(() => {
-        this.childrenList.sort = this.sort;
-      });
-    });
+  private setDataSource(childrenList) {
+
+    // Set the datasource with the new data
+    this.childrenList = new MatTableDataSource(childrenList);
+    // Set the table sort
+    setTimeout(() => { this.childrenList.sort = this.sort; });
+
   }
 
 }

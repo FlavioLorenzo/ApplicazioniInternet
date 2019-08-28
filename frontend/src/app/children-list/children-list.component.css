@@ -1,4 +1,12 @@
 table {
     margin: auto;
 }
-  
+
+
+.main-container {
+    margin-top: 1rem;
+    background: whitesmoke;
+    color: #242424;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
