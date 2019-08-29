@@ -23,7 +23,13 @@
           <a class="nav-link" routerLink="/users">Users</a>
         </li>
         <li class="nav-item" *ngIf='currentUser' routerLinkActive="active">
+          <a class="nav-link" routerLink="/reservation">Reservation</a>
+        </li>
+        <li class="nav-item" *ngIf='currentUser' routerLinkActive="active">
           <a class="nav-link" routerLink="/children">Children</a>
+        </li>
+        <li class="nav-item" *ngIf='currentUser' routerLinkActive="active">
+          <a class="nav-link" routerLink="/shift-definition">Shift Definition</a>
         </li>
         <li class="nav-item" *ngIf='currentUser' routerLinkActive="active">
           <a class="nav-link" routerLink="/logout">Logout</a>

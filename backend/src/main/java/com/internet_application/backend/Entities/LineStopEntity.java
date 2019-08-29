@@ -2,6 +2,8 @@ package com.internet_application.backend.Entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.internet_application.backend.Serializers.LineStopSerializer;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Type;
@@ -20,6 +22,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "busline_stop")
+@JsonSerialize(using = LineStopSerializer.class)
 @NamedQuery(name = "LineStopEntity.findAllWithIdLine",
         query = "SELECT c FROM LineStopEntity c WHERE c.line.id = :id")
 @NamedQuery(name="LineStopEntity.findAllWithIdLineAndDirection",

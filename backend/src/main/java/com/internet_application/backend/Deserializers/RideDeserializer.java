@@ -29,6 +29,7 @@ public class RideDeserializer extends JsonDeserializer<RideEntity> {
         final Boolean direction = node.get("direction").asBoolean();
         final Long id_line = node.get("id_line").asLong();
         final Integer rideBookingStatus = node.get("ride_booking_status").asInt();
+        final Boolean locked = node.get("locked").asBoolean();
 
         StopEntity latestStop = null;
         if(node.has("latest_stop_id")) {
@@ -54,6 +55,7 @@ public class RideDeserializer extends JsonDeserializer<RideEntity> {
         ride.setDirection(direction);
         ride.setLine(line);
         ride.setRideBookingStatus(rideBookingStatusConverter.convertToEntityAttribute(rideBookingStatus));
+        ride.setLocked(locked);
         ride.setLatestStop(latestStop);
         ride.setLatestStopTime(latestStopTime);
 

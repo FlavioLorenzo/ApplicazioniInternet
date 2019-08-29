@@ -151,4 +151,26 @@ public class RideServiceImpl implements RideService {
 
         return true;
     }
+
+    @Override
+    public List<LineStopEntity> getAvailableStops(Long rideId) {
+        RideEntity ride = rideRepository.getOne(rideId);
+
+        List<LineStopEntity> lineStops;
+        if(ride.getLatestStop() != null) {
+            lineStops = lineStopService.getLineStopsAvailableWithLineIdAndDir(
+                            ride.getLine().getId(),
+                            ride.getDirection(),
+                            ride.getLatestStop().getId());
+        } else {
+            lineStops = lineStopService.getLineStopsWithLineIdAndDir(
+                            ride.getLine().getId(),
+                            ride.getDirection());
+        }
+
+        return lineStops;
+    }
+
+
+
 }

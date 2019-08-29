@@ -66,7 +66,7 @@ public class UserEntity {
 
     @OneToMany(mappedBy = "user")
     @JsonIgnore
-    private Set<Availability> availabilities;
+    private Set<AvailabilityEntity> availabilities;
 
     @OneToMany(mappedBy = "admin")
     @JsonIgnore
@@ -102,11 +102,11 @@ public class UserEntity {
         this.children = children;
     }
 
-    public Set<Availability> getAvailabilities() {
+    public Set<AvailabilityEntity> getAvailabilities() {
         return availabilities;
     }
 
-    public void setAvailabilities(Set<Availability> availabilities) {
+    public void setAvailabilities(Set<AvailabilityEntity> availabilities) {
         this.availabilities = availabilities;
     }
 

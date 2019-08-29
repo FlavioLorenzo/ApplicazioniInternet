@@ -184,11 +184,25 @@ public class ReservationServiceImpl implements ReservationService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         ride = rdQueryResult.get(0);
 
+        /* Check if the selected ride is not terminated yet */
+        rideService.isRideEnded(ride);
+
         /* Check if the stop is present on that line */
-        LineStopEntity stop = lineStopService.getLineStopWithLineIdAndStopIdAndDir(lineId, stopId, dir);
+        LineStopEntity stop;
+
+        // If the stopId is less than 0, than we request the creation of a reservation for the first available stop
+        if(stopId < 0) {
+            if(ride.getLatestStop() != null)
+                stop = lineStopService.getFirstLineStopAvailableWithLineIdAndDir(lineId, dir, ride.getLatestStop().getId());
+            else{
+                stop = lineStopService.getFirstLineStopWithLineIdAndDir(lineId, dir);
+            }
+        } else {
+            stop = lineStopService.getLineStopWithLineIdAndStopIdAndDir(lineId, stopId, dir);
+        }
 
         /* Check if the reservation is valid (i.e. the ride to which the reservation refers is not terminated or has
-           already passed through the desired stop ) */
+        already passed through the desired stop ) */
         rideService.isRidePassedOrEnded(stop, ride);
 
         ReservationEntity r = new ReservationEntity();

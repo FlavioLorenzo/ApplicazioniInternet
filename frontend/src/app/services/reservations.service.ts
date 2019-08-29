@@ -93,21 +93,40 @@ export class ReservationsService {
         })
       );
   }
+
+  public getNReservationsByChildFromDate(lineId: number, childId: number, date: string, n: number): Observable<any> {
+    return this.http.get<any>(
+      environment.apiUrl +
+      environment.reservationsUrl +
+      '/' + lineId +
+      '/' + childId +
+      '/' + date +
+      '/' + n
+    )
+      .pipe(
+        retry(1),
+        catchError(err => {
+          console.error(err.message);
+          console.log('Error is handled');
+          return throwError('Error thrown from catchError');
+        })
+      );
+  }
 }
 
 
 export class ReservationPostBody {
   // tslint:disable-next-line:variable-name
-  id_user: number;
+  id_child: number;
   // tslint:disable-next-line:variable-name
   id_stop: number;
   direction: boolean;
   presence: boolean;
-  constructor(userId: number,
+  constructor(childId: number,
               stopId: number,
               direction: boolean,
               presence: boolean) {
-    this.id_user = userId;
+    this.id_stop = childId;
     this.id_stop = stopId;
     this.direction = direction;
     this.presence = presence;

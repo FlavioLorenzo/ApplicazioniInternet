@@ -60,7 +60,7 @@ export class UserRegistrationComponent implements OnInit {
 
       this.isLoading = true; // Load indicator
 
-      const selectedLines = this.lineSelectorComponent.getSelectedLines()
+      //const selectedLines = this.lineSelectorComponent.getSelectedLines()
 
       console.log(`Registering ${firstName} ${lastName} ${email} ${role}`);
 

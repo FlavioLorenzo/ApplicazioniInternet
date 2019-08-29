@@ -7,15 +7,15 @@ import javax.validation.constraints.NotBlank;
 
 @Data
 public class AvailabilityPostBody {
-    @JsonProperty("user_id")
+    @JsonProperty("userId")
     @NotBlank
     private Long userId;
 
-    @JsonProperty("ride_id")
+    @JsonProperty("rideId")
     @NotBlank
     private Long rideId;
 
-    @JsonProperty("stop_id")
+    @JsonProperty("stopId")
     @NotBlank
     private Long stopId;
 }

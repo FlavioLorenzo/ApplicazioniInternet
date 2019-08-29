@@ -31,9 +31,9 @@ public class BusLineController {
     }
 
     @GetMapping("/lines/{line_id}")
-    public List<List<LineStopEntity>> getBusLineWithName(@PathVariable(value="line_id") Long lineId)
+    public BusLineEntity getBusLineWithName(@PathVariable(value="line_id") Long lineId)
         throws ResponseStatusException{
-        return busLineService.getBusLineWithName(lineId);
+        return busLineService.getBuslineById(lineId);
     }
 
     /* Tests */

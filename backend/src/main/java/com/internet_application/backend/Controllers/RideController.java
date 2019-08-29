@@ -29,6 +29,11 @@ public class RideController {
         return rideService.getNRidesFromDate(lineId, date, n);
     }
 
+    @GetMapping("/rides/{rideId}/available")
+    public List<LineStopEntity> getAvailableStops(@PathVariable(value="rideId") Long rideId) {
+        return rideService.getAvailableStops(rideId);
+    }
+
     @PutMapping("/rides/{rideId}/close/{stopId}")
     public RideEntity putCloseStop(
             @PathVariable(value="rideId") Long rideId,

@@ -3,10 +3,11 @@ import {HttpClient} from '@angular/common/http';
 import {Observable, throwError} from 'rxjs';
 import {catchError, retry} from 'rxjs/operators';
 import {environment} from '../../environments/environment';
+import {AuthService} from './auth.service';
 
 @Injectable()
 export class AvailabilityService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private auth: AuthService) {}
 
   public getAvailabilitiesForRideWithId(rideId: number): Observable<any> {
     return this.http.get<any>(
@@ -38,7 +39,8 @@ export class AvailabilityService {
       );
   }
 
-  public createAvailability(availability: AvailabilityBody) {
+  public createAvailability(availability: AvailabilityPostBody) {
+    availability.userId = this.auth.currentUserValue.id;
     return this.http.post(
       environment.apiUrl +
       environment.availabilityUrl,
@@ -53,7 +55,8 @@ export class AvailabilityService {
       );
   }
 
-  public modifyAvailability(availabilityId: number, availability: AvailabilityBody) {
+  public modifyAvailability(availabilityId: number, availability: AvailabilityPostBody) {
+    availability.userId = this.auth.currentUserValue.id;
     return this.http.put(
       environment.apiUrl +
       environment.availabilityUrl +
@@ -134,13 +137,39 @@ export class AvailabilityService {
         })
       );
   }
+
+  public getNAvailabilitiesByUserFromDate(lineId: number, date: string, n: number): Observable<any> {
+    return this.http.get<any>(
+      environment.apiUrl +
+      environment.availabilitiesUrl +
+      '/' + lineId +
+      '/' + this.auth.currentUserValue.id +
+      '/' + date +
+      '/' + n
+    )
+      .pipe(
+        retry(1),
+        catchError(err => {
+          console.error(err.message);
+          console.log('Error is handled');
+          return throwError('Error thrown from catchError');
+        })
+      );
+  }
 }
 
-export class AvailabilityBody {
+export class AvailabilityPostBody {
   // tslint:disable-next-line:variable-name
-  ride_id: number;
+  rideId: number;
   // tslint:disable-next-line:variable-name
-  user_id: number;
+  userId: number;
   // tslint:disable-next-line:variable-name
-  stop_id: number;
+  stopId: number;
+  constructor(rideId: number,
+              userId: number,
+              stopId: number) {
+    this.rideId = rideId;
+    this.stopId = stopId;
+    this.userId = userId;
+  }
 }

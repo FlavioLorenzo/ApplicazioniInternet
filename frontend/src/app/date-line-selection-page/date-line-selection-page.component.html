@@ -1,0 +1,11 @@
+<div class="ai-small-content-container">
+  <form>
+    <div class="form-group">
+      <app-select-lines (lineSelected)="onLineSelected($event)"></app-select-lines>
+    </div>
+    <div class="form-group">
+      <app-datepicker (dateChanged)="onDateChanged($event)"></app-datepicker>
+    </div>
+    <button (click)="onButtonClicked()" class="btn btn-warning">Search Rides</button>
+  </form>
+</div>

@@ -2,6 +2,8 @@ package com.internet_application.backend.Entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.internet_application.backend.Serializers.ReservationSerializer;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,6 +11,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "reservation")
+@JsonSerialize(using = ReservationSerializer.class)
 public class ReservationEntity {
     @Id
     @JsonProperty("id_reservation")

@@ -14,4 +14,5 @@ public interface RideService {
     boolean isRideEnded(RideEntity ride);
     boolean isRideStarted(RideEntity ride);
     boolean isRidePassedOrEnded(LineStopEntity stopToCheck, RideEntity ride);
+    List<LineStopEntity> getAvailableStops(Long rideId);
 }

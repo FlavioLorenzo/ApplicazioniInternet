@@ -32,7 +32,6 @@ export class AuthService {
       .pipe(map(res =>  {
         let cus = null;
         if (res) {
-
           if (this.redirectUrl) {
             console.log('Redirect url is:', this.redirectUrl);
             this.router.navigate([this.redirectUrl]);
@@ -42,8 +41,7 @@ export class AuthService {
             this.router.navigate(['/']);
           }
 
-          //TODO: E' necessario sapere UID e ROLE
-          cus = new CurrentUser(res.mail, res.token, res.id_user); //If is true
+          cus = new CurrentUser(res.id, res.mail, res.token);
           localStorage.setItem('currentUser', JSON.stringify(cus));
           this.currentUserSubject.next(cus);
         }

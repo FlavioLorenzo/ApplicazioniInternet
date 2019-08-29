@@ -24,7 +24,7 @@ public class BusLineServiceImpl implements BusLineService {
         return busLineRepository.findAll();
     }
 
-    public List<List<LineStopEntity>> getBusLineWithName(Long lineId) {
+    public List<List<LineStopEntity>> getBusLineTimeTableWithName(Long lineId) {
         TypedQuery<LineStopEntity> query = em.createNamedQuery("LineStopEntity.findAllWithIdLineAndDirection",
                 LineStopEntity.class);
         query.setParameter("id", lineId);
@@ -40,5 +40,9 @@ public class BusLineServiceImpl implements BusLineService {
         res.add(resForward);
         res.add(resBackward);
         return res;
+    }
+
+    public BusLineEntity getBuslineById(Long lineId) {
+      return busLineRepository.findById(lineId).get();
     }
 }

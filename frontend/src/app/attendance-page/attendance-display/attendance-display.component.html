@@ -1,0 +1,21 @@
+<div class="row justify-content-center">
+  <div class="ai-info-header">
+    <div class="col-12">
+      <div class="ai-info-container" (click)="onBackClick()">
+        <div class="ai-back-button">
+          <i class="fas fa-chevron-left"></i>
+        </div>
+        <div class="ai-info">
+          <span>{{lineName}} - {{date}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row" id="ai-attendance-div">
+  <div class="col-12">
+    <div class="container">
+      <app-attendance [date]="date" [lineId]="lineId"></app-attendance>
+    </div>
+  </div>
+</div>

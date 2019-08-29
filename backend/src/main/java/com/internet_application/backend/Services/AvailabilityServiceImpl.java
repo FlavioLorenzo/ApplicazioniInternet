@@ -1,15 +1,19 @@
 package com.internet_application.backend.Services;
-import com.internet_application.backend.Entities.Availability;
+import com.internet_application.backend.Entities.AvailabilityEntity;
 import com.internet_application.backend.Entities.RideEntity;
 import com.internet_application.backend.Entities.StopEntity;
 import com.internet_application.backend.Entities.UserEntity;
+import com.internet_application.backend.Enums.ShiftStatus;
+import com.internet_application.backend.Enums.ShiftStatusConverter;
 import com.internet_application.backend.Repositories.*;
+import com.internet_application.backend.Utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -18,38 +22,47 @@ public class AvailabilityServiceImpl implements AvailabilityService {
     @Autowired
     private AvailabilityRepository availabilityRepository;
     @Autowired
+    private LineStopService lineStopService;
+    @Autowired
     private RideRepository rideRepository;
     @Autowired
     private UserRepository userRepository;
     @Autowired
     private StopRepository stopRepository;
 
-    public Availability buildAvailability(Long rideId, Long userId, Long stopId) {
+    public AvailabilityEntity buildAvailability(Long rideId, Long userId, Long stopId) {
         RideEntity ride = rideRepository.findById(rideId).orElse(null);
         UserEntity user = userRepository.findById(userId).orElse(null);
         StopEntity stop = stopRepository.findById(stopId).orElse(null);
 
         /* Check for null ride, user or stop */
-        if (ride == null || user == null || stop == null)
+        if (ride == null || user == null)
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 
-        //TODO Check why the hack this control does not work
-        //isStopPresentInRide(ride, stop);
+        if (stop == null) {
+            stop = lineStopService
+                    .getFirstLineStopWithLineIdAndDir(ride.getLine().getId(), ride.getDirection())
+                    .getStop();
+        }
 
-        Availability availability = new Availability();
+        if( lineStopService.getLineStopWithLineIdAndStopIdAndDir(
+                ride.getLine().getId(), stop.getId(), ride.getDirection()) == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "The provided stop is not part of the selected ride");
+        }
+
+        AvailabilityEntity availability = new AvailabilityEntity();
         availability.setRide(ride);
         availability.setUser(user);
         availability.setStop(stop);
-        availability.setConfirmed(false);
-        availability.setViewed(false);
-        availability.setLocked(false);
+        availability.setShiftStatus(ShiftStatus.NEW);
         return availability;
     }
 
-    public Availability modifyAvailability(Long AvailabilityId, Long rideId, Long stopId)
+    public AvailabilityEntity modifyAvailability(Long AvailabilityId, Long rideId, Long stopId)
         throws ResponseStatusException {
-        Availability availability = getAvailabilityWithId(AvailabilityId);
-        if (availability.getLocked())
+        AvailabilityEntity availability = getAvailabilityWithId(AvailabilityId);
+        if (availability.getRide().getLocked())
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
 
         RideEntity ride = rideRepository.findById(rideId).orElse(null);
@@ -58,16 +71,20 @@ public class AvailabilityServiceImpl implements AvailabilityService {
         if (ride == null || stop == null)
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 
-        //TODO Check why the hack this control does not work
-        //isStopPresentInRide(ride, stop);
+        if( lineStopService.getLineStopWithLineIdAndStopIdAndDir(
+                ride.getLine().getId(), stop.getId(), ride.getDirection()) == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "The provided stop is not part of the selected ride");
+        }
 
         availability.setRide(ride);
         availability.setStop(stop);
+        availability.setShiftStatus(ShiftStatus.NEW);
         availabilityRepository.save(availability);
         return availability;
     }
 
-    public Availability addAvailability(Availability availability) {
+    public AvailabilityEntity addAvailability(AvailabilityEntity availability) {
         if (availabilityRepository.findAvailabilityByRideAndUser(
                 availability.getRide().getId(),
                 availability.getUser().getId()) == null)
@@ -78,52 +95,58 @@ public class AvailabilityServiceImpl implements AvailabilityService {
         return availability;
     }
 
-    public Availability setConfirmedStatusOfAvailability(Long availabilityId, Boolean confirmedStatus) {
-        Availability availability = availabilityRepository.findById(availabilityId).orElse(null);
+    public AvailabilityEntity setStatusOfAvailability(Long availabilityId, Integer status) {
+        AvailabilityEntity availability = availabilityRepository.findById(availabilityId).orElse(null);
         if (availability == null)
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        if (availability.getLocked())
+        if (availability.getRide().getLocked())
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
-        availability.setConfirmed(confirmedStatus);
+
+        ShiftStatus currentStatus = availability.getShiftStatus();
+
+        if(status == ShiftStatus.CONFIRMED.getCode() && currentStatus != ShiftStatus.NEW) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Cannot set status to Confirmed since the current status is " + currentStatus.getDescription());
+        }
+
+        if(status == ShiftStatus.VIEWED.getCode() && currentStatus != ShiftStatus.CONFIRMED) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Cannot set status to Viewed since the current status is " + currentStatus.getDescription());
+        }
+
+        ShiftStatusConverter ssc = new ShiftStatusConverter();
+
+        availability.setShiftStatus(ssc.convertToEntityAttribute(status));
         availabilityRepository.save(availability);
         return availability;
     }
 
-    public Availability setViewedStatusOfAvailability(Long availabilityId, Boolean viewedStatus) {
-        Availability availability = availabilityRepository.findById(availabilityId).orElse(null);
-        if (availability == null)
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        /* Check if the availability is confirmed. If it is not reject the request */
-        if (!availability.getConfirmed() || availability.getLocked())
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
-        availability.setViewed(viewedStatus);
-        availabilityRepository.save(availability);
-        return availability;
-    }
-
-    public Availability setLockedStatusOfAvailability(Long availabilityId, Boolean lockedStatus) {
-        Availability availability = availabilityRepository.findById(availabilityId).orElse(null);
-        if (availability == null)
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        availability.setLocked(lockedStatus);
-        availabilityRepository.save(availability);
-        return availability;
-    }
-
-    public List<Availability> getAllAvailabilitiesForRideWithId(Long rideId) {
+    public List<AvailabilityEntity> getAllAvailabilitiesForRideWithId(Long rideId) {
         return availabilityRepository.getAllAvailabilitiesForRideWithId(rideId);
     }
 
-    public Availability getAvailabilityWithId(Long availabilityId) {
-        Availability availability = availabilityRepository.findById(availabilityId).orElse(null);
+    public AvailabilityEntity getAvailabilityWithId(Long availabilityId) {
+        AvailabilityEntity availability = availabilityRepository.findById(availabilityId).orElse(null);
         if (availability == null)
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         return availability;
     }
 
+    @Override
+    public List<AvailabilityEntity> getNAvailabilitiesByUserFromDate(Long lineId, Long userId, String date, Integer n) {
+        Date d = DateUtils.dateParser(date);
+
+        int pageNumber = n.intValue();
+
+        List<AvailabilityEntity> availabilities =
+                availabilityRepository.getFirstNReservationsWithLineIdAndUserIdAndDate(lineId, userId, d, pageNumber * 2);
+
+        return availabilities;
+    }
+
     public void deleteAvailabilityWithId(Long availabilityId) {
-        Availability availability = getAvailabilityWithId(availabilityId);
-        if (availability.getLocked())
+        AvailabilityEntity availability = getAvailabilityWithId(availabilityId);
+        if (availability.getRide().getLocked())
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         availabilityRepository.delete(availability);
     }

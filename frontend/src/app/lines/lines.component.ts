@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {LinesService} from '../services/lines.service';
-import {AttendanceComponent} from '../attendance/attendance.component';
+import {AttendanceComponent} from '../attendance-page/attendance-display/attendance/attendance.component';
 
 @Component({
   selector: 'app-lines',
@@ -14,7 +14,6 @@ export class LinesComponent implements OnInit {
   lines = [];
 
   constructor(private linesService: LinesService) {}
-
 
   ngOnInit() {
     this.linesService.getAllLines()
@@ -34,8 +33,4 @@ export class LinesComponent implements OnInit {
     console.log(idLine);
     this.attendance.changeLine(idLine);
   }
-
-
-
-
 }

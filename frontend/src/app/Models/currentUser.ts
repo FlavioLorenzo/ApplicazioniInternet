@@ -1,5 +1,12 @@
 export class CurrentUser {
+  id: number;
+  mail: string;
+  token: string;
 
-  constructor(public mail: string, public token: string, public userId: number) {}
+  constructor(id: number, mail: string, token: string) {
+    this.id = id;
+    this.mail = mail;
+    this.token = token;
+  }
 
 }

@@ -22,7 +22,7 @@ import {appRoutingModule} from './app.routing';
 import {HeaderComponent} from './header/header.component';
 import {HomeComponent} from './home/home.component';
 import {AppComponent} from './app.component';
-import {AttendanceComponent} from './attendance/attendance.component';
+import {AttendanceComponent} from './attendance-page/attendance-display/attendance/attendance.component';
 import {LoginComponent} from './login/login.component';
 import { LogoutComponent } from './logout/logout.component';
 
@@ -30,9 +30,9 @@ import {ReservationsService} from './services/reservations.service';
 import {LinesService} from './services/lines.service';
 import {UsersService} from './services/users.service';
 import {RegistrationService} from './services/registration.service';
+import {StopService} from './services/stop.service';
 
 import { LinesComponent } from './lines/lines.component';
-import { AttendanceWrapperComponent } from './attendance-wrapper/attendance-wrapper.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -41,7 +41,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { DatepickerComponent } from './datepicker/datepicker.component';
-import {DialogBoxPickNotBookedUserComponent} from './attendance/dialog-box-pick-not-booked-user.component';
+// tslint:disable-next-line:max-line-length
+import {DialogBoxPickNotBookedUserComponent} from './attendance-page/attendance-display/attendance/dialog-box-pick-not-booked-user.component';
 import {RegisterComponent} from './register/register.component';
 import { UserListComponent } from './user-list/user-list.component';
 import { UserDetailsDialogComponent } from './user-details-dialog/user-details-dialog.component';
@@ -54,6 +55,26 @@ import { ChildrenListComponent } from './children-list/children-list.component';
 import { ChildrenRegistrationComponent } from './children-registration/children-registration.component';
 import { MatProgressSpinnerModule, MatSnackBarModule, MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material';
 
+import { ReservationComponent } from './reservation/reservation.component';
+import { SelectLinesComponent } from './select-lines/select-lines.component';
+import { SelectionComponent } from './reservation/selection/selection.component';
+import { ReservationRideDisplayComponent } from './reservation/reservation-ride-display/reservation-ride-display.component';
+import { ReservationRideComponent } from './reservation/reservation-ride-display/reservation-ride/reservation-ride.component';
+import { ModifyStopPopupComponent } from './modify-stop-popup/modify-stop-popup.component';
+import { SelectAvailableStopsComponent } from './select-available-stops/select-available-stops.component';
+import { DateLineSelectionPageComponent } from './date-line-selection-page/date-line-selection-page.component';
+import { AttendancePageComponent } from './attendance-page/attendance-page.component';
+// tslint:disable-next-line:max-line-length
+import { AttendanceDateLineSelectionComponent } from './attendance-page/attendance-date-line-selection/attendance-date-line-selection.component';
+import { AttendanceDisplayComponent } from './attendance-page/attendance-display/attendance-display.component';
+import { ShiftDefinitionPageComponent } from './shift-definition-page/shift-definition-page.component';
+// tslint:disable-next-line:max-line-length
+import { ShiftDefinitionDateLineSelectionComponent } from './shift-definition-page/shift-definition-date-line-selection/shift-definition-date-line-selection.component';
+// tslint:disable-next-line:max-line-length
+import { ShiftDefinitionRideDisplayComponent } from './shift-definition-page/shift-definition-ride-display/shift-definition-ride-display.component';
+// tslint:disable-next-line:max-line-length
+import { ShiftDefinitionRideComponent } from './shift-definition-page/shift-definition-ride-display/shift-definition-ride/shift-definition-ride.component';
+import {AvailabilityService} from "./services/availability.service";
 
 @NgModule({
   declarations: [
@@ -65,7 +86,6 @@ import { MatProgressSpinnerModule, MatSnackBarModule, MAT_SNACK_BAR_DEFAULT_OPTI
     HeaderComponent,
     LogoutComponent,
     LinesComponent,
-    AttendanceWrapperComponent,
     DatepickerComponent,
     DialogBoxPickNotBookedUserComponent,
     UserListComponent,
@@ -77,8 +97,43 @@ import { MatProgressSpinnerModule, MatSnackBarModule, MAT_SNACK_BAR_DEFAULT_OPTI
     ChildrenScreenComponent,
     ChildrenListComponent,
     ChildrenRegistrationComponent,
+    ReservationComponent,
+    ModifyStopPopupComponent,
+    SelectLinesComponent,
+    SelectionComponent,
+    ReservationRideDisplayComponent,
+    ReservationRideComponent,
+    ModifyStopPopupComponent,
+    SelectAvailableStopsComponent,
+    DateLineSelectionPageComponent,
+    AttendancePageComponent,
+    AttendanceDateLineSelectionComponent,
+    AttendanceDisplayComponent,
+    ShiftDefinitionPageComponent,
+    ShiftDefinitionDateLineSelectionComponent,
+    ShiftDefinitionRideDisplayComponent,
+    ShiftDefinitionRideComponent
   ],
-  entryComponents: [DialogBoxPickNotBookedUserComponent, UserDetailsDialogComponent],
+  entryComponents: [
+    DialogBoxPickNotBookedUserComponent,
+    UserDetailsDialogComponent,
+    ModifyStopPopupComponent,
+    ReservationComponent,
+    SelectLinesComponent,
+    SelectionComponent,
+    ReservationRideDisplayComponent,
+    ReservationRideComponent,
+    ModifyStopPopupComponent,
+    SelectAvailableStopsComponent,
+    DateLineSelectionPageComponent,
+    AttendancePageComponent,
+    AttendanceDateLineSelectionComponent,
+    AttendanceDisplayComponent,
+    ShiftDefinitionPageComponent,
+    ShiftDefinitionDateLineSelectionComponent,
+    ShiftDefinitionRideDisplayComponent,
+    ShiftDefinitionRideComponent
+  ],
   imports: [
     BrowserModule,
     MatListModule,
@@ -116,7 +171,10 @@ import { MatProgressSpinnerModule, MatSnackBarModule, MAT_SNACK_BAR_DEFAULT_OPTI
     UsersService,
     RegistrationService,
     MatDatepickerModule,
-    {provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: {duration: 2000}}
+    {provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: {duration: 2000}},
+    AvailabilityService,
+    MatDatepickerModule,
+    StopService
   ],
   bootstrap: [AppComponent]
 })
