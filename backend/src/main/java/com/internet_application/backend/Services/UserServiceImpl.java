@@ -1,13 +1,7 @@
 package com.internet_application.backend.Services;
 
-import com.internet_application.backend.Entities.ConfirmationToken;
-import com.internet_application.backend.Entities.RecoverToken;
-import com.internet_application.backend.Entities.RoleEntity;
-import com.internet_application.backend.Entities.UserEntity;
-import com.internet_application.backend.Repositories.ConfirmationTokenRepository;
-import com.internet_application.backend.Repositories.RecoverTokenRepository;
-import com.internet_application.backend.Repositories.RoleRepository;
-import com.internet_application.backend.Repositories.UserRepository;
+import com.internet_application.backend.Entities.*;
+import com.internet_application.backend.Repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.mail.SimpleMailMessage;
@@ -16,9 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -34,6 +26,8 @@ public class UserServiceImpl implements UserService {
     private ConfirmationTokenRepository confirmationTokenRepository;
     @Autowired
     private RecoverTokenRepository recoverTokenRepository;
+    @Autowired
+    private BusLineRepository busLineRepository;
 
     private final String USER_ROLE = "ROLE_USER";
 
@@ -54,15 +48,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void register(String email, String password, String confirmPassword, String firstName, String lastName) {
-
-        //Annotations do must of the work. I just check password matching and that the email is not used
-        if(!password.matches(confirmPassword)){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Password must match");
-        }
-
+    public void register(String email, String firstName, String lastName, Long roleId) {
         if(userRepository.findByEmail(email) != null){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Mail already exists");
+        }
+        RoleEntity role = roleRepository.findById(roleId).orElse(null);
+        if (role == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Role not supported");
         }
 
         UserEntity user = new UserEntity();
@@ -70,42 +62,64 @@ public class UserServiceImpl implements UserService {
         user.setLastName(lastName);
         user.setEmail(email);
         user.setEnabled(false);
-        user.setPassword(password); //This will be encoded in the save method
-        save(user);
+        user.setRole(role);
+        user.setPassword(UUID.randomUUID().toString());
+        userRepository.save(user);
 
         ConfirmationToken confirmationToken = new ConfirmationToken();
+        confirmationToken.createToken();
         confirmationToken.setUser(user);
         confirmationToken.setCreationDate(new Date());
-        confirmationToken.createToken();
-
         confirmationTokenRepository.save(confirmationToken);
 
-        SimpleMailMessage mailMessage = new SimpleMailMessage();
-        mailMessage.setTo(user.getEmail());
-        mailMessage.setSubject("Complete Registration!");
-        mailMessage.setFrom("prova123@test.it");
-        mailMessage.setText("To confirm your account, please click here : "
-                +"http://localhost:8080/confirm-account?token="+confirmationToken.getConfirmationToken());
+        try {
+            SimpleMailMessage mailMessage = new SimpleMailMessage();
+            mailMessage.setTo(user.getEmail());
+            mailMessage.setSubject("Complete Registration!");
+            mailMessage.setFrom("prova123@test.it");
+            mailMessage.setText("To confirm your account, please click here : "
+                    + "http://localhost:4200/confirm-account/" + confirmationToken.getConfirmationToken());
 
-        emailSenderService.sendEmail(mailMessage);
+            emailSenderService.sendEmail(mailMessage);
+        }
+        catch(Exception ex) {
+            confirmationTokenRepository.delete(confirmationToken);
+            userRepository.delete(user);
+            throw ex;
+        }
+    }
 
+    /* Returns the user give the confirmation token */
+    @Override
+    public UserEntity getAccountConfirmationInfo(String token) {
+        /* Check the confirmation token exists and it is still valid */
+        ConfirmationToken ct = confirmationTokenRepository.findByConfirmationToken(token);
+        if (ct == null ||
+                !ct.getConfirmationToken().equals(token) ||
+                !isStillValid(ct.getCreationDate()))
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        /* Return the user if it is not enabled yet */
+        UserEntity user = ct.getUser();
+        if (user.getEnabled() == true) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
+        return user;
     }
 
     // TODO we may want to change the response if the token is invalid or the user was already confirmed
     @Override
-    public void confirmAccount(String token) {
-        ConfirmationToken ct = confirmationTokenRepository.findByConfirmationToken(token);
-        if (ct == null ||
-            !ct.getConfirmationToken().equals(token) ||
-            !isStillValid(ct.getCreationDate()))
-            throw new BadCredentialsException("Bad token");
-        UserEntity user = ct.getUser();
-        if (user.getEnabled() == true) {
-            throw new BadCredentialsException("User already confirmed");
-        } else {
-            user.setEnabled(true);
-            userRepository.save(user);
+    public void completeAccount(String token, String password, String confirmPassword, String phone) {
+        UserEntity user = getAccountConfirmationInfo(token);
+        if (password == null ||
+                confirmPassword == null ||
+                phone == null ||
+                !password.matches(confirmPassword)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
+        user.setPassword(bCryptPasswordEncoder.encode(password));
+        user.setPhone(phone);
+        user.setEnabled(true);
+        userRepository.save(user);
     }
 
     @Override
@@ -203,4 +217,67 @@ public class UserServiceImpl implements UserService {
         user.setRole(re);
         userRepository.save(user);
     }
+
+    /* Assign the admin role for a certain line */
+    public UserEntity addAdminRoleOfLineToUser(Long lineId, Long userId)
+        throws ResponseStatusException {
+        /* Check if the user and the line exist */
+        UserEntity user = userRepository.findById(userId).orElse(null);
+        BusLineEntity busLineEntity = busLineRepository.findById(lineId).orElse(null);
+        if (user == null || busLineEntity == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+        /* Remove the previous admin */
+        UserEntity previousAdmin = busLineEntity.getAdmin();
+        if (previousAdmin != null) {
+            previousAdmin.removeManagedLine(busLineEntity);
+            /* If the previous user has no administered line set its role to escort */
+            if (previousAdmin.getAdministeredBuslines().isEmpty()) {
+                previousAdmin.setRole(roleRepository.findByName("ROLE_ESCORT"));
+                userRepository.save(previousAdmin);
+            }
+        }
+        /* Set the user as admin */
+        busLineEntity.setAdmin(user);
+        user.addManagedLine(busLineEntity);
+        user.setRole(roleRepository.findByName("ROLE_ADMIN"));
+        busLineRepository.save(busLineEntity);
+        userRepository.save(user);
+        return user;
+    }
+
+    /* Remove an administered line from a user */
+    public UserEntity removeAdminRoleOfLineFromUser(Long lineId, Long userId)
+        throws ResponseStatusException {
+        /* Check if the user and the line exist */
+        UserEntity user = userRepository.findById(userId).orElse(null);
+        BusLineEntity busLineEntity = busLineRepository.findById(lineId).orElse(null);
+        if (user == null || busLineEntity == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+        /* Check if the user administers the line */
+        if (user != busLineEntity.getAdmin()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+        /* Remove the line from the user */
+        user.removeManagedLine(busLineEntity);
+        busLineEntity.setAdmin(null);
+        /* If the user has no administered line drop its role to escort */
+        if (user.getAdministeredBuslines().isEmpty()) {
+            user.setRole(roleRepository.findByName("ROLE_ESCORT"));
+        }
+        userRepository.save(user);
+        busLineRepository.save(busLineEntity);
+        return user;
+    }
+
+    public List<BusLineEntity> getAdministeredLineOfUser(Long userId)
+        throws ResponseStatusException {
+        UserEntity user = userRepository.findById(userId).orElse(null);
+        if (user == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+        return new ArrayList<>(user.getAdministeredBuslines());
+    }
+
 }
