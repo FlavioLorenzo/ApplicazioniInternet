@@ -1,13 +1,7 @@
 package com.internet_application.backend.Services;
 
-import com.internet_application.backend.Entities.ConfirmationToken;
-import com.internet_application.backend.Entities.RecoverToken;
-import com.internet_application.backend.Entities.RoleEntity;
-import com.internet_application.backend.Entities.UserEntity;
-import com.internet_application.backend.Repositories.ConfirmationTokenRepository;
-import com.internet_application.backend.Repositories.RecoverTokenRepository;
-import com.internet_application.backend.Repositories.RoleRepository;
-import com.internet_application.backend.Repositories.UserRepository;
+import com.internet_application.backend.Entities.*;
+import com.internet_application.backend.Repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.mail.SimpleMailMessage;
@@ -16,10 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -35,6 +26,8 @@ public class UserServiceImpl implements UserService {
     private ConfirmationTokenRepository confirmationTokenRepository;
     @Autowired
     private RecoverTokenRepository recoverTokenRepository;
+    @Autowired
+    private BusLineRepository busLineRepository;
 
     private final String USER_ROLE = "ROLE_USER";
 
@@ -55,11 +48,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void register(String email, String firstName, String lastName, String roleName) {
+    public void register(String email, String firstName, String lastName, Long roleId) {
         if(userRepository.findByEmail(email) != null){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Mail already exists");
         }
-        RoleEntity role = roleRepository.findByName(roleName);
+        RoleEntity role = roleRepository.findById(roleId).orElse(null);
         if (role == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Role not supported");
         }
@@ -71,7 +64,7 @@ public class UserServiceImpl implements UserService {
         user.setEnabled(false);
         user.setRole(role);
         user.setPassword(UUID.randomUUID().toString());
-        save(user);
+        userRepository.save(user);
 
         ConfirmationToken confirmationToken = new ConfirmationToken();
         confirmationToken.createToken();
@@ -123,10 +116,10 @@ public class UserServiceImpl implements UserService {
                 !password.matches(confirmPassword)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
-        user.setPassword(password);
+        user.setPassword(bCryptPasswordEncoder.encode(password));
         user.setPhone(phone);
         user.setEnabled(true);
-        save(user);
+        userRepository.save(user);
     }
 
     @Override
@@ -224,4 +217,67 @@ public class UserServiceImpl implements UserService {
         user.setRole(re);
         userRepository.save(user);
     }
+
+    /* Assign the admin role for a certain line */
+    public UserEntity addAdminRoleOfLineToUser(Long lineId, Long userId)
+        throws ResponseStatusException {
+        /* Check if the user and the line exist */
+        UserEntity user = userRepository.findById(userId).orElse(null);
+        BusLineEntity busLineEntity = busLineRepository.findById(lineId).orElse(null);
+        if (user == null || busLineEntity == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+        /* Remove the previous admin */
+        UserEntity previousAdmin = busLineEntity.getAdmin();
+        if (previousAdmin != null) {
+            previousAdmin.removeManagedLine(busLineEntity);
+            /* If the previous user has no administered line set its role to escort */
+            if (previousAdmin.getAdministeredBuslines().isEmpty()) {
+                previousAdmin.setRole(roleRepository.findByName("ROLE_ESCORT"));
+                userRepository.save(previousAdmin);
+            }
+        }
+        /* Set the user as admin */
+        busLineEntity.setAdmin(user);
+        user.addManagedLine(busLineEntity);
+        user.setRole(roleRepository.findByName("ROLE_ADMIN"));
+        busLineRepository.save(busLineEntity);
+        userRepository.save(user);
+        return user;
+    }
+
+    /* Remove an administered line from a user */
+    public UserEntity removeAdminRoleOfLineFromUser(Long lineId, Long userId)
+        throws ResponseStatusException {
+        /* Check if the user and the line exist */
+        UserEntity user = userRepository.findById(userId).orElse(null);
+        BusLineEntity busLineEntity = busLineRepository.findById(lineId).orElse(null);
+        if (user == null || busLineEntity == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+        /* Check if the user administers the line */
+        if (user != busLineEntity.getAdmin()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+        /* Remove the line from the user */
+        user.removeManagedLine(busLineEntity);
+        busLineEntity.setAdmin(null);
+        /* If the user has no administered line drop its role to escort */
+        if (user.getAdministeredBuslines().isEmpty()) {
+            user.setRole(roleRepository.findByName("ROLE_ESCORT"));
+        }
+        userRepository.save(user);
+        busLineRepository.save(busLineEntity);
+        return user;
+    }
+
+    public List<BusLineEntity> getAdministeredLineOfUser(Long userId)
+        throws ResponseStatusException {
+        UserEntity user = userRepository.findById(userId).orElse(null);
+        if (user == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+        return new ArrayList<>(user.getAdministeredBuslines());
+    }
+
 }

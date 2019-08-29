@@ -26,8 +26,5 @@ public class RegistrationPostBody {
     private String lastName;
 
     @JsonProperty("role")
-    @NotBlank(message = "Role is mandatory")
-    @Size(min=1, max=255)
-    private String roleName;
-
+    private Long roleId;
 }
