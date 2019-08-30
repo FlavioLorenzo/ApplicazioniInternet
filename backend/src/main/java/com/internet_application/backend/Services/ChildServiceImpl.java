@@ -4,28 +4,73 @@ import com.internet_application.backend.Entities.*;
 import com.internet_application.backend.Repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 @Service
 public class ChildServiceImpl implements ChildService {
     @Autowired
     private ChildRepository childRepository;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private ReservationRepository reservationRepository;
+
+    public ChildEntity getChildWithId(Long childId) {
+        ChildEntity child = childRepository.findById(childId).orElse(null);
+        if (child == null)
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        return child;
+    }
+
+    public void deleteChildWithId(Long childId) {
+        ChildEntity child = childRepository.findById(childId).orElse(null);
+        if (child == null)
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        childRepository.delete(child);
+    }
+
+    public ChildEntity buildChild(
+            Long parentId,
+            String firstName,
+            String lastName,
+            String phone
+            ) {
+        /* Check empty fields*/
+        if (parentId == null ||
+            firstName == null ||
+            lastName == null ||
+            phone == null)
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        /* Check parent user exists */
+        UserEntity user = userRepository.findById(parentId).orElse(null);
+        if (user == null)
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        /* Create child */
+        ChildEntity child = new ChildEntity();
+        child.setParent(user);
+        child.setFirstName(firstName);
+        child.setLastName(lastName);
+        child.setPhone(phone);
+        return child;
+    }
+
+    public List<ChildEntity> getAllChildrenWithParentId(Long userId) {
+        if (!userRepository.existsById(userId))
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        return childRepository.getChildrenWithParentId(userId);
+    }
 
     public List<ChildEntity> getAllChildren() {
         return childRepository.findAll();
     }
 
     @Override
-    public void save(ChildEntity child) {
+    public ChildEntity save(ChildEntity child) {
         childRepository.save(child);
+        return child;
     }
 
     @Override

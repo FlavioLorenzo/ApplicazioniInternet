@@ -2,6 +2,8 @@ package com.internet_application.backend.Controllers;
 
 import com.internet_application.backend.Configuration.SecurityConfiguration.JwtTokenProvider;
 
+import com.internet_application.backend.Entities.BusLineEntity;
+import com.internet_application.backend.Entities.RoleEntity;
 import com.internet_application.backend.Entities.UserEntity;
 import com.internet_application.backend.PostBodies.*;
 import com.internet_application.backend.Services.UserService;
@@ -51,6 +53,7 @@ public class UserController {
             Map<Object, Object> model = new HashMap<>();
             model.put("id", u.getId());
             model.put("mail", mail);
+            model.put("role", u.getRole());
             model.put("token", token);
             return ResponseEntity.ok(model);
         } catch (Exception e) {
@@ -62,7 +65,7 @@ public class UserController {
     @ResponseBody
     public ResponseEntity register(@RequestBody @Valid RegistrationPostBody rpb) {
         try {
-            userService.register(rpb.getEmail(), rpb.getPassword(), rpb.getConfirmPassword(), rpb.getFirstName(), rpb.getLastName());
+            userService.register(rpb.getEmail(), rpb.getFirstName(), rpb.getLastName(), rpb.getRoleId());
             return ResponseEntity.status(HttpStatus.OK).body("");
         } catch (Exception e) {
             if(e instanceof ResponseStatusException){
@@ -74,14 +77,24 @@ public class UserController {
         }
     }
 
-    @GetMapping("/confirm-account")
+    @GetMapping("/token-info/{token}")
     @ResponseBody
-    public void confirmAccount(@RequestParam String token, HttpServletResponse httpServletResponse)
-        throws IOException {
-        userService.confirmAccount(token);
-        httpServletResponse.sendRedirect("http://localhost:4200/login");
+    public UserEntity confirmAccount(@PathVariable(value="token") String token)
+        throws ResponseStatusException {
+        return userService.getAccountConfirmationInfo(token);
+    }
 
-        // return ResponseEntity.status(HttpStatus.OK).body("ok");
+    @PostMapping("/complete-registration/{token}")
+    @ResponseBody
+    public void completeAccount(@PathVariable(value="token") String token,
+                                @RequestBody @Valid CompleteUserPostBody completeUserPostBody)
+        throws ResponseStatusException {
+        userService.completeAccount(
+                token,
+                completeUserPostBody.getPassword(),
+                completeUserPostBody.getConfirmPassword(),
+                completeUserPostBody.getPhone()
+        );
     }
 
     @PostMapping("/recover")
@@ -103,6 +116,27 @@ public class UserController {
     public ResponseEntity checkEmail(@RequestBody @Valid CheckEmailPostBody cepb) {
         userService.checkEmail(cepb.getEmail());
         return ResponseEntity.status(HttpStatus.OK).body("ok");
+    }
+
+    @PostMapping("/user/add-admin/{userId}/{lineId}")
+    public UserEntity addAdminRoleOfLineToUser(
+            @PathVariable(value="lineId") Long lineId,
+            @PathVariable(value="userId") Long userId
+            ) {
+        return userService.addAdminRoleOfLineToUser(lineId, userId);
+    }
+
+    @PostMapping("/user/remove-admin/{userId}/{lineId}")
+    public UserEntity removeAdminRoleOfLineFromUser(
+            @PathVariable(value="lineId") Long lineId,
+            @PathVariable(value="userId") Long userId
+    ) {
+        return userService.removeAdminRoleOfLineFromUser(lineId, userId);
+    }
+
+    @GetMapping("/user/administered-line/{userId}")
+    public List<BusLineEntity> getAdministeredLineOfUser(@PathVariable(value="userId") Long userId) {
+        return userService.getAdministeredLineOfUser(userId);
     }
 }
 

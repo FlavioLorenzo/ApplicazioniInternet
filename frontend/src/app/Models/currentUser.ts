@@ -1,12 +1,7 @@
+export class Role {
+  constructor(public id_role: string, public name: string){}
+}
+
 export class CurrentUser {
-  id: number;
-  mail: string;
-  token: string;
-
-  constructor(id: number, mail: string, token: string) {
-    this.id = id;
-    this.mail = mail;
-    this.token = token;
-  }
-
+  constructor(public id: number, public mail: string, public token: string, public role: Role) {}
 }

@@ -1,43 +1,47 @@
-<form [formGroup]="form" class="ai-form">
-  <fieldset>
-    <legend>Register</legend>
-    <p>You have to register to create your personal account</p>
-    <div class="row justify-content-center">
-      <div class="col-10 col-md-6" id="ai-mex-box">
+
+<div class="container">
+    <h1>Complete registration</h1>
+    <div *ngIf="isLoading">
+      Loading registration form in progress...
+      <mat-spinner></mat-spinner>
+    </div>
+    <div *ngIf="!isLoading && hasError">
+      <p>Nessuna registrazione in corso trovata con il seguente link. Contatta l'amministratore per ulteriori informazioni</p>
+    </div>
+    <div *ngIf="registrationCompleted">
+        <p>Registrazione completata con successo. Ora effettua il login</p>
+       <!-- <a [routerLink]="[ '/login']">Vai al login</a> -->
       </div>
+    <div *ngIf="!isLoading && !hasError">
+        <form [formGroup]="form" class="ai-form">
+            <fieldset>
+              <legend>Welcome {{displayName}}</legend>
+              <p>Complete the registration of your personal account</p>
+              <div class="row justify-content-center">
+                <div class="col-10 col-md-6" id="ai-mex-box">
+                </div>
+              </div>
+              <div class="form-field">
+                <label>Phone:</label>
+                <input name="phone" formControlName="phone">
+              </div>
+              <div class="form-field">
+                <label>Password:</label>
+                <input name="password" formControlName="password"
+                       type="password">
+              </div>
+              <div class="form-field">
+                <label>Confirm Password:</label>
+                <input name="passwordConfirm" formControlName="passwordConfirm"
+                       type="password">
+              </div>
+            </fieldset>
+            <div class="form-buttons">
+              <button class="btn btn-warning"
+                      (click)="onRegister()">Register</button>
+            </div>
+          </form>
+          
     </div>
-    <div class="form-field">
-      <label>First Name:</label>
-      <input name="first" formControlName="first">
-    </div>
-    <div class="form-field">
-      <label>Last Name:</label>
-      <input name="last" formControlName="last">
-    </div>
-    <div class="form-field">
-      <label>Phone:</label>
-      <input name="phone" formControlName="phone">
-    </div>
-    <div class="form-field">
-      <label>Email:</label>
-      <input name="email" formControlName="email" (blur)="onEmailBlur($event.target.value)">
-    </div>
-    <div class="form-field">
-      <label>Password:</label>
-      <input name="password" formControlName="password"
-             type="password">
-    </div>
-    <div class="form-field">
-      <label>Confirm Password:</label>
-      <input name="passwordConfirm" formControlName="passwordConfirm"
-             type="password">
-    </div>
-  </fieldset>
-  <div class="form-buttons">
-    <button class="btn btn-warning"
-            (click)="onRegister()">Register</button>
-  </div>
-  <div class="ai-form-link">
-    <a routerLink="/login">Already a registered user? Log in here!</a>
-  </div>
-</form>
+    
+</div>

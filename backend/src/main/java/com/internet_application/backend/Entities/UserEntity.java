@@ -126,6 +126,14 @@ public class UserEntity {
         this.recoverTokens = recoverTokens;
     }
 
+    public void removeManagedLine(BusLineEntity busLineEntity) {
+        administeredBuslines.remove(busLineEntity);
+    }
+
+    public void addManagedLine(BusLineEntity busLineEntity) {
+        administeredBuslines.add(busLineEntity);
+    }
+
     @Override
     public String toString() {
         String result =  "User " + id + ":\n" +

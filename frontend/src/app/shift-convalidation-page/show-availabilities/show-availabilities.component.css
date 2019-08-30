@@ -1,0 +1,89 @@
+.ai-back-button {
+  border-right: 1px solid #5d5d5d;
+  padding-left: 0.5rem;
+}
+
+.ai-info {
+  overflow: hidden;
+}
+
+.ai-info span {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.ai-info-container {
+  background-color: white;
+  border: 1px solid #38240052;
+  border-radius: 5px;
+  color: #5d5d5d;
+  height: 40px;
+  margin: auto;
+  padding-top: 0.5rem;
+  max-width: 350px;
+  width: 70%;
+}
+
+.ai-info-container:hover {
+  cursor: pointer;
+}
+
+.ai-info-header {
+  background-color: #ffc937;
+  height: 50px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  width: 100%;
+}
+
+.ai-box-container {
+  background-color: whitesmoke;
+  border-radius: 10px;
+  color: #242424;
+  margin: 1rem auto 0 auto;
+}
+
+.ai-box-header {
+  border-bottom: 1px solid #38240052;
+  padding: 1rem;
+}
+
+.ai-box-element {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+.ai-box-element:hover {
+  cursor: pointer;
+}
+
+.ai-box-button {
+  margin-top: -0.5rem;
+  margin-bottom: -0.5rem;
+}
+
+.ai-text-box {
+  padding-left: 1rem;
+}
+
+.btn-open-close-shift {
+  margin-top: 1rem;
+  width: 100%;
+}
+
+.ai-viewed-icon {
+  margin-right: 1rem;
+}
+
+hr {
+  margin-top: 0rem;
+  margin-bottom: 0rem;
+}
+
+@media screen and (max-width: 400px) {
+  .ai-info-container {
+    max-width: 95%;
+    width: 95%;
+  }
+}

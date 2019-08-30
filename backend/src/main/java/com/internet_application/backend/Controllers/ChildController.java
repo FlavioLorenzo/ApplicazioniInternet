@@ -1,32 +1,55 @@
 package com.internet_application.backend.Controllers;
 
-import com.internet_application.backend.Configuration.SecurityConfiguration.JwtTokenProvider;
-import com.internet_application.backend.Entities.UserEntity;
-import com.internet_application.backend.PostBodies.*;
+import com.internet_application.backend.Entities.ChildEntity;
+import com.internet_application.backend.PostBodies.ChildPostBody;
 import com.internet_application.backend.Services.ChildService;
-import com.internet_application.backend.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @CrossOrigin()
 @RestController
 public class ChildController {
     @Autowired
     ChildService childService;
+
+    @GetMapping("/children")
+    public List<ChildEntity> getAllChildren()
+        throws ResponseStatusException {
+        return childService.getAllChildren();
+    }
+
+    @GetMapping("/children/{userId}")
+    public List<ChildEntity> getAllChildrenWithParentId(@PathVariable(value="userId") Long userId)
+        throws  ResponseStatusException {
+        return childService.getAllChildrenWithParentId(userId);
+    }
+
+    @GetMapping("/child/{childId}")
+    public ChildEntity getChildWithId(@PathVariable(value="childId") Long childId)
+            throws  ResponseStatusException {
+        return childService.getChildWithId(childId);
+    }
+
+    @DeleteMapping("/child/{childId}")
+    public void deleteChildWithId(@PathVariable(value="childId") Long childId)
+            throws  ResponseStatusException {
+        childService.deleteChildWithId(childId);
+    }
+
+    @PostMapping("/child")
+    public ChildEntity createChild(@RequestBody ChildPostBody childPostBody)
+            throws ResponseStatusException {
+        ChildEntity child = childService.buildChild(
+                childPostBody.getUserId(),
+                childPostBody.getFirstName(),
+                childPostBody.getLastName(),
+                childPostBody.getPhone()
+        );
+        return childService.save(child);
+    }
 }
 

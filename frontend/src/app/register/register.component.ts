@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {Router} from '@angular/router';
-import {RegistrationPostBody, RegistrationService} from '../services/registration.service';
+import {Router, ActivatedRoute} from '@angular/router';
+import {RegistrationPostBody, RegistrationService, CompleteUserPostBody} from '../services/registration.service';
 import {first, take} from 'rxjs/operators';
+import { User } from '../Models/User';
+import { CurrentUser } from '../Models/currentUser';
 
-// @ts-ignore
-// @ts-ignore
-// @ts-ignore
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -19,16 +18,20 @@ export class RegisterComponent implements OnInit {
   submitted = false;
   countErrors = 0;
 
-  // authenticationService dovrebbe essere httpRegistrationService appena capisco come passarlo
+  isLoading = true;                 // Waiting for server response
+  hasError = true;                  // Response is negative - show error message
+  registrationCompleted = false ;   // Registration is done
+
+  pendingActivationCode: string; // The code used to complete the user
+  displayName: string;
+
   constructor(private fb: FormBuilder,
               private registrationService: RegistrationService,
-              private router: Router
+              private router: Router,
+              private route: ActivatedRoute
   ) {
     this.form = this.fb.group({
-      first: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(256)]],
-      last: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(256)]],
       phone: ['', Validators.required],
-      email: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(255), Validators.email]],
       password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(32)]],
       passwordConfirm: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(32)]]
     });
@@ -58,6 +61,7 @@ export class RegisterComponent implements OnInit {
     }
 
     const val = this.form.value;
+
     if (val.password !== val.passwordConfirm) {
       const mexBox = document.getElementById('ai-mex-box');
 
@@ -79,59 +83,52 @@ export class RegisterComponent implements OnInit {
       return;
     }
 
-    if (val.first && val.last && val.phone && val.email && val.password && val.passwordConfirm) {
-      const rpb = new RegistrationPostBody(val.email, val.password, val.passwordConfirm, val.first, val.last);
 
-      this.registrationService.register(rpb)
+    if (val.phone && val.password && val.passwordConfirm) {
+
+      this.registrationService.completeRegistration(this.pendingActivationCode, new CompleteUserPostBody(val.password, val.passwordConfirm, val.phone))
         .pipe(first())
         .subscribe(
           data => {
-            console.log('Redirecting to login');
-            this.router.navigate(['/login']);
+            // TODO: SHOW CONFIRMATION TOAST
+            console.log('Registration completed');
+            console.log('Redirecting to home');
+            this.router.navigate(['/']);
           },
           error => {
             console.error(error);
             console.log('Something went wrong');
           });
     }
-  }
 
-  onEmailBlur(email: string) {
-    this.registrationService.checkEmail(email)
-      .pipe(first())
-      .subscribe(
-        data => {
-          const toRemove = document.getElementById('ai-email-already-used');
-          const mexBox = document.getElementById('ai-mex-box');
-          if (toRemove) {
-            mexBox.removeChild(toRemove);
-            this.countErrors--;
-            if (this.countErrors === 0) {
-              mexBox.classList.remove('ai-mex-box-error');
-            }
-          }
-        },
-        error => {
-          const mexBox = document.getElementById('ai-mex-box');
-
-          if (document.getElementById('ai-email-already-used')) {
-            return;
-          }
-
-          if (this.countErrors === 0) {
-            mexBox.classList.add('ai-mex-box-error');
-          }
-
-          const node = document.createElement('div');
-          node.setAttribute('id', 'ai-email-already-used');
-          node.appendChild(document.createTextNode('This email is not valid or it already exists.'));
-          mexBox.appendChild(node);
-
-          this.countErrors++;
-        });
   }
 
   ngOnInit(): void {
+
+    // Getting the code from the url
+    this.pendingActivationCode = this.route.snapshot.paramMap.get('code');
+
+    if (this.pendingActivationCode) {
+
+      this.registrationService.confirmRegistrationToken(this.pendingActivationCode)
+      .subscribe(result => {
+        const user: User = result;
+        this.displayName = `${user.first_name} ${user.last_name}`;
+        this.isLoading = false;
+        this.hasError = false;
+      }, error => {
+        // Code is invalid
+        this.hasError = true;
+        this.isLoading = false;
+      });
+
+    } else {
+      // No code found
+      this.hasError = true;
+      this.isLoading = false;
+
+    }
+
   }
 
 }

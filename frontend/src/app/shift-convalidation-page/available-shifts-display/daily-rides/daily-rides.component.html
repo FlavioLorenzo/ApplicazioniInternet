@@ -1,0 +1,31 @@
+<div class="ai-ride-container">
+  <div class="ai-ride-header">
+    {{dailyRides.date}}
+  </div>
+  <div class="ai-ride-body">
+    <div *ngFor="let ride of dailyRides.rides; let last = last">
+      <div class="ai-ride-element row" (click)="onElementAreaClicked(ride)">
+        <div class="col-2">
+          <div class="ai-ride-locked-status-container">
+            <div class="ai-ride-locked-status" [ngClass]="ride.locked ? 'ai-ride-closed' : 'ai-ride-open'"></div>
+          </div>
+        </div>
+        <div class="col-6">
+          <div>Line: {{ride.lineName}}</div>
+          <div>Direction: {{ride.direction ? 'From school' : 'To school'}}</div>
+          <div>Coverage: {{ride.coverage.charAt(0).toUpperCase() + ride.coverage.slice(1)}}</div>
+        </div>
+        <div class="col-4">
+          <div class="ai-shift-action-btn-container">
+            <button class="btn ai-shift-action-btn"
+                    [ngClass]="ride.locked ? 'btn-success' : 'btn-danger'"
+                    (click)="onCloseOpenButtonClick($event, ride)">
+              {{ride.locked ? 'Open Ride' : 'Close Ride'}}
+            </button>
+          </div>
+        </div>
+      </div>
+      <hr *ngIf="!last">
+    </div>
+  </div>
+</div>

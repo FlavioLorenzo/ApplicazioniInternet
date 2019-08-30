@@ -1,13 +1,12 @@
 import {Component, Input, OnInit} from '@angular/core';
-
-import {MatDialog} from '@angular/material';
-import {DialogBoxPickNotBookedUserComponent} from './dialog-box-pick-not-booked-user.component';
+import {RIDES} from './mock-buslines';
+import {User} from '../../../Models/User';
 import {ReservationPostBody, ReservationsService} from '../../../services/reservations.service';
 import {UsersService} from '../../../services/users.service';
-import {User} from '../../../Models/User';
-import {BusStop} from '../../../Models/BusLineStop';
-import {RIDES} from './mock-buslines';
 import {Ride} from '../../../Models/Ride';
+import {BusStop} from '../../../Models/BusLineStop';
+import { MatDialog } from '@angular/material/dialog';
+import {DialogBoxPickNotBookedUserComponent} from './dialog-box-pick-not-booked-user.component';
 import {DateUtilsService} from '../../../services/date-utils.service';
 
 @Component({
@@ -63,7 +62,7 @@ export class AttendanceComponent implements OnInit {
   }
 
   pickOrUnpick(ride: Ride, busStop: BusStop, passenger: User) {
-      const rpb = new ReservationPostBody(passenger.userId, busStop.id, !!this.direction, !passenger.picked);
+      const rpb = new ReservationPostBody(passenger.id_user, busStop.id, !!this.direction, !passenger.picked);
 
       this.reservationsService.modifyReservation(
         this.lineId,
@@ -98,7 +97,7 @@ export class AttendanceComponent implements OnInit {
     const bookedUserIds: number[] = new Array();
     this.ride.stopList.forEach(busStop => {
         busStop.passengers.forEach(passenger => {
-          bookedUserIds.push(passenger.userId);
+          bookedUserIds.push(passenger.id_user);
         });
       });
 

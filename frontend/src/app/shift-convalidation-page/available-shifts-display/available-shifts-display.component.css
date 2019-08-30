@@ -1,0 +1,49 @@
+.ai-back-button {
+  border-right: 1px solid #5d5d5d;
+  float: left;
+  margin-right: 2rem;
+  padding: 0 1rem;
+}
+
+.ai-info {
+  float: left;
+  margin-left: 1rem;
+}
+
+.ai-info-container {
+  background-color: white;
+  border: 1px solid #38240052;
+  border-radius: 5px;
+  color: #5d5d5d;
+  height: 40px;
+  margin: auto;
+  padding-top: 0.5rem;
+  width: 70%;
+}
+
+.ai-info-container:hover {
+  cursor: pointer;
+}
+
+.ai-info-header {
+  background-color: #ffc937;
+  height: 50px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  width: 100%;
+}
+
+.ai-filter {
+  text-align: center;
+  margin-top: 0.1rem;
+}
+
+@media screen and (max-width: 400px) {
+  .ai-info-container {
+    width: 95%;
+  }
+
+  .ai-filter {
+    text-align: left;
+  }
+}

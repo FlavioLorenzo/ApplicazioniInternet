@@ -4,6 +4,11 @@ import {LoginComponent} from './login/login.component';
 import {AuthGuard as AuthGuard} from './guards/auth.guard';
 import {LogoutComponent} from './logout/logout.component';
 import {RegisterComponent} from './register/register.component';
+import { UserListComponent } from './user-list/user-list.component';
+import { UserScreenComponent } from './user-screen/user-screen.component';
+import { ChildrenListComponent } from './children-list/children-list.component';
+import { ChildrenScreenComponent } from './children-screen/children-screen.component';
+
 import {ReservationComponent} from './reservation/reservation.component';
 import {SelectionComponent} from './reservation/selection/selection.component';
 import {ReservationRideDisplayComponent} from './reservation/reservation-ride-display/reservation-ride-display.component';
@@ -65,12 +70,22 @@ const appRoutes: Routes = [
     component: LoginComponent
   },
   {
-    path: 'register',
+    path: 'register/:code',
     component: RegisterComponent
   },
   {
     path: 'logout',
     component: LogoutComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'users',
+    component: UserScreenComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'children',
+    component: ChildrenScreenComponent,
     canActivate: [AuthGuard]
   },
   { // Otherwise redirect to home

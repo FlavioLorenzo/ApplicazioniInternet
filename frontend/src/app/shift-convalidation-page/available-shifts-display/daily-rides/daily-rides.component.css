@@ -1,0 +1,74 @@
+.ai-ride-container {
+  background-color: whitesmoke;
+  border-radius: 10px;
+  color: #242424;
+  margin: 1rem auto 0 auto;
+}
+
+.ai-ride-header {
+  border-bottom: 1px solid #38240052;
+  padding: 1rem;
+}
+
+.ai-ride-element {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+.ai-ride-element:hover {
+  cursor: pointer;
+}
+
+.ai-ride-status {
+  font-size: 0.8rem;
+}
+
+.ai-ride-status div {
+  margin: 0.25rem 0;
+}
+
+/* Selected signal */
+.ai-ride-locked-status-container {
+  position: relative;
+  height: 100%;
+  margin-left: 1.75rem;
+  margin-right: 0.2rem;
+}
+
+.ai-ride-locked-status {
+  border: 1px solid #7b7b7b;
+  border-radius: 50%;
+  display: inline-block;
+  height: 10px;
+  width: 10px;
+
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+}
+
+.ai-ride-closed {
+  background-color: #eb0000;
+}
+
+.ai-ride-open {
+  background-color: #10f200;
+}
+
+.ai-shift-action-btn-container {
+  position: relative;
+  height: 100%;
+  margin-left: 0.2rem;
+  margin-right: 0.2rem;
+}
+
+.ai-shift-action-btn {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+}
+
+hr {
+  margin-top: 0rem;
+  margin-bottom: 0rem;
+}

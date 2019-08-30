@@ -8,12 +8,13 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatSelectModule} from '@angular/material/select';
+import {MatButtonModule} from '@angular/material/button';
 
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
 import {HTTP_INTERCEPTORS} from '@angular/common/http';
 
-import { JwtInterceptor } from 'src/app/helpers/jwt.interceptor';
+import { JwtInterceptor } from './helpers/jwt.interceptor';
 import { AuthService } from './services/auth.service';
 import { AuthGuard as AuthGuard } from './guards/auth.guard';
 
@@ -37,12 +38,26 @@ import {
   MatDialogModule,
   MatFormFieldModule,
   MatInputModule,
-  MatNativeDateModule, MatRadioModule
+  MatNativeDateModule,
+  MatSortModule,
+  MatTableModule,
+  MatRadioModule
 } from '@angular/material';
 import { DatepickerComponent } from './datepicker/datepicker.component';
 // tslint:disable-next-line:max-line-length
 import {DialogBoxPickNotBookedUserComponent} from './attendance-page/attendance-display/attendance/dialog-box-pick-not-booked-user.component';
 import {RegisterComponent} from './register/register.component';
+import { UserListComponent } from './user-list/user-list.component';
+import { UserDetailsDialogComponent } from './user-details-dialog/user-details-dialog.component';
+import { LabelRolePipe } from './role-label.pipe';
+import { UserRegistrationComponent } from './user-registration/user-registration.component';
+import { UserScreenComponent } from './user-screen/user-screen.component';
+import { LineSelectorComponent } from './line-selector/line-selector.component';
+import { ChildrenScreenComponent } from './children-screen/children-screen.component';
+import { ChildrenListComponent } from './children-list/children-list.component';
+import { ChildrenRegistrationComponent } from './children-registration/children-registration.component';
+import { MatProgressSpinnerModule, MatSnackBarModule, MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material';
+
 import { ReservationComponent } from './reservation/reservation.component';
 import { SelectLinesComponent } from './select-lines/select-lines.component';
 import { SelectionComponent } from './reservation/selection/selection.component';
@@ -81,7 +96,17 @@ import { FilterAvailabilitiesPopupComponent } from './shift-convalidation-page/a
     LinesComponent,
     DatepickerComponent,
     DialogBoxPickNotBookedUserComponent,
+    UserListComponent,
+    UserDetailsDialogComponent,
+    LabelRolePipe,
+    UserRegistrationComponent,
+    UserScreenComponent,
+    LineSelectorComponent,
+    ChildrenScreenComponent,
+    ChildrenListComponent,
+    ChildrenRegistrationComponent,
     ReservationComponent,
+    ModifyStopPopupComponent,
     SelectLinesComponent,
     SelectionComponent,
     ReservationRideDisplayComponent,
@@ -102,7 +127,27 @@ import { FilterAvailabilitiesPopupComponent } from './shift-convalidation-page/a
     ShowAvailabilitiesComponent,
     FilterAvailabilitiesPopupComponent
   ],
-  entryComponents: [DialogBoxPickNotBookedUserComponent, ModifyStopPopupComponent, FilterAvailabilitiesPopupComponent],
+  entryComponents: [
+    DialogBoxPickNotBookedUserComponent,
+    UserDetailsDialogComponent,
+    ModifyStopPopupComponent,
+    FilterAvailabilitiesPopupComponent,
+    ReservationComponent,
+    SelectLinesComponent,
+    SelectionComponent,
+    ReservationRideDisplayComponent,
+    ReservationRideComponent,
+    ModifyStopPopupComponent,
+    SelectAvailableStopsComponent,
+    DateLineSelectionPageComponent,
+    AttendancePageComponent,
+    AttendanceDateLineSelectionComponent,
+    AttendanceDisplayComponent,
+    ShiftDefinitionPageComponent,
+    ShiftDefinitionDateLineSelectionComponent,
+    ShiftDefinitionRideDisplayComponent,
+    ShiftDefinitionRideComponent
+  ],
   imports: [
     BrowserModule,
     MatListModule,
@@ -118,9 +163,14 @@ import { FilterAvailabilitiesPopupComponent } from './shift-convalidation-page/a
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
+    MatButtonModule,
     MatDialogModule,
     FormsModule,
+    MatTableModule,
+    MatSortModule,
     MatCheckboxModule,
+    MatProgressSpinnerModule,
+    MatSnackBarModule,
     MatRadioModule
   ],
   providers: [
@@ -135,6 +185,8 @@ import { FilterAvailabilitiesPopupComponent } from './shift-convalidation-page/a
     LinesService,
     UsersService,
     RegistrationService,
+    MatDatepickerModule,
+    {provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: {duration: 2000}},
     AvailabilityService,
     MatDatepickerModule,
     RideService

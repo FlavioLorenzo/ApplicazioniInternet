@@ -1,5 +1,3 @@
-@import '@angular/material/prebuilt-themes/deeppurple-amber.css';
-
 /* You can add global styles to this file, and also import other style files */
 .mat-paginator-range-label {
   display: none;
@@ -49,7 +47,7 @@ body {
 }
 
 label {
-  width: 150px;
+ /* width: 150px; */
   text-align: left;
 }
 
@@ -63,4 +61,17 @@ label {
 
 .default-cursor {
   cursor: default !important;
+}
+
+
+.main-container {
+  background: whitesmoke;
+  color: #242424;
+  margin-top: 1rem;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+.line-selector {
+  display: inline-block;
 }

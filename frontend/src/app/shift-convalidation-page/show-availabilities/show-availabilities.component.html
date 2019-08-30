@@ -1,0 +1,98 @@
+<div class="row justify-content-center" *ngIf="rideAvailabilities !== null">
+  <div class="ai-info-header">
+    <div class="col-12">
+      <div class="ai-info-container" (click)="onBackClick()">
+        <div class="row">
+          <div class="col-2">
+            <div class="ai-back-button">
+              <i class="fas fa-chevron-left"></i>
+            </div>
+          </div>
+          <div class="col-10">
+            <div class="ai-info">
+              <span>{{rideAvailabilities.ride.lineName}} - {{rideAvailabilities.ride.date}}
+                ({{ rideAvailabilities.ride.direction ? 'From school' : 'To school' }})</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="ai-availabilities-list-container col-12 col-md-6">
+    <div class="ai-box-container">
+      <div class="ai-box-header">
+        Availabilities
+      </div>
+      <div class="ai-box-body">
+        <div *ngFor="let user of rideAvailabilities.available; let last = last">
+          <div class="ai-box-element row"
+               [ngStyle]="{'cursor': rideAvailabilities.ride.locked === true ? 'no-drop' : ''}"
+               (click)="onElementAreaClicked(user)">
+            <div class="col-9">
+              <div class="ai-text-box">
+                <strong>
+                  {{user.firstName.charAt(0).toUpperCase() + user.firstName.slice(1)}}
+                  {{user.lastName.charAt(0).toUpperCase() + user.lastName.slice(1)}}
+                </strong>,
+                {{user.stopName}}
+              </div>
+            </div>
+            <div class="col-3" *ngIf="!rideAvailabilities.ride.locked">
+              <button class="btn btn-warning ai-box-button" (click)="onElementAreaClicked(user)">Confirm</button>
+            </div>
+          </div>
+          <hr *ngIf="!last">
+        </div>
+        <div class="ai-box-element default-cursor row" *ngIf="rideAvailabilities.available.length == 0">
+          <div class="col-12">
+            <div class="ai-text-box">
+              No user confirmed
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="ai-box-container">
+      <div class="ai-box-header">
+        Confirmed
+      </div>
+      <div class="ai-box-body">
+        <div *ngFor="let user of rideAvailabilities.confirmed; let last = last">
+          <div class="ai-box-element row"
+               [ngStyle]="{'cursor': rideAvailabilities.ride.locked === true ? 'no-drop' : ''}"
+               (click)="onElementAreaClicked(user)">
+            <div class="col-9">
+              <div class="ai-text-box">
+                <span *ngIf="user.shiftStatus === 3" class="ai-viewed-icon"><i class="far fa-eye"></i></span>
+                <strong>
+                  {{user.firstName.charAt(0).toUpperCase() + user.firstName.slice(1)}}
+                  {{user.lastName.charAt(0).toUpperCase() + user.lastName.slice(1)}}
+                </strong>,
+                {{user.stopName}}
+              </div>
+            </div>
+            <div class="col-3" *ngIf="!rideAvailabilities.ride.locked">
+              <button class="btn btn-danger ai-box-button" (click)="onElementAreaClicked(user)">Undo</button>
+            </div>
+          </div>
+          <hr *ngIf="!last">
+        </div>
+        <div class="ai-box-element default-cursor row" *ngIf="rideAvailabilities.confirmed.length == 0">
+          <div class="col-12">
+            <div class="ai-text-box">
+              No user confirmed
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="w-100"></div>
+  <div class="col-4">
+    <button class="btn btn-open-close-shift"
+            [ngClass]="rideAvailabilities.ride.locked ? 'btn-success' : 'btn-danger'"
+            (click)="onCloseOpenButtonClick()">
+      {{rideAvailabilities.ride.locked ? 'Open Ride' : 'Close Ride'}}
+    </button>
+  </div>
+</div>

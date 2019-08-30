@@ -1,0 +1,15 @@
+<div class="row justify-content-center">
+  <div class="ai-info-header">
+    <div class="col-12 ai-filter">
+      <button class="btn btn-dark" (click)="onFilterButtonClick()">
+        <i class="fas fa-filter"></i>
+        Filter
+      </button>
+    </div>
+  </div>
+  <div class="ai-ride-list-container col-12 col-md-6">
+    <app-daily-rides *ngFor="let dailyRides of ridesByDay"
+                               [dailyRides]="dailyRides"
+                     (shiftChange)="onShiftChange($event)"></app-daily-rides>
+  </div>
+</div>
