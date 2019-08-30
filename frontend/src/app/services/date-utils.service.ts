@@ -16,13 +16,24 @@ export class DateUtilsService {
   getCurrentDate(): string {
     const date: Date = new Date();
 
+    return this.dateToSendString(date);
+  }
+
+  getDateAfterNDays(n: number): string {
+    const date = new Date();
+    date.setDate(date.getDate() + n);
+
+    return this.dateToSendString(date);
+  }
+
+  dateToSendString(date: Date) {
     const day = date.getDate();
     let dayString = '';
     if (day < 10) {
       dayString = '0';
     }
     dayString += day.toString();
-    const month = date.getMonth();
+    const month = date.getMonth() + 1;
     let monthString = '';
     if (month < 10) {
       monthString = '0';
@@ -30,5 +41,9 @@ export class DateUtilsService {
     monthString += month.toString();
 
     return date.getFullYear().toString() + '-' + monthString + '-' + dayString;
+  }
+
+  sendStringToDate(dateString: string): Date {
+    return new Date(dateString);
   }
 }

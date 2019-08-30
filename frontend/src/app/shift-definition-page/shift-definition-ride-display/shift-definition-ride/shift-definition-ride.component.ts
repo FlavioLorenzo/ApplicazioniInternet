@@ -163,4 +163,20 @@ export class ShiftDefinitionRideComponent implements OnInit {
       });
     }
   }
+
+  onSetViewedButtonClick(event: Event, back: boolean) {
+    if (this.hasAvailability(back)) {
+      event.stopPropagation();
+
+      const toModify: RideWithShiftAvailability = back ? this.ride.backRide : this.ride.forthRide;
+
+      this.availabilityService.changeStatus(toModify.availability.availabilityId, 3).subscribe(
+        (data) => {
+          this.availabilityChange.emit(data);
+        },
+        (error) => {
+          console.log(error);
+        });
+    }
+  }
 }

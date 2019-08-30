@@ -29,10 +29,16 @@ import {ReservationsService} from './services/reservations.service';
 import {LinesService} from './services/lines.service';
 import {UsersService} from './services/users.service';
 import {RegistrationService} from './services/registration.service';
-import {StopService} from './services/stop.service';
+import {RideService} from './services/ride.service';
 
 import { LinesComponent } from './lines/lines.component';
-import {MatDialogModule, MatFormFieldModule, MatInputModule, MatNativeDateModule} from '@angular/material';
+import {
+  MatCheckboxModule,
+  MatDialogModule,
+  MatFormFieldModule,
+  MatInputModule,
+  MatNativeDateModule, MatRadioModule
+} from '@angular/material';
 import { DatepickerComponent } from './datepicker/datepicker.component';
 // tslint:disable-next-line:max-line-length
 import {DialogBoxPickNotBookedUserComponent} from './attendance-page/attendance-display/attendance/dialog-box-pick-not-booked-user.component';
@@ -56,7 +62,12 @@ import { ShiftDefinitionDateLineSelectionComponent } from './shift-definition-pa
 import { ShiftDefinitionRideDisplayComponent } from './shift-definition-page/shift-definition-ride-display/shift-definition-ride-display.component';
 // tslint:disable-next-line:max-line-length
 import { ShiftDefinitionRideComponent } from './shift-definition-page/shift-definition-ride-display/shift-definition-ride/shift-definition-ride.component';
-import {AvailabilityService} from "./services/availability.service";
+import {AvailabilityService} from './services/availability.service';
+import { ShiftConvalidationPageComponent } from './shift-convalidation-page/shift-convalidation-page.component';
+import { AvailableShiftsDisplayComponent } from './shift-convalidation-page/available-shifts-display/available-shifts-display.component';
+import { DailyRidesComponent } from './shift-convalidation-page/available-shifts-display/daily-rides/daily-rides.component';
+import { ShowAvailabilitiesComponent } from './shift-convalidation-page/show-availabilities/show-availabilities.component';
+import { FilterAvailabilitiesPopupComponent } from './shift-convalidation-page/available-shifts-display/filter-availabilities-popup/filter-availabilities-popup.component';
 
 @NgModule({
   declarations: [
@@ -84,9 +95,14 @@ import {AvailabilityService} from "./services/availability.service";
     ShiftDefinitionPageComponent,
     ShiftDefinitionDateLineSelectionComponent,
     ShiftDefinitionRideDisplayComponent,
-    ShiftDefinitionRideComponent
+    ShiftDefinitionRideComponent,
+    ShiftConvalidationPageComponent,
+    AvailableShiftsDisplayComponent,
+    DailyRidesComponent,
+    ShowAvailabilitiesComponent,
+    FilterAvailabilitiesPopupComponent
   ],
-  entryComponents: [DialogBoxPickNotBookedUserComponent, ModifyStopPopupComponent],
+  entryComponents: [DialogBoxPickNotBookedUserComponent, ModifyStopPopupComponent, FilterAvailabilitiesPopupComponent],
   imports: [
     BrowserModule,
     MatListModule,
@@ -103,7 +119,9 @@ import {AvailabilityService} from "./services/availability.service";
     MatInputModule,
     MatSelectModule,
     MatDialogModule,
-    FormsModule
+    FormsModule,
+    MatCheckboxModule,
+    MatRadioModule
   ],
   providers: [
     AuthService,
@@ -119,7 +137,7 @@ import {AvailabilityService} from "./services/availability.service";
     RegistrationService,
     AvailabilityService,
     MatDatepickerModule,
-    StopService
+    RideService
   ],
   bootstrap: [AppComponent]
 })

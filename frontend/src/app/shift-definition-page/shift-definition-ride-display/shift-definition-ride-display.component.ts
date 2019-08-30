@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute, Params, Router} from '@angular/router';
 import {forkJoin} from 'rxjs';
 import {LinesService} from '../../services/lines.service';
-import {StopService} from '../../services/stop.service';
+import {RideService} from '../../services/ride.service';
 import {AvailabilityService} from '../../services/availability.service';
 import {RidesWithShiftAvailabilityContainer, ShiftAvailabilityOfRide} from '../rides-with-shift-availability-container';
 
@@ -20,7 +20,7 @@ export class ShiftDefinitionRideDisplayComponent implements OnInit {
   ridesContainer: Array<RidesWithShiftAvailabilityContainer> = [];
 
   constructor(private route: ActivatedRoute, private router: Router,
-              private lineService: LinesService, private stopService: StopService,
+              private lineService: LinesService, private rideService: RideService,
               private availabilityService: AvailabilityService) { }
 
   ngOnInit() {
@@ -38,7 +38,7 @@ export class ShiftDefinitionRideDisplayComponent implements OnInit {
         .getLineNameFromId(
           this.lineId
         ),
-      this.stopService
+      this.rideService
         .getNRidesFromDate(
           this.lineId,
           this.fromDate,

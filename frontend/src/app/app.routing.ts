@@ -13,6 +13,9 @@ import {AttendanceDisplayComponent} from './attendance-page/attendance-display/a
 import {ShiftDefinitionDateLineSelectionComponent} from './shift-definition-page/shift-definition-date-line-selection/shift-definition-date-line-selection.component';
 import {ShiftDefinitionRideDisplayComponent} from './shift-definition-page/shift-definition-ride-display/shift-definition-ride-display.component';
 import {ShiftDefinitionPageComponent} from './shift-definition-page/shift-definition-page.component';
+import {ShiftConvalidationPageComponent} from "./shift-convalidation-page/shift-convalidation-page.component";
+import {AvailableShiftsDisplayComponent} from "./shift-convalidation-page/available-shifts-display/available-shifts-display.component";
+import {ShowAvailabilitiesComponent} from "./shift-convalidation-page/show-availabilities/show-availabilities.component";
 
 const appRoutes: Routes = [
   /*{
@@ -45,6 +48,15 @@ const appRoutes: Routes = [
     children: [
       { path: '', component: ShiftDefinitionDateLineSelectionComponent },
       { path: 'line/:id/:from', component: ShiftDefinitionRideDisplayComponent }
+    ],
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'shift-consolidation',
+    component: ShiftConvalidationPageComponent,
+    children: [
+      { path: '', component: AvailableShiftsDisplayComponent },
+      { path: ':rideId', component: ShowAvailabilitiesComponent }
     ],
     canActivate: [AuthGuard]
   },

@@ -1,10 +1,14 @@
 package com.internet_application.backend.Services;
 
-import com.internet_application.backend.Entities.LineStopEntity;
-import com.internet_application.backend.Entities.RideEntity;
-import com.internet_application.backend.Entities.StopEntity;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.internet_application.backend.Entities.*;
 import com.internet_application.backend.Enums.RideBookingStatus;
 import com.internet_application.backend.Repositories.RideRepository;
+import com.internet_application.backend.Serializers.RideSerializer;
 import com.internet_application.backend.Utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,6 +17,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -21,7 +26,13 @@ import java.util.List;
 public class RideServiceImpl implements RideService {
     @Autowired
     private RideRepository rideRepository;
-    @Autowired LineStopService lineStopService;
+    @Autowired
+    private LineStopService lineStopService;
+    @Autowired
+    private AvailabilityService availabilityService;
+    @Autowired
+    private UserService userService;
+
     @PersistenceContext
     private EntityManager em;
 
@@ -33,6 +44,154 @@ public class RideServiceImpl implements RideService {
         List<RideEntity> rides = rideRepository.findTopNRidesWithLineIdAndDate(lineId, d, pageNumber*2);
 
         return rides;
+    }
+
+    @Override
+    public JsonNode getAdministeredLinesRidesFromDateToDate
+            (Long userId, String fromDate, String toDate, String openOrLocked) {
+        Date from = DateUtils.dateParser(fromDate);
+        Date to = DateUtils.dateParser(toDate);
+
+        // TODO: Still need to add support for administered lines
+        // Based on the filter type, select only the rides that satisfy the filter
+        List<RideEntity> rides;
+
+        System.out.println(openOrLocked);
+
+        if (openOrLocked.equals("open"))
+            rides = rideRepository.getAllRidesBetweenDates(from, to, false);
+        else if (openOrLocked.equals("closed"))
+            rides = rideRepository.getAllRidesBetweenDates(from, to, true);
+        else
+            rides = rideRepository.getAllRidesBetweenDates(from, to);
+
+        if (rides==null) return null;
+
+        // I start to create a JSON node to hold the answer
+        ObjectMapper mapper = new ObjectMapper();
+        ArrayNode rootNode = mapper.createArrayNode();
+
+        Date curDate = from;
+        while (curDate.before(to)) {
+            JsonNode dayNode = mapper.createObjectNode();
+            ArrayNode ridesInDayNode = mapper.createArrayNode();
+
+            // Create the rides for the selected day
+            for(int i=0; i<rides.size(); i++) {
+                RideEntity ride = rides.get(i);
+
+                if(curDate.equals(ride.getDate())) {
+                    JsonNode rideNode = mapper.createObjectNode();
+
+                    ((ObjectNode) rideNode).put("id", ride.getId().longValue());
+                    ((ObjectNode) rideNode).put("date", DateUtils.dateToString(ride.getDate()));
+                    ((ObjectNode) rideNode).put("direction", ride.getDirection().booleanValue());
+                    ((ObjectNode) rideNode).put("lineId", ride.getLine().getId());
+                    ((ObjectNode) rideNode).put("lineName", ride.getLine().getName());
+                    ((ObjectNode) rideNode).put("rideBookingStatus", ride.getRideBookingStatus().getDescription());
+                    ((ObjectNode) rideNode).put("locked", ride.getLocked());
+                    ((ObjectNode) rideNode).put("coverage", getCoverage(ride));
+
+                    ridesInDayNode.add(rideNode);
+                } else if (curDate.before(ride.getDate())) {
+                    break;
+                }
+            }
+
+            // Add the rides selected to the daily rides node
+            if(ridesInDayNode.size()>0) {
+                ((ObjectNode) dayNode).put("date", DateUtils.dateToString(curDate));
+                ((ObjectNode) dayNode).set("rides", ridesInDayNode);
+                rootNode.add(dayNode);
+            }
+
+            // Move to the next date
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(curDate);
+            calendar.add(Calendar.DATE, 1);
+            curDate = calendar.getTime();
+        }
+
+
+
+        return rootNode;
+    }
+
+    public String getCoverage(RideEntity ride) {
+        LineStopEntity firstLse = lineStopService.getFirstLineStopWithLineIdAndDir(
+                ride.getLine().getId(),
+                ride.getDirection());
+
+        if( availabilityService.hasCoverageForRideAndStop(ride, firstLse.getStop()) )
+            return "complete";
+        else if( availabilityService.hasCoverageForRide(ride) )
+            return "partial";
+
+        return "empty";
+    }
+
+    public JsonNode getRideAvailabilityInfo(Long userId, Long rideId) {
+        RideEntity ride = rideRepository.getOne(rideId);
+
+        if(ride == null)
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The selected ride does not exist.");
+
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode rideNode = mapper.createObjectNode();
+
+        // Creation of the ride object
+        ObjectMapper rideMapper = new ObjectMapper();
+        SimpleModule module = new SimpleModule();
+        module.addSerializer(RideEntity.class, new RideSerializer());
+        rideMapper.registerModule(module);
+
+        JsonNode rideJson = rideMapper.valueToTree(ride);
+        ((ObjectNode) rideNode).set("ride", rideJson);
+
+        List<AvailabilityEntity> availabilities = availabilityService.getAllAvailabilitiesForRideWithId(rideId);
+
+        ArrayNode available = mapper.createArrayNode();
+        ArrayNode confirmed = mapper.createArrayNode();
+
+        for (AvailabilityEntity availability: availabilities) {
+            JsonNode userNode = mapper.createObjectNode();
+
+            ((ObjectNode) userNode).put("availabilityId", availability.getId());
+            ((ObjectNode) userNode).put("userId", availability.getUser().getId());
+            ((ObjectNode) userNode).put("firstName", availability.getUser().getFirstName());
+            ((ObjectNode) userNode).put("lastName", availability.getUser().getLastName());
+            ((ObjectNode) userNode).put("stopId", availability.getStop().getId());
+            ((ObjectNode) userNode).put("stopName", availability.getStop().getName());
+            ((ObjectNode) userNode).put("shiftStatus", availability.getShiftStatus().getCode());
+
+            if(availability.getShiftStatus().getCode() == 1) { // If the availability is new
+                available.add(userNode);
+            } else {
+                confirmed.add(userNode);
+            }
+        }
+
+        ((ObjectNode) rideNode).set("available", available);
+        ((ObjectNode) rideNode).set("confirmed", confirmed);
+
+        return rideNode;
+    }
+
+    @Override
+    public RideEntity lockUnlock(Long rideId, Boolean locked) {
+        RideEntity ride = em.find(RideEntity.class, rideId);
+
+        /* Check if the ride already exists*/
+        if (ride == null)
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Ride not found");
+
+
+        if( !getCoverage(ride).equals("complete"))
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Ride can't be locked unless its coverage is " +
+                    "complete");
+
+        ride.setLocked(locked);
+        return rideRepository.save(ride);
     }
 
     public RideEntity closeStop(Long rideId, Long stopId) {

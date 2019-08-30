@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {StopService} from '../services/stop.service';
+import {RideService} from '../services/ride.service';
 
 @Component({
   selector: 'app-select-available-stops',
@@ -11,10 +11,10 @@ export class SelectAvailableStopsComponent implements OnInit {
   @Output() stopSelected = new EventEmitter<number>();
   stops = [];
 
-  constructor(private stopService: StopService) {}
+  constructor(private rideService: RideService) {}
 
   ngOnInit() {
-    this.stopService.getAvailableStops(this.rideId)
+    this.rideService.getAvailableStops(this.rideId)
       .subscribe(
         (data) => { this.stops = data; },
         (error) => {console.error(error); },

@@ -100,7 +100,8 @@ public class AvailabilityServiceImpl implements AvailabilityService {
         if (availability == null)
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         if (availability.getRide().getLocked())
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "This ride is closed. " +
+                    "Availabilities for this ride can no longer be modified.");
 
         ShiftStatus currentStatus = availability.getShiftStatus();
 
@@ -151,19 +152,17 @@ public class AvailabilityServiceImpl implements AvailabilityService {
         availabilityRepository.delete(availability);
     }
 
-    // TODO NOT WORKING
-    /* Utility to check if the stop is present inside the ride */
-    private void isStopPresentInRide(RideEntity ride, StopEntity stop)
-            throws ResponseStatusException {
-        if (!ride.getDirection()) {
-            ride.getLine().getOutwordStops().forEach(lineStopEntity -> {
-                if (lineStopEntity.getStop().equals(stop)) return; });
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+    public Boolean hasCoverageForRideAndStop(RideEntity ride, StopEntity stop) {
+        if( availabilityRepository.countViewedAvailabilitiesForRideAndStop(ride.getId(), stop.getId()) == 0 ) {
+            return false;
         }
-        if (ride.getDirection()) {
-            ride.getLine().getOutwordStops().forEach(lineStopEntity -> {
-                if (lineStopEntity.getStop().equals(stop)) return; });
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        return true;
+    }
+
+    public Boolean hasCoverageForRide(RideEntity ride) {
+        if( availabilityRepository.countViewedAvailabilitiesForRide(ride.getId()) == 0 ) {
+            return false;
         }
+        return true;
     }
 }

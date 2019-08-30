@@ -39,4 +39,15 @@ public interface RideRepository extends JpaRepository<RideEntity, Long> {
             "AND r.date = ?2 " +
             "AND r.direction = ?3")
     List<RideEntity> getRidesWithLineIdAndDateAndDirection(Long lineId, Date d, Boolean dir);
+
+    @Query("SELECT r FROM RideEntity r " +
+            "WHERE r.date BETWEEN ?1 AND ?2 " +
+            "AND r.locked = ?3 " +
+            "ORDER BY r.date, r.line.id, r.direction ASC ")
+    List<RideEntity> getAllRidesBetweenDates(Date fromDate, Date toDate, Boolean locked);
+
+    @Query("SELECT r FROM RideEntity r " +
+            "WHERE r.date BETWEEN ?1 AND ?2 " +
+            "ORDER BY r.date, r.line.id, r.direction ASC ")
+    List<RideEntity> getAllRidesBetweenDates(Date fromDate, Date toDate);
 }

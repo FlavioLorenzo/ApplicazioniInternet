@@ -92,6 +92,16 @@
   background-color: #ffc937;
 }
 
+/* Button to acknowledge shift consoliation */
+.ai-viewed-button-container {
+  margin-top: 0.5rem;
+  padding: 0 0.5rem;
+}
+
+.ai-viewed-button {
+  width: 100%;
+}
+
 hr {
   margin-top: 0rem;
   margin-bottom: 0rem;

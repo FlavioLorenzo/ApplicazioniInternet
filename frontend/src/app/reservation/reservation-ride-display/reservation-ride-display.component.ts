@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute, Params, Router} from '@angular/router';
-import {StopService} from '../../services/stop.service';
 import {ReservationsService} from '../../services/reservations.service';
 import {LinesService} from '../../services/lines.service';
 import {forkJoin} from 'rxjs';
 import {ReservationOfRide, RidesWithReservationContainer} from '../rides-with-reservation-container';
+import {RideService} from '../../services/ride.service';
 
 @Component({
   selector: 'app-reservation-ride-display',
@@ -19,7 +19,7 @@ export class ReservationRideDisplayComponent implements OnInit {
   ridesContainer: Array<RidesWithReservationContainer> = [];
 
   constructor(private route: ActivatedRoute, private router: Router,
-              private stopService: StopService, private reservationService: ReservationsService,
+              private rideService: RideService, private reservationService: ReservationsService,
               private lineService: LinesService) { }
 
   ngOnInit() {
@@ -37,7 +37,7 @@ export class ReservationRideDisplayComponent implements OnInit {
         .getLineNameFromId(
           this.lineId
         ),
-      this.stopService
+      this.rideService
         .getNRidesFromDate(
           this.lineId,
           this.fromDate,

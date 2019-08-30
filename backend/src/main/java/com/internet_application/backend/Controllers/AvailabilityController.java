@@ -44,7 +44,7 @@ public class AvailabilityController {
                 availabilityService.getNAvailabilitiesByUserFromDate(lineId, userId, date, n);
         return availabilities;
     }
-
+    
     /* Create escort availability */
     @PostMapping("/availability")
     public AvailabilityEntity createAvailability(@RequestBody AvailabilityPostBody availabilityPostBody)
@@ -84,7 +84,7 @@ public class AvailabilityController {
 
     /* Assign availability */
     @PutMapping("/availability/{availabilityId}/{statusCode}")
-    public void PutConfirmationStatusAvailability(@PathVariable(value="availabilityId") Long availabilityId,
+    public void PutAvailabilityStatus(@PathVariable(value="availabilityId") Long availabilityId,
                 @PathVariable(value="statusCode") Integer status)
             throws ResponseStatusException {
         availabilityService.setStatusOfAvailability(availabilityId, status);

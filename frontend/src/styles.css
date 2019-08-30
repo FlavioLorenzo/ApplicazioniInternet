@@ -60,3 +60,7 @@ label {
 .ai-dialog-button-container {
   margin-bottom: 1rem;
 }
+
+.default-cursor {
+  cursor: default !important;
+}

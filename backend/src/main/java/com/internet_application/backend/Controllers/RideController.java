@@ -1,9 +1,11 @@
 package com.internet_application.backend.Controllers;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.internet_application.backend.Entities.BusLineEntity;
 import com.internet_application.backend.Entities.LineStopEntity;
 import com.internet_application.backend.Entities.RideEntity;
 import com.internet_application.backend.Entities.StopEntity;
+import com.internet_application.backend.PostBodies.ChangeLockedStatusPostBody;
 import com.internet_application.backend.PostBodies.ReservationPostBody;
 import com.internet_application.backend.Repositories.LineStopRepository;
 import com.internet_application.backend.Repositories.StopRepository;
@@ -34,6 +36,23 @@ public class RideController {
         return rideService.getAvailableStops(rideId);
     }
 
+
+    @GetMapping("/rides/manage/{userId}/{rideId}")
+    public JsonNode getRideAvailabilityInfo(@PathVariable(value="userId") Long userId,
+                                            @PathVariable(value="rideId") Long rideId)
+            throws ResponseStatusException {
+        return rideService.getRideAvailabilityInfo(userId, rideId);
+    }
+
+    @GetMapping("/rides/manage/{userId}/{fromDate}/{toDate}/{openOrLocked}")
+    public JsonNode getAdministeredLinesRidesFromDateToDate(@PathVariable(value="userId") Long userId,
+                                                            @PathVariable(value="fromDate") String fromDate,
+                                                            @PathVariable(value="toDate") String toDate,
+                                                            @PathVariable(value="openOrLocked") String openOrLocked)
+            throws ResponseStatusException {
+        return rideService.getAdministeredLinesRidesFromDateToDate(userId, fromDate, toDate, openOrLocked);
+    }
+
     @PutMapping("/rides/{rideId}/close/{stopId}")
     public RideEntity putCloseStop(
             @PathVariable(value="rideId") Long rideId,
@@ -51,5 +70,12 @@ public class RideController {
     public RideEntity putCloseRide(
             @PathVariable(value="rideId") Long rideId) {
         return rideService.closeRide(rideId);
+    }
+
+    @PutMapping("/rides/{rideId}/lock-unlock")
+    public RideEntity putLockUnlockRide(
+            @PathVariable(value="rideId") Long rideId,
+            @RequestBody ChangeLockedStatusPostBody clspb) {
+        return rideService.lockUnlock(rideId, clspb.getLocked());
     }
 }

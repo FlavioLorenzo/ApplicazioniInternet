@@ -1,6 +1,9 @@
 package com.internet_application.backend.Services;
 
 import com.internet_application.backend.Entities.AvailabilityEntity;
+import com.internet_application.backend.Entities.RideEntity;
+import com.internet_application.backend.Entities.StopEntity;
+import com.internet_application.backend.Entities.UserEntity;
 
 import java.util.List;
 
@@ -21,4 +24,7 @@ public interface AvailabilityService {
 
     void deleteAvailabilityWithId(Long availabilityId);
 
+    Boolean hasCoverageForRideAndStop(RideEntity ride, StopEntity stop);
+
+    Boolean hasCoverageForRide(RideEntity ride);
 }

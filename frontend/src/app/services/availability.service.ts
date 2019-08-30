@@ -87,30 +87,13 @@ export class AvailabilityService {
       );
   }
 
-  public changeConfirmedStatus(availabilityId: number, status: boolean) {
+  public changeStatus(availabilityId: number, status) {
     return this.http.put(
       environment.apiUrl +
       environment.availabilityUrl +
       '/' + availabilityId +
-      environment.confirmedAvailabilityUrl,
-      status
-    )
-      .pipe(
-        retry(3),
-        catchError(err => {
-          console.log(err.message);
-          return throwError('Error thrown from catchError');
-        })
-      );
-  }
-
-  public changeViewedStatus(availabilityId: number, status: boolean) {
-    return this.http.put(
-      environment.apiUrl +
-      environment.availabilityUrl +
-      '/' + availabilityId +
-      environment.viewedAvailabilityUrl,
-      status
+      '/' + status,
+      {}
     )
       .pipe(
         retry(3),
