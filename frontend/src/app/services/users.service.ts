@@ -18,11 +18,11 @@ export class UsersService {
         map(it => {
           it.forEach(user => {
             if (user.id_user === 2){
-              user.role.role_id = 2;
+              user.role.id_role = 2;
               user.role.name = 'ROLE_COMPANION';
             }
             if (user.id_user === 3){
-              user.role.role_id = 2;
+              user.role.id_role = 2;
               user.role.name = 'ROLE_ADMIN';
             }
           });

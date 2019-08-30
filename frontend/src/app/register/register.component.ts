@@ -86,8 +86,10 @@ export class RegisterComponent implements OnInit {
       return;
     }
 
+    /*
+    TODO: Here goes the complete registration
     if (val.first && val.last && val.phone && val.email && val.password && val.passwordConfirm) {
-      const rpb = new RegistrationPostBody(val.email, val.password, val.passwordConfirm, val.first, val.last);
+      const rpb = new RegistrationPostBody(val.email, val.password, val.passwordConfirm, val.first);
 
       this.registrationService.register(rpb)
         .pipe(first())
@@ -101,6 +103,7 @@ export class RegisterComponent implements OnInit {
             console.log('Something went wrong');
           });
     }
+    */
   }
 
   onEmailBlur(email: string) {

@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Child } from '../Models/Child';
+import {environment} from '../../environments/environment';
+import { retry, catchError } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -10,55 +12,87 @@ export class ChildrenService {
 
   constructor(private http: HttpClient) { }
 
-  children: Array<Child> = [
-    {user_id: 0, child_id: 1, first_name:"balwant.padwal",last_name:"pune", phone:`33414232542`},
-    {user_id: 0, child_id: 2, first_name:"fs.fds",last_name:"fsd", phone:`33414232542`},
-    {user_id: 0, child_id: 3, first_name:"fdsfasd.fsdf",last_name:"dsfa", phone:`33414232542`},
-  ]
-
-  public getChildrenForUser(userId): Observable<any> {
-    return Observable.create(observer => {
-      setTimeout(() => {
-        observer.next(this.children);
-        observer.complete();
-      }, 500);
-     });
+  public getAllChildren(){
+    return this.http.get<any>(
+      `${environment.apiUrl}/children`)
+      .pipe(
+        retry(1),
+        catchError(err => {
+          console.error(err.message);
+          console.log('Error is handled');
+          return throwError('Error thrown from catchError');
+        })
+      );
   }
 
-  public registerChild(userId: number, firstName: string, lastName: string, phone: string): Observable<any> {
-    return Observable.create(observer => {
-      setTimeout(() => {
-        const maxIndex = Math.max.apply(null, this.children.map(it =>  it.child_id))
-        this.children.push({user_id: 0, child_id: maxIndex + 1, first_name: firstName, last_name: lastName, phone});
-        observer.next(0);
-        observer.complete();
-      }, 500);
-    });
+
+  public getChildrenForUser(userId: number): Observable<any> {
+
+    return this.http.get<any>(
+      `${environment.apiUrl}/children/${userId}`)
+      .pipe(
+        retry(1),
+        catchError(err => {
+          console.error(err.message);
+          console.log('Error is handled');
+          return throwError('Error thrown from catchError');
+        })
+      );
+
   }
 
-  public deleteChild(child: Child){
-    return Observable.create(observer => {
-      setTimeout(() => {
-        const index = this.children.map(it=>it.child_id).indexOf(child.child_id);
-        if(index >= 0){
-          console.log(`Deleting ${index}`);
-          this.children .splice(index, 1);
-        }else{
-          console.log(`Can't find ${JSON.stringify(child)}`);
-        }
-        observer.next(this.children);
-        observer.complete();
-      }, 500);
-    });
-  }
-  
-  public getChild(childId: string){
-    return Observable.create(observer => {
-      setTimeout(() => {
-        observer.next({first_name:"balwant.padwal",last_name:"pune"});
-        observer.complete();
-      }, 500);
-     }); 
+  public getChildById(childId: string): Observable<any> {
+
+    return this.http.get<any>(
+      `${environment.apiUrl}/child/${childId}`)
+      .pipe(
+        retry(1),
+        catchError(err => {
+          console.error(err.message);
+          console.log('Error is handled');
+          return throwError('Error thrown from catchError');
+        })
+      );
+
   }
 
+  public registerChild(cpb: ChildPostBody): Observable<any> {
+
+    return this.http.post<any>(
+      `${environment.apiUrl}/child/`,
+      cpb)
+      .pipe(
+        retry(1),
+        catchError(err => {
+          console.error(err.message);
+          console.log('Error is handled');
+          return throwError('Error thrown from catchError');
+        })
+      );
+
+  }
+
+  public deleteChild(childId: number): Observable<any> {
+
+    return this.http.delete<any>(
+      `${environment.apiUrl}/child/${childId}`)
+      .pipe(
+        retry(1),
+        catchError(err => {
+          console.error(err.message);
+          console.log('Error is handled');
+          return throwError('Error thrown from catchError');
+        })
+      );
+
+  }
+
+}
+
+
+export class ChildPostBody {
+  constructor(public user_id: number,
+              public first_name: string,
+              public last_name: string,
+              public phone: string) {}
 }

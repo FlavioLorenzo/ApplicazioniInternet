@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Validators, FormControl } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
-import { ChildrenService } from '../services/children.service';
+import { ChildrenService, ChildPostBody } from '../services/children.service';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-children-registration',
@@ -16,7 +17,7 @@ export class ChildrenRegistrationComponent implements OnInit {
   lastNameFormControl = new FormControl('', [Validators.required]);
   phoneFormControl = new FormControl('', []);
 
-  constructor(private snackBar: MatSnackBar, private childrenService: ChildrenService) {
+  constructor(private snackBar: MatSnackBar, private childrenService: ChildrenService, private authService: AuthService) {
 
    }
 
@@ -29,14 +30,13 @@ export class ChildrenRegistrationComponent implements OnInit {
       const firstName = this.firstNameFormControl.value;
       const lastName = this.lastNameFormControl.value;
       const phone = this.phoneFormControl.value;
+      const userId = this.authService.currentUserValue.id;
 
       this.isLoading = true; // Load indicator
 
-
-
       console.log(`Registering ${firstName} ${lastName} ${phone}`);
 
-      this.childrenService.registerChild(1, firstName, lastName, phone).subscribe( result => {
+      this.childrenService.registerChild(new ChildPostBody(userId, firstName, lastName, phone)).subscribe( result => {
         this.isLoading = false;
         this.clearForm();
         this.snackBar.open("Figlio creato con successo");

@@ -31,8 +31,13 @@ export class ChildrenListComponent implements OnInit {
     // Browser confirm dialog
     if (confirm(`Confirm to delete child ${child.first_name} + ${child.last_name}? This operation can't be undone.`)) {
      // Delete child from service
-      this.childrenService.deleteChild(child)
-      .subscribe(childrenList => this.setDataSource(childrenList));
+      this.childrenService.deleteChild(child.id_child)
+      .subscribe(
+        () => {
+          //TODO: REFRESHARE LA LISTA
+          console.log(`Cancellazione effettuata con successo`);
+        }
+      );
     }
 
   }

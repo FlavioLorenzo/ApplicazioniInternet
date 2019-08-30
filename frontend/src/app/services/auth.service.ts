@@ -25,25 +25,20 @@ export class AuthService {
 
   login(email: string, password: string ) {
 
-    console.log('Prelogin redirect url is:', this.redirectUrl);
-
     return this.http.post<any>(environment.apiUrl + '/login',
       {email, password})
       .pipe(map(res =>  {
         let cus = null;
         if (res) {
-          if (this.redirectUrl) {
-            console.log('Redirect url is:', this.redirectUrl);
-            this.router.navigate([this.redirectUrl]);
-            this.redirectUrl = null;
-          } else {
-            console.log('Redirecting to home');
-            this.router.navigate(['/']);
-          }
 
-          cus = new CurrentUser(res.id, res.mail, res.token);
+          //Create and set the new user
+          cus = new CurrentUser(res.id, res.mail, res.token, res.role);
           localStorage.setItem('currentUser', JSON.stringify(cus));
           this.currentUserSubject.next(cus);
+
+          //Handle the redirect logic after the login
+          this.handleRedirectUrl();
+
         }
         return cus;
       }));
@@ -53,4 +48,18 @@ export class AuthService {
     localStorage.removeItem('currentUser');
     this.currentUserSubject.next(null);
   }
+
+  handleRedirectUrl() {
+    if (this.redirectUrl) {
+      console.log('Redirect url is:', this.redirectUrl);
+      this.router.navigate([this.redirectUrl]);
+      this.redirectUrl = null;
+    } else {
+      console.log('Redirecting to home');
+      this.router.navigate(['/']);
+    }
+  }
+
+
+
 }

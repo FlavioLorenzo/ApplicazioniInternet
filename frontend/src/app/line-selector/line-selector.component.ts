@@ -29,7 +29,6 @@ export class LineSelectorComponent implements OnInit {
   }
 
   isLineInCommon(lineId){
-    console.log(`Cheking ${lineId}`);
     return this.allLines.map(it => it.id_line).indexOf(lineId) > 0;
   }
 
