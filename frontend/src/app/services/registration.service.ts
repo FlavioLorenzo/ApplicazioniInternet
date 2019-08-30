@@ -21,6 +21,7 @@ export class RegistrationService {
   }
 
   completeRegistration(token: string, rpb: CompleteUserPostBody) {
+    console.log(`Sending ${JSON.stringify(rpb)}`);
     return this.http.post<any>(
        `${environment.apiUrl}/complete-registration/${token}`,
        rpb)
@@ -29,7 +30,7 @@ export class RegistrationService {
         catchError(err => {
           console.error(err.message);
           console.log('Error is handled');
-          return throwError('Error thrown from catchError');
+          return throwError('Error th rown from catchError');
         }),
         map(res => {
           // TODO: action to perform after registration
@@ -55,9 +56,8 @@ export class RegistrationService {
   }
 
   confirmRegistrationToken(token: string) {
-    return this.http.post<any>(
-      `${environment.apiUrl}/token-info/${token}`,
-       {})
+    return this.http.get<any>(
+      `${environment.apiUrl}/token-info/${token}`)
        .pipe(
         retry(1),
         catchError(err => {
@@ -100,7 +100,7 @@ export class RegistrationService {
 
   }
 
-  getAdministeredLineOfUser(userId: number){
+  getAdministeredLineOfUser(userId: number) {
     return this.http.post<any>(
       `${environment.apiUrl}/user/administered-line/${userId}`,
        {})
@@ -126,7 +126,11 @@ export class RegistrationPostBody {
 export class CompleteUserPostBody {
   constructor(public password: string,
               public confirm_password: string,
-              public phone: string) {}
+              public phone_number: string) {
+                console.log(password);
+                console.log(confirm_password);
+                console.log(phone_number);
+              }
 }
 
 export class RecoverNewPwdPostBody{

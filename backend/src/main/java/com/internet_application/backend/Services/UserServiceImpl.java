@@ -81,6 +81,9 @@ public class UserServiceImpl implements UserService {
                     + "http://localhost:4200/confirm-account/" + confirmationToken.getConfirmationToken());
 
             emailSenderService.sendEmail(mailMessage);
+
+            System.out.println("CONFIRMATION TOKEN = " + confirmationToken.getConfirmationToken());
+
         }
         catch(Exception ex) {
             confirmationTokenRepository.delete(confirmationToken);
@@ -97,11 +100,11 @@ public class UserServiceImpl implements UserService {
         if (ct == null ||
                 !ct.getConfirmationToken().equals(token) ||
                 !isStillValid(ct.getCreationDate()))
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         /* Return the user if it is not enabled yet */
         UserEntity user = ct.getUser();
         if (user.getEnabled() == true) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
         return user;
     }

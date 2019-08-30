@@ -4,6 +4,7 @@ import {ErrorStateMatcher} from '@angular/material/core';
 import { Line } from '../Models/Line';
 import { MatSnackBar } from '@angular/material';
 import { LineSelectorComponent } from '../line-selector/line-selector.component';
+import { RegistrationService, RegistrationPostBody } from '../services/registration.service';
 
 
 /** Error when invalid control is dirty, touched, or submitted. */
@@ -31,10 +32,9 @@ export class UserRegistrationComponent implements OnInit {
 
   isLoading = false; // Load indicator
 
-
   userTypes = [
-    { id: "user", name : "Genitore" },
-    { id: "companion", name: "Accompagnatore" }
+    { id: 4, name : "Genitore" },
+    { id: 3, name: "Accompagnatore" }
   ]
 
   selectedValue;
@@ -42,13 +42,9 @@ export class UserRegistrationComponent implements OnInit {
   @ViewChild(LineSelectorComponent, {static: false})
   private lineSelectorComponent: LineSelectorComponent;
 
-  constructor(private snackBar: MatSnackBar) {
+  constructor(private snackBar: MatSnackBar, private registrationService: RegistrationService) {}
 
-   }
-
-  ngOnInit() {
-
-  }
+  ngOnInit() {}
 
   onSendRegistration() {
 
@@ -64,11 +60,14 @@ export class UserRegistrationComponent implements OnInit {
 
       console.log(`Registering ${firstName} ${lastName} ${email} ${role}`);
 
-      setTimeout(()=>{
-        this.isLoading = false;
-        this.clearForm();
-        this.snackBar.open("Utente creato con successo");
-      }, 1000);
+      this.registrationService.register(new RegistrationPostBody(email, firstName, lastName, role))
+      .subscribe(result => {
+          console.log(`Registration result: ${JSON.stringify(result)}`);
+          this.isLoading = false;
+          this.clearForm();
+          this.snackBar.open("Utente creato con successo");
+      });
+
     }else{
       console.log('Check the data');
     }

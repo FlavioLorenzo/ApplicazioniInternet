@@ -62,7 +62,7 @@ export class AttendanceComponent implements OnInit {
   }
 
   pickOrUnpick(ride: Ride, busStop: BusStop, passenger: User) {
-      const rpb = new ReservationPostBody(passenger.userId, busStop.id, !!this.direction, !passenger.picked);
+      const rpb = new ReservationPostBody(passenger.id_user, busStop.id, !!this.direction, !passenger.picked);
 
       this.reservationsService.modifyReservation(
         this.lineId,
@@ -97,7 +97,7 @@ export class AttendanceComponent implements OnInit {
     const bookedUserIds: number[] = new Array();
     this.ride.stopList.forEach(busStop => {
         busStop.passengers.forEach(passenger => {
-          bookedUserIds.push(passenger.userId);
+          bookedUserIds.push(passenger.id_user);
         });
       });
 

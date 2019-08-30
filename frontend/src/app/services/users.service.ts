@@ -14,20 +14,6 @@ export class UsersService {
       environment.apiUrl +
       environment.usersUrl)
       .pipe(
-        //TODO: THIS IS JUST A DEBUG THING
-        map(it => {
-          it.forEach(user => {
-            if (user.id_user === 2){
-              user.role.id_role = 2;
-              user.role.name = 'ROLE_COMPANION';
-            }
-            if (user.id_user === 3){
-              user.role.id_role = 2;
-              user.role.name = 'ROLE_ADMIN';
-            }
-          });
-          return it;
-        }),
         retry(3),
         catchError(err => {
           console.error(err.message);
