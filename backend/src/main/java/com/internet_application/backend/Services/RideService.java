@@ -19,4 +19,5 @@ public interface RideService {
     List<LineStopEntity> getAvailableStops(Long rideId);
     JsonNode getRideAvailabilityInfo(Long userId, Long rideId);
     RideEntity lockUnlock(Long rideId, Boolean locked);
+    JsonNode getLockedRidesFromUserAndDate(Long userId, String date);
 }

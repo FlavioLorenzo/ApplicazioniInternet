@@ -4,6 +4,7 @@ import {environment} from '../../environments/environment';
 import {catchError, retry} from 'rxjs/operators';
 import {HttpClient} from '@angular/common/http';
 import {AuthService} from "./auth.service";
+import {Ride} from "../Models/Ride";
 
 @Injectable({
   providedIn: 'root'
@@ -106,4 +107,61 @@ export class RideService {
         })
       );
     }
+
+  getLockedRidesFromUserAndDate(userId, date) {
+    return this.http.get<any>(
+      environment.apiUrl +
+      environment.ridesUrl +
+      '/locked' +
+      '/' + userId +
+      '/' + date
+    )
+      .pipe(
+        retry(1),
+        catchError(err => {
+          console.error(err.message);
+          console.log('Error is handled');
+          return throwError('Error thrown from catchError');
+        })
+      );
+  }
+
+  changeRideBookingStatus(openClose: boolean, rideId: number) {
+    const action = openClose ? 'close' : 'open';
+
+    return this.http.put<any>(
+      environment.apiUrl +
+      environment.ridesUrl +
+      '/' + rideId +
+      '/' + action,
+      {}
+    )
+      .pipe(
+        retry(1),
+        catchError(err => {
+          console.error(err.message);
+          console.log('Error is handled');
+          return throwError('Error thrown from catchError');
+        })
+      );
+  }
+
+  closeStop(rideId: number, stopId: number) {
+    return this.http.put<any>(
+      environment.apiUrl +
+      environment.ridesUrl +
+      '/' + rideId +
+      '/close' +
+      '/' + stopId,
+      {}
+    )
+      .pipe(
+        retry(1),
+        catchError(err => {
+          console.error(err.message);
+          console.log('Error is handled');
+          return throwError('Error thrown from catchError');
+        })
+      );
+  }
 }

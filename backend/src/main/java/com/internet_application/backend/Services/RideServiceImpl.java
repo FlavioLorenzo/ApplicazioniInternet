@@ -7,6 +7,8 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.internet_application.backend.Entities.*;
 import com.internet_application.backend.Enums.RideBookingStatus;
+import com.internet_application.backend.Repositories.LineStopRepository;
+import com.internet_application.backend.Repositories.ReservationRepository;
 import com.internet_application.backend.Repositories.RideRepository;
 import com.internet_application.backend.Serializers.RideSerializer;
 import com.internet_application.backend.Utils.DateUtils;
@@ -32,6 +34,10 @@ public class RideServiceImpl implements RideService {
     private AvailabilityService availabilityService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private LineStopRepository lineStopRepository;
+    @Autowired
+    private ReservationRepository reservationRepository;
 
     @PersistenceContext
     private EntityManager em;
@@ -192,6 +198,72 @@ public class RideServiceImpl implements RideService {
 
         ride.setLocked(locked);
         return rideRepository.save(ride);
+    }
+
+    @Override
+    public JsonNode getLockedRidesFromUserAndDate(Long userId, String date) {
+        Date d = DateUtils.dateParser(date);
+
+        List<RideEntity> rides = rideRepository.getTopNLockedRidesFromUserAndDate(userId, d, 10);
+
+        // Creation of the mapper for the ride json
+        ObjectMapper rideMapper = new ObjectMapper();
+        SimpleModule module = new SimpleModule();
+        module.addSerializer(RideEntity.class, new RideSerializer());
+        rideMapper.registerModule(module);
+
+        ObjectMapper mapper = new ObjectMapper();
+        ArrayNode ridesNode = mapper.createArrayNode();
+
+        for(RideEntity ride: rides) {
+            JsonNode rideNode = rideMapper.valueToTree(ride);
+
+            List<StopEntity> stops = rideRepository.getAllStopsOfRide(ride.getLine().getId(), ride.getDirection());
+
+            ArrayNode stopNodes = mapper.createArrayNode();
+            // For each stop
+            stops.forEach((stop) -> {
+                JsonNode stopNode = mapper.createObjectNode();
+                List<ChildEntity> children;
+
+                // Set the id and name of the stop
+                ((ObjectNode) stopNode).put("id", stop.getId().longValue());
+                ((ObjectNode) stopNode).put("name", stop.getName());
+
+                // Set the arrivalTime to the current stop
+                List<LineStopEntity> lineStopList = lineStopRepository.getLineStopsWithLineIdAndStopIdAndDir(ride.getLine().getId(), stop.getId(), ride.getDirection());
+                if (lineStopList.size() != 1)
+                    throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+                ((ObjectNode) stopNode).put("arrivalTime", lineStopList.get(0).getArrivalTime().toString());
+
+                // Set the passengers attribute. Since we only have one property for both joining and leaving
+                // children, the meaning of this attribute depends on the direction of the ride (forward - joining children /
+                // backward - leaving children)
+                children = reservationRepository.getAllChildrenByStopIdAndRideId(stop.getId(), ride.getId());
+
+                // Build a structure for each child that details his first name and whether or not the child is present
+                ArrayNode childArray = mapper.createArrayNode();
+                children.forEach((child) -> {
+                    JsonNode childNode = mapper.createObjectNode();
+                    ((ObjectNode) childNode).put("childId", child.getId());
+                    ((ObjectNode) childNode).put("firstName", child.getFirstName());
+                    ((ObjectNode) childNode).put("lastName", child.getLastName());
+                    ((ObjectNode) childNode).put("picked",
+                            reservationRepository.getPresenceByChildIdAndRide(child.getId(), ride.getId()));
+                    ((ObjectNode) childNode).put("reservationId",
+                            reservationRepository.getReservationsByChildIdAndRideId(child.getId(), ride.getId()).get(0).getId());
+                    childArray.add(childNode);
+                });
+                ((ObjectNode) stopNode).set("passengers", childArray);
+
+                stopNodes.add(stopNode);
+            });
+            ((ObjectNode) rideNode).set("stopList", stopNodes);
+
+            ridesNode.add(rideNode);
+        }
+
+        return ridesNode;
     }
 
     public RideEntity closeStop(Long rideId, Long stopId) {

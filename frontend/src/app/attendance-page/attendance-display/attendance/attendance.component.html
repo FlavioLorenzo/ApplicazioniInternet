@@ -1,62 +1,58 @@
-<div>
-  <ng-template [ngIf]="ride">
-    <div class="ai-ride">
-      <div class="row justify-content-center">
-        <div class="col-12 col-md-8 col-lg-6 col-xl-5">
-          <div id="ai-stop-list">
-            <div class="ai-list-item row" *ngFor="let busStop of ride.stopList; let i=index; let isFirst=first; let isLast=last;">
-              <div class="col-3">
-                <div class="ai-route" [ngClass]="isFirst ? 'ai-top-route' : (isLast ? 'ai-bottom-route' : 'ai-middle-route')"></div>
-                <ng-template [ngIf]="!isLast">
-                  <div class="ai-fill-route"></div>
-                </ng-template>
-              </div>
-              <div class="col-9">
-                <div class="ai-list-item-label"><span>{{busStop.arrivaltime}}</span> {{busStop.name}}</div>
-                <p class="ai-user-selection-container">
-                  <span class="ai-user-selection" *ngFor="let passenger of busStop.passengers"
-                        (click)="pickOrUnpick(ride, busStop, passenger)">
-                    <b [ngClass]="passenger.picked ? 'ai-picked' : 'ai-not-picked'">
-                      {{passenger.username}}</b>
-                    <i class="far" [ngClass]="passenger.picked ? 'fa-times-circle' : 'fa-check-circle'"></i>
-                  </span>
-                </p>
-              </div>
+<div class="ai-ride">
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+      <div id="ai-stop-list">
+        <div class="ai-title-container">
+          <div>
+            {{ride.lineName.charAt(0).toUpperCase() + ride.lineName.slice(1)}} -
+            {{ride.date}} ({{ride.direction ? "From school": "To school"}})
+          </div>
+          <div *ngIf="ride.rideBookingStatus === 'Not started yet'">
+            <button class="btn btn-success ai-ride-control-button" (click)="onChangeRideStatus(false)">Start</button>
+          </div>
+          <div *ngIf="ride.rideBookingStatus === 'In Progress'">
+            <button class="btn btn-danger ai-ride-control-button" (click)="onChangeRideStatus(true)">Terminate</button>
+          </div>
+        </div>
+
+        <div class="ai-list-item row" *ngFor="let busStop of ride.stopList; let i=index; let isFirst=first; let isLast=last;">
+          <div class="col-3">
+            <div class="ai-route" [ngClass]="isFirst ? 'ai-top-route' : (isLast ? 'ai-bottom-route' : 'ai-middle-route')"></div>
+            <ng-template [ngIf]="!isLast">
+              <div class="ai-fill-route"></div>
+            </ng-template>
+          </div>
+          <div class="col-9">
+            <div class="ai-list-item-label">
+              <span>{{busStop.arrivalTime}}</span> {{busStop.name}}
+              <button *ngIf="isNextStop(isFirst, i)" class="btn btn-danger ai-close-stop"
+                      (click)="closeStop(busStop.id)">Close stop</button>
             </div>
+            <p class="ai-user-selection-container">
+              <span class="ai-user-selection" *ngFor="let passenger of busStop.passengers"
+                    (click)="pickOrUnpick(busStop, passenger)">
+                <b [ngClass]="passenger.picked ? 'ai-picked' : 'ai-not-picked'">
+                  {{passenger.firstName}} {{passenger.lastName}}</b>
+                <i class="far" [ngClass]="passenger.picked ? 'fa-times-circle' : 'fa-check-circle'"></i>
+              </span>
+            </p>
           </div>
         </div>
       </div>
-      <div class="row">
-        <div class="col-12" id="ai-missing-passengers">
-          <h3>Unexpected Passengers</h3>
-          <p>
-            <span class="ai-user-selection" *ngFor="let passenger of remainingUsers"
-                  (click)="openDialogBoxPickNotBookedUser(passenger)">
-              <b [ngClass]="passenger.picked ? 'ai-picked' : 'ai-not-picked'">
-                {{passenger.first_name}}</b>
-              <i class="far" [ngClass]="passenger.picked ? 'fa-times-circle' : 'fa-check-circle'"></i>
-            </span>
-          </p>
-        </div>
-      </div>
-      <div class="row">
-        <div class="ai-paginator">
-          <mat-paginator
-            [hidePageSize]="true"
-            [length]="pageNumber"
-            [pageIndex]="0"
-            [pageSize]="1"
-            (page)="changePage($event)">
-          </mat-paginator>
-        </div>
-      </div>
     </div>
-  </ng-template>
-  <ng-template [ngIf]="!ride">
-    <div class="row ai-no-rides-mex">
-      <div class="col-12">
-        <b>There are no rides for the line {{this.lineId}} in {{date}}</b>
-      </div>
+  </div>
+  <div class="row">
+    <div class="col-12" id="ai-missing-passengers">
+      <h3>Unexpected Passengers</h3>
+      <p>
+        <span class="ai-user-selection" *ngFor="let passenger of freeChildren"
+              (click)="openDialogBoxPickNotBookedChild(passenger)">
+          <b [ngClass]="passenger.picked ? 'ai-picked' : 'ai-not-picked'">
+            {{passenger.firstName}} {{passenger.lastName}}</b>
+          <i class="far" [ngClass]="passenger.picked ? 'fa-times-circle' : 'fa-check-circle'"></i>
+        </span>
+      </p>
     </div>
-  </ng-template>
+  </div>
 </div>
+

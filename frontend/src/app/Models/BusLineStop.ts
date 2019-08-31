@@ -1,13 +1,13 @@
 // BusLineStop class model
 
 // BusStop models
-import {User} from './User';
+import {Child} from './Child';
 
 export class BusStop {
   id: number;
   name: string;
   direction: boolean;
   line: number;
-  arrivaltime: string;
-  passengers: User[];
+  arrivalTime: string;
+  passengers: Child[];
 }

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.internet_application.backend.Entities.*;
+import com.internet_application.backend.Enums.RideBookingStatus;
 import com.internet_application.backend.Repositories.BusLineRepository;
 import com.internet_application.backend.Repositories.LineStopRepository;
 import com.internet_application.backend.Repositories.ReservationRepository;
@@ -148,6 +149,12 @@ public class ReservationServiceImpl implements ReservationService {
         }
 
         ReservationEntity builtReservation = buildReservation(lineId, date, rpb);
+
+        // If the companion is trying to update the child presence, check that the ride is already started
+        if(r.getPresence() != builtReservation.getPresence() &&
+                r.getRide().getRideBookingStatus() != RideBookingStatus.IN_PROGRESS)
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "To set the presence of a child the ride needs to be started");
 
         r.setRide(builtReservation.getRide());
         r.setStop(builtReservation.getStop());

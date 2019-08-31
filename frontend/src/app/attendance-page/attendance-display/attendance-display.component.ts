@@ -1,6 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Params, Router} from '@angular/router';
 import {DateUtilsService} from '../../services/date-utils.service';
+import {RideService} from '../../services/ride.service';
+import {AuthService} from '../../services/auth.service';
+import {Ride} from '../../Models/Ride';
 
 @Component({
   selector: 'app-attendance-display',
@@ -8,29 +11,43 @@ import {DateUtilsService} from '../../services/date-utils.service';
   styleUrls: ['./attendance-display.component.css']
 })
 export class AttendanceDisplayComponent implements OnInit {
-  lineId: number;
-  lineName = 'Test';
   date: string;
+  rides: Array<Ride> = [];
+  curPage = 0;
 
-  constructor(private route: ActivatedRoute, private router: Router, private dateService: DateUtilsService) { }
+  constructor(private route: ActivatedRoute, private router: Router, private dateService: DateUtilsService,
+              private rideService: RideService, private auth: AuthService) { }
 
   ngOnInit() {
     this.route.params.subscribe((params: Params) => {
-      this.lineId = params.id;
       this.date = params.from;
     });
 
-    if (this.lineId == null) {
-      this.defaultSetup();
+    if (this.date == null) {
+      this.date = this.dateService.getCurrentDate();
+      this.getRides();
     }
   }
 
-  defaultSetup() {
-    this.date = this.dateService.getCurrentDate();
-    this.lineId = 1; // ToDo: After setting up the administration of the lines, this part won't be needed anymore
+  getRides() {
+    this.rideService.getLockedRidesFromUserAndDate(this.auth.currentUserValue.id, this.date).subscribe(
+      (data) => {
+        this.rides = data;
+      },
+      (error) => {console.log(error); },
+      () => console.log('Done building rides data structure')
+    );
+  }
+
+  changePage(page) {
+    this.curPage = page.pageIndex;
   }
 
   onBackClick() {
     this.router.navigate(['attendance', 'selection']);
+  }
+
+  onAttendanceChanged() {
+    this.getRides();
   }
 }

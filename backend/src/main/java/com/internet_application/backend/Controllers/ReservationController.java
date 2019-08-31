@@ -37,7 +37,6 @@ public class ReservationController {
                                        @PathVariable(value="date") String date,
                                        @RequestBody ReservationPostBody rpb)
             throws ResponseStatusException {
-        System.out.println(lineId + date + rpb.presence + rpb.id_child);
         return reservationService.addReservation(lineId, date, rpb);
     }
 

@@ -1,7 +1,8 @@
 export class Child {
-    user_id: number;
-    id_child: number;
-    first_name: string;
-    last_name: string;
-    phone: string;
+    childId: number;
+    firstName: string;
+    lastName: string;
+    picked: boolean;
+    reservationId: number;
+    parentId: number;
 }

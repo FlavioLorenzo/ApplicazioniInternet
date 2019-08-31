@@ -29,9 +29,9 @@ export class ChildrenListComponent implements OnInit {
   onDeleteChild(child: Child) {
 
     // Browser confirm dialog
-    if (confirm(`Confirm to delete child ${child.first_name} + ${child.last_name}? This operation can't be undone.`)) {
+    if (confirm(`Confirm to delete child ${child.firstName} + ${child.lastName}? This operation can't be undone.`)) {
      // Delete child from service
-      this.childrenService.deleteChild(child.id_child)
+      this.childrenService.deleteChild(child.childId)
       .subscribe(
         () => {
           //TODO: REFRESHARE LA LISTA

@@ -13,19 +13,19 @@ import java.util.Set;
 public class ChildEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonProperty("id_child")
+    @JsonProperty("childId")
     @Column(name="id_child")
     @Getter
     @Setter
     private Long id;
 
-    @JsonProperty("first_name")
+    @JsonProperty("firstName")
     @Column(name="first_name")
     @Getter
     @Setter
     private String firstName;
 
-    @JsonProperty("last_name")
+    @JsonProperty("lastName")
     @Column(name="last_name")
     @Getter
     @Setter
@@ -41,7 +41,7 @@ public class ChildEntity {
     @JsonIgnore
     private Set<ReservationEntity> reservations;
 
-    @JsonProperty("id_parent")
+    @JsonProperty("parent")
     @ManyToOne
     @JoinColumn(name = "id_parent", referencedColumnName = "id_user")
     private UserEntity parent;

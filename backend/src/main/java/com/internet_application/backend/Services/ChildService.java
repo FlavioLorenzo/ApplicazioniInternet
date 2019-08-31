@@ -19,4 +19,5 @@ public interface ChildService {
 
     List<ChildEntity> getAllChildren();
     List<ChildEntity> getAllChildrenWithParentId(Long userId);
+    List<ChildEntity> getFreeChildren(String date, Boolean direction);
 }

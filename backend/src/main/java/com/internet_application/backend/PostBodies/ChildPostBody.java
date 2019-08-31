@@ -7,15 +7,15 @@ import javax.validation.constraints.NotBlank;
 
 @Data
 public class ChildPostBody {
-    @JsonProperty("user_id")
+    @JsonProperty("childId")
     @NotBlank
     private Long userId;
 
-    @JsonProperty("first_name")
+    @JsonProperty("firstName")
     @NotBlank
     private String firstName;
 
-    @JsonProperty("last_name")
+    @JsonProperty("lastName")
     @NotBlank
     private String lastName;
 

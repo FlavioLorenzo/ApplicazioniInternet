@@ -2,11 +2,13 @@ package com.internet_application.backend.Services;
 
 import com.internet_application.backend.Entities.*;
 import com.internet_application.backend.Repositories.*;
+import com.internet_application.backend.Utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -65,6 +67,11 @@ public class ChildServiceImpl implements ChildService {
 
     public List<ChildEntity> getAllChildren() {
         return childRepository.findAll();
+    }
+
+    public List<ChildEntity> getFreeChildren(String date, Boolean direction) {
+        Date d = DateUtils.dateParser(date);
+        return childRepository.getFreeChildrenByDateAndDirection(d, direction);
     }
 
     @Override

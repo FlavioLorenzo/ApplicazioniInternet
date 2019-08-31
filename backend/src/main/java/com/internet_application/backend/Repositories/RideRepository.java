@@ -50,4 +50,19 @@ public interface RideRepository extends JpaRepository<RideEntity, Long> {
             "WHERE r.date BETWEEN ?1 AND ?2 " +
             "ORDER BY r.date, r.line.id, r.direction ASC ")
     List<RideEntity> getAllRidesBetweenDates(Date fromDate, Date toDate);
+
+    @Query("SELECT r FROM RideEntity r " +
+            "WHERE r.id IN (" +
+                "SELECT a.ride.id FROM AvailabilityEntity a " +
+                "WHERE a.user.id = ?1 " +
+                "AND a.shiftStatus = com.internet_application.backend.Enums.ShiftStatus.VIEWED) " +
+            "AND r.date >= ?2 " +
+            "AND r.locked = true " +
+            "AND r.rideBookingStatus <> com.internet_application.backend.Enums.RideBookingStatus.TERMINATED " +
+            "ORDER BY r.date ASC")
+    List<RideEntity> getTopLockedRidesFromUserAndDate(Long lineId, Date date, Pageable pageable);
+
+    default List<RideEntity> getTopNLockedRidesFromUserAndDate(Long userId, Date date, int n) {
+        return getTopLockedRidesFromUserAndDate(userId, date, PageRequest.of(0, n));
+    }
 }

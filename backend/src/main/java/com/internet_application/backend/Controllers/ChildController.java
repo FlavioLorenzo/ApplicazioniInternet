@@ -28,6 +28,14 @@ public class ChildController {
         return childService.getAllChildrenWithParentId(userId);
     }
 
+    @GetMapping("/children/free/{date}/{direction}")
+    public List<ChildEntity> getFreeChildren(
+            @PathVariable(value="date") String date,
+            @PathVariable(value="direction") Boolean direction)
+            throws ResponseStatusException {
+        return childService.getFreeChildren(date, direction);
+    }
+
     @GetMapping("/child/{childId}")
     public ChildEntity getChildWithId(@PathVariable(value="childId") Long childId)
             throws  ResponseStatusException {

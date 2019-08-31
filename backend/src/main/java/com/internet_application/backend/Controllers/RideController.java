@@ -31,6 +31,13 @@ public class RideController {
         return rideService.getNRidesFromDate(lineId, date, n);
     }
 
+    @GetMapping("/rides/locked/{userId}/{date}")
+    public JsonNode getLockedRidesFromUserAndDate(
+            @PathVariable(value="userId") Long userId,
+            @PathVariable(value="date") String date) {
+        return rideService.getLockedRidesFromUserAndDate(userId, date);
+    }
+
     @GetMapping("/rides/{rideId}/available")
     public List<LineStopEntity> getAvailableStops(@PathVariable(value="rideId") Long rideId) {
         return rideService.getAvailableStops(rideId);

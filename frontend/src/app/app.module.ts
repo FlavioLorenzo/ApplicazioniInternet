@@ -32,7 +32,6 @@ import {UsersService} from './services/users.service';
 import {RegistrationService} from './services/registration.service';
 import {RideService} from './services/ride.service';
 
-import { LinesComponent } from './lines/lines.component';
 import {
   MatCheckboxModule,
   MatDialogModule,
@@ -93,7 +92,6 @@ import { FilterAvailabilitiesPopupComponent } from './shift-convalidation-page/a
     RegisterComponent,
     HeaderComponent,
     LogoutComponent,
-    LinesComponent,
     DatepickerComponent,
     DialogBoxPickNotBookedUserComponent,
     UserListComponent,

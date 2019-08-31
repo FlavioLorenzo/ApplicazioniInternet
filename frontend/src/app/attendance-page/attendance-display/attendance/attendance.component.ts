@@ -1,13 +1,13 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {RIDES} from './mock-buslines';
-import {User} from '../../../Models/User';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {ReservationPostBody, ReservationsService} from '../../../services/reservations.service';
-import {UsersService} from '../../../services/users.service';
 import {Ride} from '../../../Models/Ride';
 import {BusStop} from '../../../Models/BusLineStop';
 import { MatDialog } from '@angular/material/dialog';
 import {DialogBoxPickNotBookedUserComponent} from './dialog-box-pick-not-booked-user.component';
+import {Child} from '../../../Models/Child';
+import {ChildrenService} from '../../../services/children.service';
 import {DateUtilsService} from '../../../services/date-utils.service';
+import {RideService} from "../../../services/ride.service";
 
 @Component({
   selector: 'app-attendance',
@@ -15,120 +15,58 @@ import {DateUtilsService} from '../../../services/date-utils.service';
   styleUrls: ['./attendance.component.css']
 })
 export class AttendanceComponent implements OnInit {
-  @Input() date: string;
-  @Input() lineId: number;
+  ride: Ride;
 
-  rides = RIDES;
-  direction = 0;
-  ride = this.rides[this.direction];
-  pageNumber = this.rides.length;
+  @Input('ride')
+  set inputRide(ride: Ride) {
+    this.ride = ride;
+    this.getFreeUsers();
+  }
+  get inputRide(): Ride { return this.ride; }
 
-  allUsers = [];
-  remainingUsers = [];
-  loadedUsers = false;
-  loadedLine = false;
+  @Output() attendanceChange = new EventEmitter();
 
-  constructor(private reservationsService: ReservationsService,
-              private usersService: UsersService,
-              private dateService: DateUtilsService,
-              public dialog: MatDialog) {
+  freeChildren: Array<Child> = [];
+
+  constructor(private reservationsService: ReservationsService, private childrenService: ChildrenService,
+              public dialog: MatDialog, private dateService: DateUtilsService, private rideService: RideService) {
   }
 
   ngOnInit() {
-    this.queryReservationService();
-    this.queryAllUsersService();
   }
 
-  queryReservationService() {
-    this.reservationsService
-      .getReservationsForLineAndDay(this.lineId,
-        this.date)
-      .subscribe(
+  getFreeUsers() {
+    this.childrenService.getAllFreeChildren(
+      this.dateService.fromPrintFormatToSendFormat(this.ride.date),
+      this.ride.direction).subscribe(
         (data) => {
-          this.rides = data;
-          this.ride = this.rides[this.direction];
-          this.pageNumber = this.rides.length;
-          this.loadedLine = true;
-          if (this.loadedUsers && this.ride) {
-            console.log('Calling processRemainingUsers from query reservations');
-            this.processRemainingUsers();
-          }
-        },
-        (error) => {
-          console.log(error);
-          },
-        () => console.log('Done loading reservations')
-      );
-  }
-
-  pickOrUnpick(ride: Ride, busStop: BusStop, passenger: User) {
-      const rpb = new ReservationPostBody(passenger.id_user, busStop.id, !!this.direction, !passenger.picked);
-
-      this.reservationsService.modifyReservation(
-        this.lineId,
-        this.date,
-        passenger.reservationId,
-        rpb
-      ).subscribe((data) => {
-          passenger.picked = !passenger.picked;
-        },
-        (error) => {
-          console.log(error);
-        });
-  }
-
-  changePage(event) {
-    this.direction = event.pageIndex;
-    this.ride = this.rides[this.direction];
-    this.processRemainingUsers();
-  }
-
-  changeLine(event) {
-    this.lineId = event;
-    this.queryReservationService();
-  }
-
-  changeDate(event) {
-    this.date = event;
-    this.queryReservationService();
-  }
-
-  private processRemainingUsers() {
-    const bookedUserIds: number[] = new Array();
-    this.ride.stopList.forEach(busStop => {
-        busStop.passengers.forEach(passenger => {
-          bookedUserIds.push(passenger.id_user);
-        });
-      });
-
-    this.remainingUsers = this.allUsers.filter( (item) => {
-      if (bookedUserIds.includes(item.id_user)) {
-        return false;
-      }
-      return true;
-    });
-  }
-
-  private queryAllUsersService() {
-    this.usersService.getAllusers().subscribe(
-      (data) => {
-        this.allUsers = data;
-        this.loadedUsers = true;
-        if (this.loadedLine  && this.ride) {
-          console.log('Calling processRemainingUsers from query users');
-          this.processRemainingUsers();
-        }
+        this.freeChildren = data;
       },
-    (error) => {},
-      () => console.log('Loading users completed')
+      (error) => {console.log(error); },
+      () => console.log('Done building free children data structure')
     );
   }
 
-  openDialogBoxPickNotBookedUser(passenger: any) {
-    console.log(JSON.stringify(passenger));
+  pickOrUnpick(busStop: BusStop, passenger: Child) {
+    const rpb = new ReservationPostBody(passenger.childId, busStop.id, this.ride.direction, !passenger.picked);
+
+    this.reservationsService.modifyReservation(
+      this.ride.lineId,
+      this.dateService.fromPrintFormatToSendFormat(this.ride.date),
+      passenger.reservationId,
+      rpb
+    ).subscribe((data) => {
+        passenger.picked = !passenger.picked;
+      },
+      (error) => {
+        console.log(error);
+      });
+  }
+
+  openDialogBoxPickNotBookedChild(passenger: Child) {
     const dialogRef = this.dialog.open(DialogBoxPickNotBookedUserComponent, {
       width: '250px',
-      data: {ride: this.ride, user: passenger, direction: this.direction}
+      data: {ride: this.ride, user: passenger, direction: this.ride.direction}
     });
 
     dialogRef.afterClosed().subscribe(() => {
@@ -137,24 +75,48 @@ export class AttendanceComponent implements OnInit {
 
     dialogRef.componentInstance.update.subscribe(busStop => {
       const rpb = new ReservationPostBody(
-        passenger.id_user,
+        passenger.childId,
         busStop.id,
-        !!this.direction,
+        this.ride.direction,
         !passenger.picked);
-      console.log('update: ' + JSON.stringify(rpb));
 
       this.reservationsService.createReservation(
-        this.lineId,
-        this.date,
+        this.ride.lineId,
+        this.dateService.fromPrintFormatToSendFormat(this.ride.date),
         rpb
       ).subscribe(() => {
           passenger.picked = !passenger.picked;
-          this.ngOnInit();
+          this.attendanceChange.emit();
         },
         (error) => {
           console.log(error);
         });
     });
+  }
+
+  // false: open, true:close
+  onChangeRideStatus(openClose: boolean) {
+    this.rideService.changeRideBookingStatus(openClose, this.ride.id).subscribe(
+      (data) => { this.ride.rideBookingStatus = data.rideBookingStatus; },
+      (error) => {
+        console.log(error);
+      });
+  }
+
+  isNextStop(isFirst: boolean, i: number) {
+    if ((this.ride.rideBookingStatus !== 'In Progress') || ((this.ride.latestStopId != null) && isFirst)) {
+      return false;
+    }
+
+    console.log(i);
+    return ((this.ride.latestStopId == null) && isFirst) ||
+      ((this.ride.latestStopId != null) && (this.ride.latestStopId === this.ride.stopList[i - 1].id));
+  }
+
+  closeStop(id: number) {
+    this.rideService.closeStop(this.ride.id, id).subscribe(
+      () => { this.attendanceChange.emit(); },
+      (error) => { console.log(error); } );
   }
 }
 
