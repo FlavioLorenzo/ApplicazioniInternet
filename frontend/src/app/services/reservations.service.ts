@@ -126,7 +126,7 @@ export class ReservationPostBody {
               stopId: number,
               direction: boolean,
               presence: boolean) {
-    this.id_stop = childId;
+    this.id_child = childId;
     this.id_stop = stopId;
     this.direction = direction;
     this.presence = presence;

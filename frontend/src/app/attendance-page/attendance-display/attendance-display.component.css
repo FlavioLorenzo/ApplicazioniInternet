@@ -33,6 +33,17 @@
   width: 100%;
 }
 
+/* Paginator */
+
+.ai-paginator {
+  margin: 0 auto;
+}
+
+.ai-paginator mat-paginator {
+  border: 1px solid #a1a1a1;
+  border-radius: 20px;
+}
+
 @media screen and (max-width: 400px) {
   .ai-info-container {
     width: 95%;

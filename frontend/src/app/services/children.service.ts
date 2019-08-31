@@ -12,7 +12,7 @@ export class ChildrenService {
 
   constructor(private http: HttpClient) { }
 
-  public getAllChildren(){
+  public getAllChildren() {
     return this.http.get<any>(
       `${environment.apiUrl}/children`)
       .pipe(
@@ -25,11 +25,25 @@ export class ChildrenService {
       );
   }
 
-
   public getChildrenForUser(userId: number): Observable<any> {
 
     return this.http.get<any>(
       `${environment.apiUrl}/children/${userId}`)
+      .pipe(
+        retry(1),
+        catchError(err => {
+          console.error(err.message);
+          console.log('Error is handled');
+          return throwError('Error thrown from catchError');
+        })
+      );
+
+  }
+
+  public getAllFreeChildren(date: string, direction: boolean): Observable<any> {
+
+    return this.http.get<any>(
+      `${environment.apiUrl}/children/free/${date}/${direction}`)
       .pipe(
         retry(1),
         catchError(err => {
@@ -91,8 +105,8 @@ export class ChildrenService {
 
 
 export class ChildPostBody {
-  constructor(public user_id: number,
-              public first_name: string,
-              public last_name: string,
+  constructor(public childId: number,
+              public firstName: string,
+              public lastName: string,
               public phone: string) {}
 }
