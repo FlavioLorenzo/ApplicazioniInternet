@@ -7,7 +7,7 @@ import {DialogBoxPickNotBookedUserComponent} from './dialog-box-pick-not-booked-
 import {Child} from '../../../Models/Child';
 import {ChildrenService} from '../../../services/children.service';
 import {DateUtilsService} from '../../../services/date-utils.service';
-import {RideService} from "../../../services/ride.service";
+import {RideService} from '../../../services/ride.service';
 
 @Component({
   selector: 'app-attendance',
@@ -97,7 +97,12 @@ export class AttendanceComponent implements OnInit {
   // false: open, true:close
   onChangeRideStatus(openClose: boolean) {
     this.rideService.changeRideBookingStatus(openClose, this.ride.id).subscribe(
-      (data) => { this.ride.rideBookingStatus = data.rideBookingStatus; },
+      (data) => {
+        this.ride.rideBookingStatus = data.rideBookingStatus;
+        if (this.ride.rideBookingStatus === 'Terminated' ) {
+          this.attendanceChange.emit();
+        }
+      },
       (error) => {
         console.log(error);
       });

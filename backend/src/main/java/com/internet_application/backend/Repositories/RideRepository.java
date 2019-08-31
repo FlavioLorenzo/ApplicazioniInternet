@@ -66,3 +66,9 @@ public interface RideRepository extends JpaRepository<RideEntity, Long> {
         return getTopLockedRidesFromUserAndDate(userId, date, PageRequest.of(0, n));
     }
 }
+
+/*
+*
+* (" +
+                "r.rideBookingStatus = com.internet_application.backend.Enums.RideBookingStatus.NOT_STARTED " +
+                "OR r.rideBookingStatus = com.internet_application.backend.Enums.RideBookingStatus.IN_PROGRESS) " +*/
