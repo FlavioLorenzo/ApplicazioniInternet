@@ -29,7 +29,8 @@ export class ShiftDefinitionRideDisplayComponent implements OnInit {
       this.fromDate = params.from;
     });
 
-    this.getRidesAndAvailabilities();
+    this.lineName = this.route.snapshot.data.info[0].name;
+    this.buildShiftContainer(this.route.snapshot.data.info[1], this.route.snapshot.data.info[2]);
   }
 
   getRidesAndAvailabilities() {

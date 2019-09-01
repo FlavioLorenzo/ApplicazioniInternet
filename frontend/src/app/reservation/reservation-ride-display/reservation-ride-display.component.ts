@@ -5,8 +5,8 @@ import {LinesService} from '../../services/lines.service';
 import {forkJoin} from 'rxjs';
 import {ReservationOfRide, RidesWithReservationContainer} from '../rides-with-reservation-container';
 import {RideService} from '../../services/ride.service';
-import {ChildrenService} from "../../services/children.service";
-import {Child} from "../../Models/Child";
+import {ChildrenService} from '../../services/children.service';
+import {Child} from '../../Models/Child';
 
 @Component({
   selector: 'app-reservation-ride-display',
@@ -33,7 +33,9 @@ export class ReservationRideDisplayComponent implements OnInit {
       this.fromDate = params.from;
     });
 
-    this.getRidesAndReservations();
+    this.lineName = this.route.snapshot.data.info[0].name;
+    this.child = this.route.snapshot.data.info[1];
+    this.buildRidesContainer(this.route.snapshot.data.info[2], this.route.snapshot.data.info[3]);
   }
 
   getRidesAndReservations() {

@@ -81,8 +81,13 @@ import { ShiftConvalidationPageComponent } from './shift-convalidation-page/shif
 import { AvailableShiftsDisplayComponent } from './shift-convalidation-page/available-shifts-display/available-shifts-display.component';
 import { DailyRidesComponent } from './shift-convalidation-page/available-shifts-display/daily-rides/daily-rides.component';
 import { ShowAvailabilitiesComponent } from './shift-convalidation-page/show-availabilities/show-availabilities.component';
+// tslint:disable-next-line:max-line-length
 import { FilterAvailabilitiesPopupComponent } from './shift-convalidation-page/available-shifts-display/filter-availabilities-popup/filter-availabilities-popup.component';
 import { SelectChildComponent } from './select-child/select-child.component';
+import {AttendanceResolverService} from './resolvers/attendance-resolver.service';
+import {ReservationResolverService} from './resolvers/reservation-resolver.service';
+import {AvailabilitiesResolverService} from './resolvers/availabilities-resolver.service';
+import {ShiftConsolidationResolverService} from './resolvers/shift-consolidation-resolver.service';
 
 @NgModule({
   declarations: [
@@ -189,7 +194,11 @@ import { SelectChildComponent } from './select-child/select-child.component';
     {provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: {duration: 2000}},
     AvailabilityService,
     MatDatepickerModule,
-    RideService
+    RideService,
+    AttendanceResolverService,
+    ReservationResolverService,
+    AvailabilitiesResolverService,
+    ShiftConsolidationResolverService
   ],
   bootstrap: [AppComponent]
 })

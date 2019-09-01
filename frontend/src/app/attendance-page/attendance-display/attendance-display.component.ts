@@ -25,6 +25,7 @@ export class AttendanceDisplayComponent implements OnInit {
 
     if (this.date == null) {
       this.date = this.dateService.getCurrentDate();
+      this.rides = this.route.snapshot.data.rides;
       this.getRides();
     }
   }
@@ -32,7 +33,6 @@ export class AttendanceDisplayComponent implements OnInit {
   getRides() {
     this.rideService.getLockedRidesFromUserAndDate(this.auth.currentUserValue.id, this.date).subscribe(
       (data) => {
-        console.log(data);
         this.rides = data;
       },
       (error) => {console.log(error); },
