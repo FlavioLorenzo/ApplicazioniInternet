@@ -31,7 +31,8 @@ public interface RideRepository extends JpaRepository<RideEntity, Long> {
     @Query("SELECT s FROM StopEntity s, LineStopEntity ls " +
             "WHERE s.id = ls.stop " +
             "AND ls.line.id = ?1 " +
-            "AND ls.direction = ?2")
+            "AND ls.direction = ?2 " +
+            "ORDER BY ls.arrivalTime ASC")
     List<StopEntity> getAllStopsOfRide(Long lineId, Boolean direction);
 
     @Query("Select r FROM RideEntity r " +

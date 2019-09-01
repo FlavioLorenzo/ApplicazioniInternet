@@ -12,6 +12,7 @@ import {DateUtilsService} from '../../../services/date-utils.service';
 })
 export class ReservationRideComponent implements OnInit {
   @Input() ride: RidesWithReservationContainer;
+  @Input() childId: number;
   @Output() reservationChange = new EventEmitter<any>();
 
   constructor(private dialog: MatDialog, private reservationService: ReservationsService,
@@ -91,7 +92,7 @@ export class ReservationRideComponent implements OnInit {
   createReservation(back: boolean) {
     const toSave: RideWithReservation = back ? this.ride.backRide : this.ride.forthRide;
     const rpb: ReservationPostBody = {
-      id_child: 1,
+      id_child: this.childId,
       id_stop: -1,
       direction: toSave.direction,
       presence: false
@@ -140,7 +141,7 @@ export class ReservationRideComponent implements OnInit {
 
       dialogRef.componentInstance.update.subscribe(busStop => {
         const rpb: ReservationPostBody = {
-          id_child: 1, // TODO: Same story as before... we need to be able to select the kid
+          id_child: this.childId,
           id_stop: busStop,
           direction: toModify.direction,
           presence: false

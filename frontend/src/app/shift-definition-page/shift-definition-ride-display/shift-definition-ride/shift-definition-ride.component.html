@@ -9,7 +9,7 @@
           <div class="ai-select-button" [ngClass]="getSelectedClass(false)"></div>
         </div>
       </div>
-      <div class="col-6">
+      <div class="col-6 col-sm-7">
         <div>To School</div>
         <div class="ai-availability-detail-box" (click)="onModifyAvailabilityDetailAreaClick($event, false)">
           <div>{{getAvailabilityStop(false)}}</div>
@@ -17,7 +17,7 @@
           <div class="ai-availability-detail-modify"><i class="far fa-edit"></i></div>
         </div>
       </div>
-      <div class="col-4">
+      <div class="col-4 col-sm-3">
         <div class="ai-ride-status">
           <div>
             <span class="circle-signal" [ngClass]="getStatusClass(false)" ></span>
@@ -38,13 +38,13 @@
       </div>
     </div>
     <hr>
-    <div class="ai-ride-element row" (click)="onElementAreaClicked(true)">
+    <div class="ai-ride-element row justify-content-center" (click)="onElementAreaClicked(true)">
       <div class="col-2">
         <div class="ai-select-button-container">
           <div class="ai-select-button" [ngClass]="getSelectedClass(true)"></div>
         </div>
       </div>
-      <div class="col-6">
+      <div class="col-6 col-sm-7">
         <div>From School</div>
         <div class="ai-availability-detail-box" (click)="onModifyAvailabilityDetailAreaClick($event, true)">
           <div>{{getAvailabilityStop(true)}}</div>
@@ -52,7 +52,7 @@
           <div class="ai-availability-detail-modify"><i class="far fa-edit"></i></div>
         </div>
       </div>
-      <div class="col-4">
+      <div class="col-4 col-sm-3">
         <div class="ai-ride-status">
           <div>
             <span class="circle-signal" [ngClass]="getStatusClass(true)" ></span>
@@ -64,7 +64,7 @@
           </div>
         </div>
       </div>
-      <div class="col-12" *ngIf="hasAvailability(true) && (ride.backRide.availability.shiftStatus === 2)">
+      <div class="col-12 col-md-8" *ngIf="hasAvailability(true) && (ride.backRide.availability.shiftStatus === 2)">
         <div class="ai-viewed-button-container">
           <button class="btn btn-warning ai-viewed-button" (click)="onSetViewedButtonClick($event, true)">
             Set as acknowledged

@@ -11,7 +11,19 @@
       </div>
     </div>
   </div>
-  <div class="ai-ride-list-container col-12 col-md-6">
-    <app-reservation-ride *ngFor="let ride of ridesContainer" [ride]="ride" (reservationChange)="onReservationChange($event)"></app-reservation-ride>
+  <div class="col-12 ai-child-info" *ngIf="child!==null">
+    <h3>
+      Reservations for child <strong>{{child.firstName}}</strong>
+    </h3>
+  </div>
+  <div class="ai-ride-list-container col-12 col-sm-10 col-md-8 col-lg-6" *ngIf="ridesContainer.length>0">
+    <app-reservation-ride *ngFor="let ride of ridesContainer" [ride]="ride" [childId]="childId" (reservationChange)="onReservationChange($event)"></app-reservation-ride>
+  </div>
+
+  <div class="ai-no-results" *ngIf="ridesContainer.length === 0">
+    <b>
+      <div><i class="fas fa-exclamation-triangle"></i></div>
+      <div>No ride available from this date</div>
+    </b>
   </div>
 </div>

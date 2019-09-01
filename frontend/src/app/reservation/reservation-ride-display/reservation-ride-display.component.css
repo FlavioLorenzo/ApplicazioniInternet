@@ -5,6 +5,15 @@
   padding: 0 1rem;
 }
 
+.ai-child-info {
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.ai-child-info h3 {
+  font-size: 1.35rem;
+}
+
 .ai-info {
   float: left;
   margin-left: 1rem;

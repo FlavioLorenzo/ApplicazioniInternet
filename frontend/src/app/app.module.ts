@@ -82,6 +82,7 @@ import { AvailableShiftsDisplayComponent } from './shift-convalidation-page/avai
 import { DailyRidesComponent } from './shift-convalidation-page/available-shifts-display/daily-rides/daily-rides.component';
 import { ShowAvailabilitiesComponent } from './shift-convalidation-page/show-availabilities/show-availabilities.component';
 import { FilterAvailabilitiesPopupComponent } from './shift-convalidation-page/available-shifts-display/filter-availabilities-popup/filter-availabilities-popup.component';
+import { SelectChildComponent } from './select-child/select-child.component';
 
 @NgModule({
   declarations: [
@@ -123,7 +124,8 @@ import { FilterAvailabilitiesPopupComponent } from './shift-convalidation-page/a
     AvailableShiftsDisplayComponent,
     DailyRidesComponent,
     ShowAvailabilitiesComponent,
-    FilterAvailabilitiesPopupComponent
+    FilterAvailabilitiesPopupComponent,
+    SelectChildComponent
   ],
   entryComponents: [
     DialogBoxPickNotBookedUserComponent,

@@ -5,6 +5,8 @@ import {LinesService} from '../../services/lines.service';
 import {forkJoin} from 'rxjs';
 import {ReservationOfRide, RidesWithReservationContainer} from '../rides-with-reservation-container';
 import {RideService} from '../../services/ride.service';
+import {ChildrenService} from "../../services/children.service";
+import {Child} from "../../Models/Child";
 
 @Component({
   selector: 'app-reservation-ride-display',
@@ -12,19 +14,22 @@ import {RideService} from '../../services/ride.service';
   styleUrls: ['./reservation-ride-display.component.css']
 })
 export class ReservationRideDisplayComponent implements OnInit {
+  childId: number;
   lineId: number;
   lineName: string;
   fromDate: string;
+  child: Child;
   rides: any;
   ridesContainer: Array<RidesWithReservationContainer> = [];
 
   constructor(private route: ActivatedRoute, private router: Router,
               private rideService: RideService, private reservationService: ReservationsService,
-              private lineService: LinesService) { }
+              private lineService: LinesService, private childrenService: ChildrenService) { }
 
   ngOnInit() {
     this.route.params.subscribe((params: Params) => {
-      this.lineId = params.id;
+      this.childId = params.child;
+      this.lineId = params.line;
       this.fromDate = params.from;
     });
 
@@ -37,6 +42,8 @@ export class ReservationRideDisplayComponent implements OnInit {
         .getLineNameFromId(
           this.lineId
         ),
+      this.childrenService
+        .getChildById(this.childId.toString()),
       this.rideService
         .getNRidesFromDate(
           this.lineId,
@@ -46,14 +53,15 @@ export class ReservationRideDisplayComponent implements OnInit {
       this.reservationService
         .getNReservationsByChildFromDate(
           this.lineId,
-          1, // TODO: The child must be given as an argument to this component
+          this.childId,
           this.fromDate,
           7
         )
     ]).subscribe(
       (data) => {
         this.lineName = data[0].name;
-        this.buildRidesContainer(data[1], data[2]);
+        this.child = data[1];
+        this.buildRidesContainer(data[2], data[3]);
       },
       (error) => {console.log(error); },
       () => console.log('Done building data structure')
@@ -62,9 +70,9 @@ export class ReservationRideDisplayComponent implements OnInit {
 
   buildRidesContainer(rides, res) {
     for (let i = 0, len = rides.length; i < len; i++) {
-      let pos = this.getPositionInContainer(this.ridesContainer, rides[i].date);
-      let reservation = this.getReservationInList(res, rides[i].id);
-      let toAdd = rides[i];
+      const pos = this.getPositionInContainer(this.ridesContainer, rides[i].date);
+      const reservation = this.getReservationInList(res, rides[i].id);
+      const toAdd = rides[i];
 
       if (reservation != null) {
         toAdd.reservation = reservation;
@@ -77,7 +85,7 @@ export class ReservationRideDisplayComponent implements OnInit {
           this.ridesContainer[pos].backRide = toAdd;
         }
       } else {
-        let newRide: RidesWithReservationContainer = {
+        const newRide: RidesWithReservationContainer = {
           date: toAdd.date,
           forthRide: undefined,
           backRide: undefined
@@ -92,8 +100,6 @@ export class ReservationRideDisplayComponent implements OnInit {
         this.ridesContainer.push(newRide);
       }
     }
-
-    console.log(this.ridesContainer);
   }
 
   getPositionInContainer(ridesContainer: Array<RidesWithReservationContainer>, date: string): number {

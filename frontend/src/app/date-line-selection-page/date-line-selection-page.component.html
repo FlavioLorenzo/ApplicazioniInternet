@@ -1,5 +1,11 @@
 <div class="ai-small-content-container">
+  <div *ngIf="title !== ''" class="ai-box-title">
+    <h3>{{title}}</h3>
+  </div>
   <form>
+    <div *ngIf="showChild" class="form-group">
+      <app-select-child (childSelected)="onChildSelected($event)"></app-select-child>
+    </div>
     <div class="form-group">
       <app-select-lines (lineSelected)="onLineSelected($event)"></app-select-lines>
     </div>

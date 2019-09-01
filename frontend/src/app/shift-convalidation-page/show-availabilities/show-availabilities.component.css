@@ -42,6 +42,7 @@
   border-radius: 10px;
   color: #242424;
   margin: 1rem auto 0 auto;
+  max-width: 500px;
 }
 
 .ai-box-header {
@@ -59,8 +60,11 @@
 }
 
 .ai-box-button {
-  margin-top: -0.5rem;
+  margin-top: -0.35rem;
   margin-bottom: -0.5rem;
+  font-size: 0.95rem;
+  float: right;
+  margin-right: 1rem;
 }
 
 .ai-text-box {

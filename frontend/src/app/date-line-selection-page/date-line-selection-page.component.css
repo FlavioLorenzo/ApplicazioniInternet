@@ -7,6 +7,17 @@
   width: 300px;
 }
 
+.ai-box-title {
+  margin-bottom: 1rem;
+  border-bottom: 1px solid #959595;
+  padding-bottom: 0.5rem;
+}
+
+.ai-box-title h3 {
+  font-weight: 600;
+  font-size: 1.25rem;
+}
+
 @media screen and (max-width: 400px) {
   .ai-small-content-container {
     width: 95%;

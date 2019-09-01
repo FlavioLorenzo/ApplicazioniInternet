@@ -9,7 +9,7 @@
           <div class="ai-select-button" [ngClass]="getSelectedClass(false)"></div>
         </div>
       </div>
-      <div class="col-5">
+      <div class="col-5 col-sm-6">
         <div>To School</div>
         <div class="ai-reservation-detail-box" (click)="onModifyReservationDetailAreaClick($event, false)">
           <div>{{getReservationStop(false)}}</div>
@@ -17,7 +17,7 @@
           <div class="ai-reservation-detail-modify"><i class="far fa-edit"></i></div>
         </div>
       </div>
-      <div class="col-5">
+      <div class="col-5 col-sm-4">
         <div class="ai-ride-status">
           <div>
             <span class="circle-signal" [ngClass]="getStatusClass(false)" ></span>
@@ -37,7 +37,7 @@
           <div class="ai-select-button" [ngClass]="getSelectedClass(true)"></div>
         </div>
       </div>
-      <div class="col-5">
+      <div class="col-5 col-sm-6">
         <div>From School</div>
         <div class="ai-reservation-detail-box" (click)="onModifyReservationDetailAreaClick($event, true)">
           <div>{{getReservationStop(true)}}</div>
@@ -45,7 +45,7 @@
           <div class="ai-reservation-detail-modify"><i class="far fa-edit"></i></div>
         </div>
       </div>
-      <div class="col-5">
+      <div class="col-5 col-sm-4">
         <div class="ai-ride-status">
           <div>
             <span class="circle-signal" [ngClass]="getStatusClass(true)" ></span>

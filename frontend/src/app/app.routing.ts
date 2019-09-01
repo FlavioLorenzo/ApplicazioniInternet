@@ -43,7 +43,7 @@ const appRoutes: Routes = [
     component: ReservationComponent,
     children: [
       { path: '', component: SelectionComponent },
-      { path: 'line/:id/:from', component: ReservationRideDisplayComponent }
+      { path: ':child/:line/:from', component: ReservationRideDisplayComponent }
     ],
     canActivate: [AuthGuard]
   },

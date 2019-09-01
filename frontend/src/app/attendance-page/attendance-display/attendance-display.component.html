@@ -19,7 +19,12 @@
       <ng-template [ngIf]="rides.length===0">
         <div class="row ai-no-rides-mex">
           <div class="col-12">
-            <b>You've not been assigned to any ride yet</b>
+            <div class="ai-no-results">
+              <b>
+                <div><i class="fas fa-exclamation-triangle"></i></div>
+                <div>You've not been assigned to any ride yet</div>
+              </b>
+            </div>
           </div>
         </div>
       </ng-template>

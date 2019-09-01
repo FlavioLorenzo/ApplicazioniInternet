@@ -11,9 +11,16 @@
       </div>
     </div>
   </div>
-  <div class="ai-ride-list-container col-12 col-md-6">
+  <div class="ai-ride-list-container col-12 col-sm-10 col-md-8 col-lg-6" *ngIf="ridesContainer.length > 0">
     <app-shift-definition-ride *ngFor="let ride of ridesContainer"
                                [ride]="ride"
                                (availabilityChange)="onAvailabilityChanged($event)"></app-shift-definition-ride>
   </div>
+  <div class="ai-no-results" *ngIf="ridesContainer.length === 0">
+    <b>
+      <div><i class="fas fa-exclamation-triangle"></i></div>
+      <div>No ride available from this date</div>
+    </b>
+  </div>
+
 </div>

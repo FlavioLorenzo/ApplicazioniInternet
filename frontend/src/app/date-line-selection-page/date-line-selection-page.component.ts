@@ -1,4 +1,4 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Router} from "@angular/router";
 
 @Component({
@@ -8,7 +8,10 @@ import {Router} from "@angular/router";
 })
 export class DateLineSelectionPageComponent implements OnInit {
 
+  @Input() showChild = false;
+  @Input() title = '';
   @Output() buttonClicked = new EventEmitter<any>();
+  childId: number;
   lineId: number;
   dateSelected: string;
 
@@ -17,6 +20,10 @@ export class DateLineSelectionPageComponent implements OnInit {
   ngOnInit() {
     this.lineId = null;
     this.dateSelected = null;
+  }
+
+  onChildSelected(value: number) {
+    this.childId = value;
   }
 
   onLineSelected(value: number) {
@@ -29,7 +36,11 @@ export class DateLineSelectionPageComponent implements OnInit {
 
   onButtonClicked() {
     if ( this.lineId !== null && this.dateSelected !== null) {
-      this.buttonClicked.emit({line: this.lineId, date: this.dateSelected});
+      if ( this.showChild && this.childId !== null) {
+        this.buttonClicked.emit({child: this.childId, line: this.lineId, date: this.dateSelected});
+      } else {
+        this.buttonClicked.emit({line: this.lineId, date: this.dateSelected});
+      }
     }
   }
 }

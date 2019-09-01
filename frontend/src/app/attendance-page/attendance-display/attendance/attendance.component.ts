@@ -113,7 +113,6 @@ export class AttendanceComponent implements OnInit {
       return false;
     }
 
-    console.log(i);
     return ((this.ride.latestStopId == null) && isFirst) ||
       ((this.ride.latestStopId != null) && (this.ride.latestStopId === this.ride.stopList[i - 1].id));
   }

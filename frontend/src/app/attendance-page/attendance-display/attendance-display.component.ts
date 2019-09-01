@@ -32,6 +32,7 @@ export class AttendanceDisplayComponent implements OnInit {
   getRides() {
     this.rideService.getLockedRidesFromUserAndDate(this.auth.currentUserValue.id, this.date).subscribe(
       (data) => {
+        console.log(data);
         this.rides = data;
       },
       (error) => {console.log(error); },

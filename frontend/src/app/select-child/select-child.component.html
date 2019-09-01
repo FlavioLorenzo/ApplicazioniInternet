@@ -1,0 +1,7 @@
+<mat-form-field>
+  <mat-label>Select the child</mat-label>
+  <select matNativeControl (change)="onSelectChild($event.target.value)">
+    <option value="" selected></option>
+    <option *ngFor="let child of children" [value]="child.childId">{{child.firstName}}</option>
+  </select>
+</mat-form-field>

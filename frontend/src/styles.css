@@ -75,3 +75,16 @@ label {
 .line-selector {
   display: inline-block;
 }
+
+.ai-no-results {
+  text-align: center;
+  margin-top: 3.5rem;
+  margin-bottom: 2rem;
+  font-size: 2rem;
+}
+
+@media screen and (max-width: 400px) {
+  .ai-no-results {
+    font-size: 1.7rem;
+  }
+}

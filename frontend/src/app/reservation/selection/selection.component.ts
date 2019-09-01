@@ -12,6 +12,6 @@ export class SelectionComponent implements OnInit {
   ngOnInit() {}
 
   onButtonClicked(data) {
-    this.router.navigate(['/reservation', 'line', data.line, data.date]);
+    this.router.navigate(['/reservation', data.child, data.line, data.date]);
   }
 }

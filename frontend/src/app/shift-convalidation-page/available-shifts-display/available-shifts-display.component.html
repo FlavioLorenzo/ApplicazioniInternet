@@ -7,7 +7,7 @@
       </button>
     </div>
   </div>
-  <div class="ai-ride-list-container col-12 col-md-6">
+  <div class="ai-ride-list-container col-12 col-md-8 col-lg-6">
     <app-daily-rides *ngFor="let dailyRides of ridesByDay"
                                [dailyRides]="dailyRides"
                      (shiftChange)="onShiftChange($event)"></app-daily-rides>
