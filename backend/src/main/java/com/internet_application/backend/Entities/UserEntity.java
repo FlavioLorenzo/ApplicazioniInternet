@@ -59,6 +59,10 @@ public class UserEntity {
     @JsonIgnore
     private Set<ChildEntity> children;
 
+    @OneToMany(mappedBy = "user")
+    @JsonIgnore
+    private Set<NotificationEntity> notifications;
+
     @Column
     @Getter
     @Setter
@@ -132,6 +136,14 @@ public class UserEntity {
 
     public void addManagedLine(BusLineEntity busLineEntity) {
         administeredBuslines.add(busLineEntity);
+    }
+
+    public void addNotification(NotificationEntity notificationEntity) {
+        notifications.add(notificationEntity);
+    }
+
+    public void removeNotification(NotificationEntity notificationEntity) {
+        notifications.remove(notificationEntity);
     }
 
     @Override
