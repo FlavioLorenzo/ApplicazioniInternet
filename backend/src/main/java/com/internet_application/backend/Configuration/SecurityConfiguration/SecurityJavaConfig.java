@@ -53,13 +53,13 @@ public class SecurityJavaConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/login", "/register", "/confirm-account", "/recover", "/recover/**",
                         "/check-email", "/reservations/**", "/rides/**", "/availability/**", "/availability**", "/availabilities/**",
                         "/children**", "/children/**", "/child/**", "/token-info**", "/token-info/**", "/complete-registration**",
-                        "/complete-registration/**", "/user**","/user/**")
+                        "/complete-registration/**", "/user**", "/user/**")
                     .permitAll()
                 //.antMatchers("/reservations")
                     //.hasRole("USER")
                 .antMatchers("/css/**")
                     .permitAll()
-                .antMatchers("/users", "/users/*")
+                .antMatchers("/users", "/users/*", "/ws**", "/ws/**")
                     .permitAll()
                     //.hasAnyRole("ADMIN", "SYS_ADMIN")
                 .anyRequest().authenticated()

@@ -88,6 +88,7 @@ import {AttendanceResolverService} from './resolvers/attendance-resolver.service
 import {ReservationResolverService} from './resolvers/reservation-resolver.service';
 import {AvailabilitiesResolverService} from './resolvers/availabilities-resolver.service';
 import {ShiftConsolidationResolverService} from './resolvers/shift-consolidation-resolver.service';
+import {WebSocketAttendanceService} from './services/web-socket-attendance.service';
 
 @NgModule({
   declarations: [
@@ -198,7 +199,8 @@ import {ShiftConsolidationResolverService} from './resolvers/shift-consolidation
     AttendanceResolverService,
     ReservationResolverService,
     AvailabilitiesResolverService,
-    ShiftConsolidationResolverService
+    ShiftConsolidationResolverService,
+    WebSocketAttendanceService
   ],
   bootstrap: [AppComponent]
 })

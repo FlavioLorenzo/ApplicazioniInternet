@@ -5,6 +5,7 @@
 export const environment = {
   production: false,
   apiUrl: 'http://localhost:8080',
+  socketUrl: '/ws',
   reservationsUrl: '/reservations',
   stopsUrl: '/stops',
   linesUrl: '/lines',
