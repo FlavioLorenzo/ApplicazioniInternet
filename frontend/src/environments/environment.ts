@@ -15,7 +15,10 @@ export const environment = {
   availabilityUrl: '/availability',
   confirmedAvailabilityUrl: '/confirmed',
   viewedAvailabilityUrl: '/viewed',
-  lockedAvailabilityUrl: '/locked'
+  lockedAvailabilityUrl: '/locked',
+  notificationsUrl: '/notifications',
+  pendingNotificationsUrl: '/notifications/pending',
+  viewedNotificationUrl: '/notifications/viewed/'
 };
 
 /*

@@ -39,7 +39,7 @@ public class NotificationController {
         notificationService.deleteNotification(notificationId);
     }
 
-    @PutMapping("/notifications/{notificationId}/viewed")
+    @PutMapping("/notifications/viewed/{notificationId}")
     public NotificationEntity setViewedOnNotificationWithId(
             @PathVariable(value="notificationId") Long notificationId
     )
