@@ -6,14 +6,22 @@ import {HttpClient} from '@angular/common/http';
 import {AuthService} from './auth.service';
 import {Observable, throwError} from 'rxjs';
 import {catchError, retry} from 'rxjs/operators';
+import {NotificationsComponent} from '../notifications/notifications.component';
 
 @Injectable()
 export class NotificationsService {
   webSocketEndPoint = environment.apiUrl + environment.socketUrl;
   stompClient: any;
-  userId: number;
+  notificationsComponent: NotificationsComponent;
 
-  constructor(private http: HttpClient, private auth: AuthService) {}
+  constructor(
+    private http: HttpClient,
+    private auth: AuthService,
+  ) {}
+
+  setup(notificationsComponent: NotificationsComponent) {
+    this.notificationsComponent = notificationsComponent;
+  }
 
   getActiveNotificationsForUser(userId: number): Observable<any> {
     return this.http.get<any>(
@@ -94,15 +102,14 @@ export class NotificationsService {
 
 
   connect(userId: number) {
-    this.userId = userId;
     const ws = new SockJS(this.webSocketEndPoint);
     this.stompClient = Stomp.over(ws);
 
     this.stompClient.connect({}, function(frame) {
-      this.stompClient.subscribe('/messages/' + userId, () => {
-        // TODO execute update on the component displaying notifications
+      this.stompClient.subscribe('/messages/' + userId, (data) => {
+          this.notificationsComponent.notifications = data;
       });
-    }, this.errorCallBack);
+    }, this.errorCallBack(userId));
   }
 
   disconnect() {
@@ -111,9 +118,9 @@ export class NotificationsService {
     }
   }
 
-  errorCallBack(error) {
+  errorCallBack(userId: number) {
     setTimeout(() => {
-      this.connect(this.userId);
+      this.connect(userId);
     }, 5000);
   }
 

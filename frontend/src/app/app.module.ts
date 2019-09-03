@@ -89,6 +89,8 @@ import {ReservationResolverService} from './resolvers/reservation-resolver.servi
 import {AvailabilitiesResolverService} from './resolvers/availabilities-resolver.service';
 import {ShiftConsolidationResolverService} from './resolvers/shift-consolidation-resolver.service';
 import {WebSocketAttendanceService} from './services/web-socket-attendance.service';
+import { NotificationsComponent } from './notifications/notifications.component';
+import {NotificationsService} from './services/notifications.service';
 
 @NgModule({
   declarations: [
@@ -131,7 +133,8 @@ import {WebSocketAttendanceService} from './services/web-socket-attendance.servi
     DailyRidesComponent,
     ShowAvailabilitiesComponent,
     FilterAvailabilitiesPopupComponent,
-    SelectChildComponent
+    SelectChildComponent,
+    NotificationsComponent
   ],
   entryComponents: [
     DialogBoxPickNotBookedUserComponent,
@@ -200,7 +203,8 @@ import {WebSocketAttendanceService} from './services/web-socket-attendance.servi
     ReservationResolverService,
     AvailabilitiesResolverService,
     ShiftConsolidationResolverService,
-    WebSocketAttendanceService
+    WebSocketAttendanceService,
+    NotificationsService
   ],
   bootstrap: [AppComponent]
 })
