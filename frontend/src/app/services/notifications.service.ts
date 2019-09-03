@@ -6,7 +6,6 @@ import {HttpClient} from '@angular/common/http';
 import {AuthService} from './auth.service';
 import {Observable, throwError} from 'rxjs';
 import {catchError, retry} from 'rxjs/operators';
-import {AvailabilityPostBody} from './availability.service';
 
 @Injectable()
 export class NotificationsService {
@@ -16,7 +15,7 @@ export class NotificationsService {
 
   constructor(private http: HttpClient, private auth: AuthService) {}
 
-  public getActiveNotificationsForUser(userId: number): Observable<any> {
+  getActiveNotificationsForUser(userId: number): Observable<any> {
     return this.http.get<any>(
       environment.apiUrl +
       environment.pendingNotificationsUrl +
@@ -31,7 +30,7 @@ export class NotificationsService {
       );
   }
 
-  public getNotificationWithId(notificationId: number) {
+  getNotificationWithId(notificationId: number): Observable<any> {
     return this.http.get<any>(
       environment.apiUrl +
       environment.notificationsUrl +
@@ -46,7 +45,7 @@ export class NotificationsService {
       );
   }
 
-  public createNotification(notification: NotificationPostBody) {
+  createNotification(notification: NotificationPostBody): Observable<any> {
     return this.http.post(
       environment.apiUrl +
       environment.notificationsUrl,
@@ -61,24 +60,8 @@ export class NotificationsService {
       );
   }
 
-  public modifyAvailability(availabilityId: number, availability: AvailabilityPostBody) {
-    availability.userId = this.auth.currentUserValue.id;
-    return this.http.put(
-      environment.apiUrl +
-      environment.availabilityUrl +
-      '/' + availabilityId,
-      availability
-    )
-      .pipe(
-        retry(3),
-        catchError(err => {
-          console.log(err.message);
-          return throwError('Error thrown from catchError');
-        })
-      );
-  }
 
-  public deleteAvailability(notificationId: number) {
+  deleteNotification(notificationId: number) {
     return this.http.delete(
       environment.apiUrl +
       environment.notificationsUrl +
@@ -93,7 +76,7 @@ export class NotificationsService {
       );
   }
 
-  public viewNotification(notificationId: number) {
+  viewNotification(notificationId: number): Observable<any> {
     return this.http.put(
       environment.apiUrl +
       environment.viewedNotificationUrl +
@@ -132,6 +115,11 @@ export class NotificationsService {
     setTimeout(() => {
       this.connect(this.userId);
     }, 5000);
+  }
+
+  notifyUser(userId: number) {
+    this.stompClient.send(
+      '/app' + environment.notificationUpdateUrl + '/' + userId, {}, {});
   }
 }
 

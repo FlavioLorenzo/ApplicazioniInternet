@@ -18,7 +18,8 @@ export const environment = {
   lockedAvailabilityUrl: '/locked',
   notificationsUrl: '/notifications',
   pendingNotificationsUrl: '/notifications/pending',
-  viewedNotificationUrl: '/notifications/viewed/'
+  viewedNotificationUrl: '/notifications/viewed/',
+  notificationUpdateUrl: '/update/notifications'
 };
 
 /*
