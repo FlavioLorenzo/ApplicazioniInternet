@@ -22,4 +22,6 @@ public interface UserService {
     UserEntity addAdminRoleOfLineToUser(Long lineId, Long userId);
     UserEntity removeAdminRoleOfLineFromUser(Long lineId, Long userId);
     List<BusLineEntity> getAdministeredLineOfUser(Long userId);
+    UserEntity getUserFromEmail(String email);
+
 }

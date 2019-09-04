@@ -283,4 +283,12 @@ public class UserServiceImpl implements UserService {
         return new ArrayList<>(user.getAdministeredBuslines());
     }
 
+    public UserEntity getUserFromEmail(String email)
+        throws ResponseStatusException {
+        UserEntity user = userRepository.findByEmail(email);
+        if (user == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+        return user;
+    }
 }
