@@ -1,16 +1,41 @@
 import { Injectable } from '@angular/core';
-import { Observable, throwError } from 'rxjs';
+import { Observable, throwError, BehaviorSubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Child } from '../Models/Child';
 import {environment} from '../../environments/environment';
-import { retry, catchError } from 'rxjs/operators';
+import { retry, catchError, tap} from 'rxjs/operators';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ChildrenService {
 
-  constructor(private http: HttpClient) { }
+  private fetchedUsers = [];
+  private currentUserChildSubject: BehaviorSubject<Array<Child>>;
+  public currentUserChild: Observable<Array<Child>>;
+
+
+  constructor(private http: HttpClient, private authService: AuthService) { 
+    this.currentUserChildSubject = new BehaviorSubject<Array<Child>>([]);
+    this.currentUserChild = this.currentUserChildSubject.asObservable();
+
+    this.authService.currentUser.subscribe(
+      currentUser => {
+        if(currentUser){
+            this.updateCurrentUserChildren(currentUser.id);
+        }
+      }
+    )
+  }
+
+  private updateCurrentUserChildren(currentUserId){
+    this.getChildrenForUser(currentUserId).subscribe(children => {
+      this.fetchedUsers = children;
+      this.currentUserChildSubject.next(children);
+    });
+  }
+
 
   public getAllChildren() {
     return this.http.get<any>(
@@ -81,8 +106,13 @@ export class ChildrenService {
           console.error(err.message);
           console.log('Error is handled');
           return throwError('Error thrown from catchError');
+        }),tap(() => {
+        //  this.fetchedUsers.push(cpb);
+       //   this.currentUserChildSubject.next(this.fetchedUsers);
+       this.updateCurrentUserChildren(cpb.userId);
+
         })
-      );
+      )
 
   }
 
@@ -96,8 +126,11 @@ export class ChildrenService {
           console.error(err.message);
           console.log('Error is handled');
           return throwError('Error thrown from catchError');
+        }),tap(() => {
+          this.fetchedUsers = this.fetchedUsers.filter(it => childId !== it.childId);
+          this.currentUserChildSubject.next(this.fetchedUsers);
         })
-      );
+      )
 
   }
 
@@ -105,7 +138,7 @@ export class ChildrenService {
 
 
 export class ChildPostBody {
-  constructor(public childId: number,
+  constructor(public userId: number,
               public firstName: string,
               public lastName: string,
               public phone: string) {}

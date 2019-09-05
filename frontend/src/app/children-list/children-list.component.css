@@ -1,12 +1,29 @@
 table {
     margin: auto;
+    min-width: 500px;
+    background: transparent;
+    max-height: 500px;
+}
+
+@media screen and (max-width: 400px) {
+    .ai-small-content-container {
+      width: 95%;
+    }
+  }
+
+  
+.ai-small-content-container {
+    background-color: whitesmoke;
+    border-radius: 10px;
+    color: #242424;
+    margin: 1rem auto 0 auto;
+    padding: 1rem;
+    width: 90%;
+    overflow: auto;
 }
 
 
-.main-container {
-    margin-top: 1rem;
-    background: whitesmoke;
-    color: #242424;
-    padding-top: 2rem;
-    padding-bottom: 2rem;
-  }
+.table-container{
+    height: 400px;
+    overflow: auto; 
+}

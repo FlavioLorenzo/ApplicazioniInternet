@@ -53,6 +53,8 @@ export class ChildrenRegistrationComponent implements OnInit {
     this.lastNameFormControl.setValue('');
     this.firstNameFormControl.setValue('');
     this.phoneFormControl.setValue('');
+    this.firstNameFormControl = new FormControl('', [Validators.required]);
+    this.lastNameFormControl = new FormControl('', [Validators.required]);
   }
 
 }
