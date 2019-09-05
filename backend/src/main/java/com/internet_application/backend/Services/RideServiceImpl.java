@@ -22,6 +22,7 @@ import javax.persistence.PersistenceContext;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @SuppressWarnings("Duplicates")
 @Service
@@ -38,6 +39,8 @@ public class RideServiceImpl implements RideService {
     private LineStopRepository lineStopRepository;
     @Autowired
     private ReservationRepository reservationRepository;
+    @Autowired
+    private NotificationService notificationService;
 
     @PersistenceContext
     private EntityManager em;
@@ -197,7 +200,36 @@ public class RideServiceImpl implements RideService {
                     "complete");
 
         ride.setLocked(locked);
-        return rideRepository.save(ride);
+        RideEntity toReturn = rideRepository.save(ride);
+
+        // Retrieve all users with this availability and send them a notification
+        Set<AvailabilityEntity> availabilities = toReturn.getAvailabilities();
+
+        if(locked == true) {
+            for(AvailabilityEntity availability: availabilities) {
+                notificationService.createNotification(
+                        availability.getUser().getId(),
+                        "The ride for line " + toReturn.getLine().getName() +
+                                ", scheduled for " + DateUtils.dateToString(toReturn.getDate()) +
+                                ", has been closed. " +
+                                "You can no longer modify your availability.",
+                        ""
+                );
+            }
+        } else {
+            for(AvailabilityEntity availability: availabilities) {
+                notificationService.createNotification(
+                        availability.getUser().getId(),
+                        "The ride for line " + toReturn.getLine().getName() +
+                                ", scheduled for " + DateUtils.dateToString(toReturn.getDate()) +
+                                ", has been opened once again. " +
+                                "If you still need to modify your availability, now is the time.",
+                        ""
+                );
+            }
+        }
+
+        return toReturn;
     }
 
     @Override

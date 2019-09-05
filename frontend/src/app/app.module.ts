@@ -91,6 +91,8 @@ import {ShiftConsolidationResolverService} from './resolvers/shift-consolidation
 import {WebSocketAttendanceService} from './services/web-socket-attendance.service';
 import { NotificationsComponent } from './notifications/notifications.component';
 import {NotificationsService} from './services/notifications.service';
+import { SingleNotificationComponent } from './notifications/single-notification/single-notification.component';
+import {WebSocketNotificationService} from './services/web-socket-notification.service';
 
 @NgModule({
   declarations: [
@@ -134,7 +136,8 @@ import {NotificationsService} from './services/notifications.service';
     ShowAvailabilitiesComponent,
     FilterAvailabilitiesPopupComponent,
     SelectChildComponent,
-    NotificationsComponent
+    NotificationsComponent,
+    SingleNotificationComponent
   ],
   entryComponents: [
     DialogBoxPickNotBookedUserComponent,
@@ -204,7 +207,8 @@ import {NotificationsService} from './services/notifications.service';
     AvailabilitiesResolverService,
     ShiftConsolidationResolverService,
     WebSocketAttendanceService,
-    NotificationsService
+    NotificationsService,
+    WebSocketNotificationService
   ],
   bootstrap: [AppComponent]
 })

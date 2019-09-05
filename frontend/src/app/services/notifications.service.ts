@@ -1,5 +1,3 @@
-import * as Stomp from 'stompjs';
-import * as SockJS from 'sockjs-client';
 import {Injectable} from '@angular/core';
 import {environment} from '../../environments/environment';
 import {HttpClient} from '@angular/common/http';
@@ -10,17 +8,24 @@ import {NotificationsComponent} from '../notifications/notifications.component';
 
 @Injectable()
 export class NotificationsService {
-  webSocketEndPoint = environment.apiUrl + environment.socketUrl;
-  stompClient: any;
-  notificationsComponent: NotificationsComponent;
-
   constructor(
     private http: HttpClient,
     private auth: AuthService,
   ) {}
 
-  setup(notificationsComponent: NotificationsComponent) {
-    this.notificationsComponent = notificationsComponent;
+  getNotificationsForUser(userId: number): Observable<any> {
+    return this.http.get<any>(
+      environment.apiUrl +
+      environment.allNotificationsUrl +
+      '/' + userId
+    )
+      .pipe(
+        retry(3),
+        catchError(err => {
+          console.log(err.message);
+          return throwError('Error thrown from catchError');
+        })
+      );
   }
 
   getActiveNotificationsForUser(userId: number): Observable<any> {
@@ -98,35 +103,6 @@ export class NotificationsService {
           return throwError('Error thrown from catchError');
         })
       );
-  }
-
-
-  connect(userId: number) {
-    const ws = new SockJS(this.webSocketEndPoint);
-    this.stompClient = Stomp.over(ws);
-
-    this.stompClient.connect({}, function(frame) {
-      this.stompClient.subscribe('/messages/' + userId, (data) => {
-          this.notificationsComponent.notifications = data;
-      });
-    }, this.errorCallBack(userId));
-  }
-
-  disconnect() {
-    if (this.stompClient != null) {
-      this.stompClient.disconnect();
-    }
-  }
-
-  errorCallBack(userId: number) {
-    setTimeout(() => {
-      this.connect(userId);
-    }, 5000);
-  }
-
-  notifyUser(userId: number) {
-    this.stompClient.send(
-      '/app' + environment.notificationUpdateUrl + '/' + userId, {}, {});
   }
 }
 

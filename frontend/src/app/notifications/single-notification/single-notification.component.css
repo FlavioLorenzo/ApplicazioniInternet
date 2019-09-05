@@ -1,0 +1,52 @@
+.ai-notification-container {
+  background-color: whitesmoke;
+  border-radius: 10px;
+  color: #242424;
+  margin: 1rem auto 0 auto;
+}
+
+.ai-notification-header {
+  border-bottom: 1px solid #38240052;
+  font-size: 0.85rem;
+  padding: 0.3rem 1rem;
+}
+
+.ai-notification-footer {
+  border-top: 1px solid #38240052;
+  font-size: 0.85rem;
+  padding: 0.3rem 1rem;
+  text-align: center;
+}
+
+.ai-notification-body {
+}
+
+.ai-notification-element {
+  font-size: 0.92rem;
+  padding: 1rem 2rem;
+}
+
+.ai-delete {
+  color: #eb0000;
+  text-align: right;
+}
+
+.ai-delete i {
+  padding: 0.2rem 1rem;
+}
+
+.ai-delete i:hover {
+  cursor: pointer;
+}
+
+.ai-not-viewed {
+  border: 6px solid #ffc937;
+}
+
+.ai-not-viewed:hover {
+  cursor: pointer;
+}
+
+.ai-viewed {
+
+}

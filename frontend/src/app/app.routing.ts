@@ -28,6 +28,7 @@ import {AttendanceResolverService} from './resolvers/attendance-resolver.service
 import {ReservationResolverService} from './resolvers/reservation-resolver.service';
 import {AvailabilitiesResolverService} from './resolvers/availabilities-resolver.service';
 import {ShiftConsolidationResolverService} from './resolvers/shift-consolidation-resolver.service';
+import {NotificationsComponent} from './notifications/notifications.component';
 
 const appRoutes: Routes = [
   /*{
@@ -36,6 +37,11 @@ const appRoutes: Routes = [
     canActivate: [AuthGuard]
   },*/
   {
+    path: 'notifications',
+    component: NotificationsComponent,
+    canActivate: [AuthGuard]
+  },
+  {
     path: 'attendance',
     component: AttendancePageComponent,
     children: [
@@ -43,16 +49,7 @@ const appRoutes: Routes = [
         path: '',
         component: AttendanceDisplayComponent,
         resolve: {rides: AttendanceResolverService }
-      }/*,
-      {
-        path: 'line/:id/:from',
-        component: AttendanceDisplayComponent,
-        resolve: {rides: AttendanceResolverService}
-      },
-      {
-        path: 'selection',
-        component: AttendanceDateLineSelectionComponent
-      }*/
+      }
     ],
     canActivate: [AuthGuard]
   },

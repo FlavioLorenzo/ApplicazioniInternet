@@ -272,6 +272,11 @@ public class DateUtils {
         return dateFormat.format(date);
     }
 
+    public static String dateToSendString(Date date) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        return dateFormat.format(date);
+    }
+
     public static Date timeParser(String date) throws ResponseStatusException {
         SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
         try {
