@@ -176,7 +176,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void save(UserEntity user) {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword())); //TODO: Come mai qua?
-        user.setRole(roleRepository.findByName(USER_ROLE)); //TODO: Anche questo come mai qua?
+        //user.setRole(roleRepository.findByName(USER_ROLE)); //TODO: Anche questo come mai qua?
         userRepository.save(user);
     }
 

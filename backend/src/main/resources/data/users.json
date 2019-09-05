@@ -6,7 +6,11 @@
     "phone": "1234",
     "email": "u1@example.it",
     "password": "password",
-    "password_confirm": "password"
+    "password_confirm": "password",
+    "role": {
+      "id_role": 1,
+      "name": "ROLE_SYS_ADMIN"
+    }
   },
   {
     "id_user": 2,
@@ -15,7 +19,11 @@
     "phone": "1234",
     "email": "u2@example.it",
     "password": "password",
-    "password_confirm": "password"
+    "password_confirm": "password",
+    "role": {
+      "id_role": 2,
+      "name": "ROLE_ADMIN"
+    }
   },
   {
     "id_user": 3,
@@ -24,7 +32,11 @@
     "phone": "1234",
     "email": "u3@example.it",
     "password": "password",
-    "password_confirm": "password"
+    "password_confirm": "password",
+    "role": {
+      "id_role": 3,
+      "name": "ROLE_ESCORT"
+    }
   },
   {
     "id_user": 4,
@@ -33,7 +45,11 @@
     "phone": "1234",
     "email": "u4@example.it",
     "password": "password",
-    "password_confirm": "password"
+    "password_confirm": "password",
+    "role": {
+      "id_role": 4,
+      "name": "ROLE_USER"
+    }
   },
   {
     "id_user": 5,
@@ -42,6 +58,10 @@
     "phone": "1234",
     "email": "u5@example.it",
     "password": "password",
-    "password_confirm": "password"
+    "password_confirm": "password",
+    "role": {
+      "id_role": 4,
+      "name": "ROLE_USER"
+    }
   }
 ]
