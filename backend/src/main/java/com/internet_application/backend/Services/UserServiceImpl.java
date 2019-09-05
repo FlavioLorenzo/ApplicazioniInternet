@@ -48,7 +48,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void register(String email, String firstName, String lastName, Long roleId) {
+    public UserEntity register(String email, String firstName, String lastName, Long roleId) {
         if(userRepository.findByEmail(email) != null){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Mail already exists");
         }
@@ -64,7 +64,7 @@ public class UserServiceImpl implements UserService {
         user.setEnabled(false);
         user.setRole(role);
         user.setPassword(UUID.randomUUID().toString());
-        userRepository.save(user);
+        UserEntity savedUser = userRepository.save(user);
 
         ConfirmationToken confirmationToken = new ConfirmationToken();
         confirmationToken.createToken();
@@ -90,6 +90,8 @@ public class UserServiceImpl implements UserService {
             userRepository.delete(user);
             throw ex;
         }
+
+        return savedUser;
     }
 
     /* Returns the user give the confirmation token */

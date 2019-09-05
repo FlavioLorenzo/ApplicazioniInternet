@@ -12,7 +12,7 @@ public interface UserService {
     UserEntity findByEmail(String email);
     List<UserEntity> getAllUsers();
     String login(String email, String password);
-    void register(String email, String firstName, String lastName, Long roleId);
+    UserEntity register(String email, String firstName, String lastName, Long roleId);
     UserEntity getAccountConfirmationInfo(String token);
     void completeAccount(String token, String password, String confirmPassword, String phone);
     void recoverAccount(String email);

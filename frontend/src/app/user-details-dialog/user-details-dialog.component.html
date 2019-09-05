@@ -21,9 +21,10 @@
     <div *ngIf="user.role.name !== 'ROLE_USER'">
       <strong>Linee amministrate:</strong>
       <ul *ngIf="!isLoading">
-        <app-line-selector
+        <app-line-selector class="line-selector"
         [checkableLines]="myLines"
-        [allLines]="userLines"></app-line-selector>
+        [alreadySelectedLines]="userLines"
+        (chekedLinesId)="onLinesChanged($event)"></app-line-selector>
       </ul>
   </div>
 

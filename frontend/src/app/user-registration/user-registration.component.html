@@ -1,7 +1,7 @@
-<div class="main-container">
-    <div class="container">
-        <h1>User registration</h1>
-      
+<div class="ai-small-content-container">
+  <h3>Child registration</h3>
+
+    <div style="margin: auto; display: flex; justify-content: center;">
         <form class="registration-form">
             <mat-form-field class="example-full-width">
                 <input matInput placeholder="Email" [formControl]="emailFormControl"
@@ -29,7 +29,7 @@
               </mat-form-field>            
               <mat-form-field>
                 <mat-label>User type</mat-label>
-                <mat-select name="selectedValue" [formControl]="selectFormControl">
+                <mat-select [formControl]="selectFormControl">
                   <mat-option *ngFor="let type of userTypes" [value]="type.id" >
                     {{type.name}}
                   </mat-option>
@@ -41,7 +41,8 @@
       
               <app-line-selector class="line-selector" *ngIf="selectFormControl.value === 3"
               [checkableLines]="myLines"
-              [allLines]="[]"></app-line-selector>
+              [alreadySelectedLines]="[]"
+              (chekedLinesId)="onLinesChanged($event)"></app-line-selector>
       
               <button *ngIf="!isLoading" mat-raised-button (click)="onSendRegistration()">REGISTER USER</button>
               <mat-spinner *ngIf="isLoading"></mat-spinner>

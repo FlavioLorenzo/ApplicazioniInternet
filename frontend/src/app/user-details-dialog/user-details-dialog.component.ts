@@ -3,6 +3,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ChildrenService } from '../services/children.service';
 import { User } from '../Models/User';
 import { Line } from '../Models/Line';
+import { RegistrationService } from '../services/registration.service';
 
 @Component({
   selector: 'app-user-details-dialog',
@@ -20,13 +21,7 @@ export class UserDetailsDialogComponent implements OnInit {
   isUserEdited = false;
 
   // Lines that I'm managing
-  myLines: Array<Line> = [
-    {id_line: 0, name: 'linea 1'},
-    {id_line: 1, name: 'linea 2'},
-    {id_line: 2, name: 'linea 3'},
-    {id_line: 3, name: 'linea 4'},
-    {id_line: 4, name: 'linea 5'}
-  ];
+  myLines: Array<Line>;
 
   userLines: Array<Line> = [
     {id_line: 3, name: 'linea 4'},
@@ -40,6 +35,7 @@ export class UserDetailsDialogComponent implements OnInit {
   userChildren;
 
   constructor(
+    private registrationService: RegistrationService,
     private childrenService: ChildrenService,
     private dialogRef: MatDialogRef<UserDetailsDialogComponent>,
     @Inject(MAT_DIALOG_DATA) data) {
@@ -54,8 +50,25 @@ export class UserDetailsDialogComponent implements OnInit {
         this.isLoading = false;
       });
     } else {
+
+      this.registrationService.getAdministeredLineOfUser(this.user.id_user).subscribe(
+        lines => {
+          console.log(`User is managing lines ${lines}`);
+          this.userLines = lines;
+        }
+      );
+
+
       this.isLoading = false;
     }
+
+  }
+
+  onLinesChanged(lines){
+
+    setTimeout(() => {
+      this.isUserEdited = !this.arraysEqual(lines, this.userLines.map(it => it.id_line));
+    }, 0);
 
   }
 
@@ -65,6 +78,25 @@ export class UserDetailsDialogComponent implements OnInit {
 
   close() {
     this.dialogRef.close();
+  }
+
+  //TODO: Move somewhere else
+  arraysEqual(_arr1, _arr2) {
+
+    if (!Array.isArray(_arr1) || ! Array.isArray(_arr2) || _arr1.length !== _arr2.length)
+      return false;
+
+    var arr1 = _arr1.concat().sort();
+    var arr2 = _arr2.concat().sort();
+
+    for (var i = 0; i < arr1.length; i++) {
+
+        if (arr1[i] !== arr2[i])
+            return false;
+
+    }
+
+    return true;
   }
 
 }

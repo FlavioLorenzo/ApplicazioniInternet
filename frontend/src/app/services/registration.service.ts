@@ -3,21 +3,18 @@ import {HttpClientModule, HttpClient, HttpHeaders} from '@angular/common/http';
 import {catchError, map, retry} from 'rxjs/operators';
 import {BehaviorSubject, Observable, throwError} from 'rxjs';
 import {CurrentUser} from '../Models/currentUser';
-import {Router} from '@angular/router';
 import {environment} from '../../environments/environment';
 
 @Injectable()
 export class RegistrationService {
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient) {}
 
   register(rpb: RegistrationPostBody) {
     return this.http.post<any>(
        `${environment.apiUrl}/register`,
        rpb)
-      .pipe(map(res =>  {
-        // TODO: Action to perform
-     }));
+      .pipe(map(res => res));
   }
 
   completeRegistration(token: string, rpb: CompleteUserPostBody) {

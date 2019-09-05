@@ -65,8 +65,8 @@ public class UserController {
     @ResponseBody
     public ResponseEntity register(@RequestBody @Valid RegistrationPostBody rpb) {
         try {
-            userService.register(rpb.getEmail(), rpb.getFirstName(), rpb.getLastName(), rpb.getRoleId());
-            return ResponseEntity.status(HttpStatus.OK).body("");
+            UserEntity user = userService.register(rpb.getEmail(), rpb.getFirstName(), rpb.getLastName(), rpb.getRoleId());
+            return ResponseEntity.status(HttpStatus.OK).body(user);
         } catch (Exception e) {
             if(e instanceof ResponseStatusException){
                 throw e;

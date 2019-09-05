@@ -1,5 +1,8 @@
 <div>
-  <span>Amministratore delle linee: </span>
-  <mat-checkbox class="checkboxItem" *ngFor="let line of checkableLines" [id]="line.id_line" [checked]="isLineInCommon(line.id_line)" (change)="onCheckboxChanged($event)" >{{line.name}}</mat-checkbox>
-  <span class="fixedItem" *ngFor="let line of fixedLines">{{line.name}}</span>
+    <mat-form-field>
+        <mat-label>Lines</mat-label>
+        <mat-select [formControl]="linesControl" (selectionChange)="onSelectChange($event.value)" multiple> 
+          <mat-option *ngFor="let line of allLines" [value]="line.id_line" [disabled]="isLineDisabled(line.id_line)">{{line.name}}</mat-option>
+        </mat-select>
+      </mat-form-field>
 </div>

@@ -5,6 +5,8 @@ import { MatSort } from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import { UserDetailsDialogComponent } from '../user-details-dialog/user-details-dialog.component';
 import { Line } from '../Models/Line';
+import { AuthService } from '../services/auth.service';
+import { RegistrationService } from '../services/registration.service';
 
 @Component({
   selector: 'app-user-list',
@@ -19,7 +21,7 @@ export class UserListComponent implements OnInit {
 
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 
-  constructor(private usersService: UsersService, private dialog: MatDialog) { 
+  constructor(private usersService: UsersService, private dialog: MatDialog, private authService: AuthService, private registrationService: RegistrationService) { 
   }
 
   ngOnInit() {
@@ -35,6 +37,29 @@ export class UserListComponent implements OnInit {
         this.userList.sort = this.sort;
       });
       
+    });
+
+    this.authService.currentUser.subscribe(currentUser => {
+      this.registrationService.getAdministeredLineOfUser(currentUser.id).subscribe(lines => {
+        if(lines.length == 0){
+          console.log("DEBUG: USING FAKE LINES");
+          lines.push({ id_line: 0, name: "Linea 1" },
+          { id_line: 1, name: "Linea 2" },
+          { id_line: 2, name: "Linea 3" },
+          { id_line: 3, name: "Linea 4" },
+          { id_line: 4, name: "Linea 5" });
+        }
+        this.myLines = lines;
+      }, error => {
+        console.log("DEBUG ON ERROR: USING FAKE LINES");
+        const lines = [{ id_line: 0, name: "Linea 1" },
+          { id_line: 1, name: "Linea 2" },
+          { id_line: 2, name: "Linea 3" },
+          { id_line: 3, name: "Linea 4" },
+          { id_line: 4, name: "Linea 5" }];
+
+          this.myLines = lines;
+      });
     });
   }
 
