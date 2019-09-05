@@ -39,6 +39,14 @@ public class PrincipalServiceImpl implements PrincipalService {
     }
 
     @Override
+    public boolean doesUserMatchPrincipal(Principal principal, Long userId) {
+        UserEntity user = getUserFromPrincipal(principal);
+        if (user.getId().equals(userId))
+            return true;
+        return false;
+    }
+
+    @Override
     public boolean IsUserSystemAdmin(Principal principal)
         throws ResponseStatusException {
         UserEntity user = getUserFromPrincipal(principal);
@@ -121,7 +129,7 @@ public class PrincipalServiceImpl implements PrincipalService {
         /* If child does not exist throw 404 */
         if (child == null)
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        if (user.getRole().getId().equals(1L) &&
+        if (user.getRole().getId().equals(4L) &&
             child.getParent().equals(user))
             return true;
         return false;
