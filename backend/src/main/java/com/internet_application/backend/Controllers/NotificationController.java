@@ -15,6 +15,7 @@ public class NotificationController {
     @Autowired
     private NotificationService notificationService;
 
+    // utente deve matchare a chi e` destinata
     @GetMapping("/notifications/{notificationId}")
     public NotificationEntity getNotificationEntityWithId(
             @PathVariable(value="notificationId") Long notificationId
@@ -23,6 +24,7 @@ public class NotificationController {
         return notificationService.getNotificationEntityWithId(notificationId);
     }
 
+    // utente deve matchare a chi e` destinata
     @GetMapping("/notifications/pending/{userId}")
     public List<NotificationEntity> getActiveNotificationsForUserWithId(
             @PathVariable(value="userId") Long userId
@@ -31,6 +33,7 @@ public class NotificationController {
         return notificationService.getActiveNotificationsForUserWithId(userId);
     }
 
+    // utente deve matchare a chi e` destinata
     @DeleteMapping("/notifications/{notificationId}")
     public void deleteNotificationWithId(
             @PathVariable(value="notificationId") Long notificationId
@@ -39,6 +42,7 @@ public class NotificationController {
         notificationService.deleteNotification(notificationId);
     }
 
+    // utente deve matchare a chi e` destinata
     @PutMapping("/notifications/{notificationId}/viewed")
     public NotificationEntity setViewedOnNotificationWithId(
             @PathVariable(value="notificationId") Long notificationId

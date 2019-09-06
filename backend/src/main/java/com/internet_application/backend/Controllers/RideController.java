@@ -43,7 +43,7 @@ public class RideController {
         return rideService.getAvailableStops(rideId);
     }
 
-
+    // no parent
     @GetMapping("/rides/manage/{userId}/{rideId}")
     public JsonNode getRideAvailabilityInfo(@PathVariable(value="userId") Long userId,
                                             @PathVariable(value="rideId") Long rideId)
@@ -60,6 +60,7 @@ public class RideController {
         return rideService.getAdministeredLinesRidesFromDateToDate(userId, fromDate, toDate, openOrLocked);
     }
 
+    // scorta assegnata
     @PutMapping("/rides/{rideId}/close/{stopId}")
     public RideEntity putCloseStop(
             @PathVariable(value="rideId") Long rideId,
@@ -67,18 +68,21 @@ public class RideController {
         return rideService.closeStop(rideId, stopId);
     }
 
+    // scorta assegnata
     @PutMapping("/rides/{rideId}/open")
     public RideEntity putOpenRide(
             @PathVariable(value="rideId") Long rideId) {
         return rideService.openRide(rideId);
     }
 
+    // scorta assegnata
     @PutMapping("/rides/{rideId}/close")
     public RideEntity putCloseRide(
             @PathVariable(value="rideId") Long rideId) {
         return rideService.closeRide(rideId);
     }
 
+    // admin della linea
     @PutMapping("/rides/{rideId}/lock-unlock")
     public RideEntity putLockUnlockRide(
             @PathVariable(value="rideId") Long rideId,

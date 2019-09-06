@@ -62,6 +62,7 @@ public class UserController {
         }
     }
 
+    // sysadmin and admin
     @PostMapping("/register")
     @ResponseBody
     public ResponseEntity register(@RequestBody @Valid RegistrationPostBody rpb) {
