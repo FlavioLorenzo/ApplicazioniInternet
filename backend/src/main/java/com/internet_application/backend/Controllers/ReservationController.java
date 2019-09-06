@@ -16,6 +16,7 @@ public class ReservationController {
     @Autowired
     private ReservationService reservationService;
 
+    // no parent
     @GetMapping("/reservations/{line_id}/{date}")
     public JsonNode getAllReservationForLineAndData(@PathVariable(value="line_id") Long lineId,
                                                     @PathVariable(value="date") String date)
@@ -23,6 +24,9 @@ public class ReservationController {
         return reservationService.getAllReservationForLineAndData(lineId, date);
     }
 
+    // padre del figlio
+    // amministratore della linea
+    // escort della linea
     @PutMapping("/reservations/{line_id}/{date}/{reservation_id}")
     public ReservationEntity putReservation(@PathVariable(value="line_id") Long lineId,
                                             @PathVariable(value="date") String date,
@@ -32,6 +36,8 @@ public class ReservationController {
         return reservationService.updateReservation(lineId, date, reservationId, rpb);
     }
 
+    // padre del figlio
+    // escort della linea
     @PostMapping("/reservations/{line_id}/{date}")
     public ReservationEntity postReservation(@PathVariable(value="line_id") Long lineId,
                                        @PathVariable(value="date") String date,
@@ -40,6 +46,9 @@ public class ReservationController {
         return reservationService.addReservation(lineId, date, rpb);
     }
 
+    // padre del figlio
+    // amministratore della linea
+    // escort della linea
     @DeleteMapping("/reservations/{line_id}/{date}/{reservation_id}")
     public void deleteReservation(@PathVariable(value="line_id") Long lineId,
                                          @PathVariable(value="date") String date,
@@ -48,7 +57,8 @@ public class ReservationController {
         reservationService.deleteReservation(lineId, date, res_id);
     }
 
-
+    // padre del figlio
+    // gli altri
     @GetMapping("/reservations/{line_id}/{date}/{reservation_id}")
     public ReservationEntity getReservation(@PathVariable(value="line_id") Long lineId,
                                       @PathVariable(value="date") String date,
@@ -58,6 +68,8 @@ public class ReservationController {
         return reservation;
     }
 
+    // padre del figlio
+    // gli altri
     @GetMapping("/reservations/{line_id}/{child_id}/{date}/{n}")
     public List<ReservationEntity> getNReservationsByUserFromDate(@PathVariable(value="line_id") Long lineId,
                                             @PathVariable(value="child_id") Long child_id,

@@ -22,18 +22,24 @@ public class AvailabilityController {
     @Autowired
     BusLineService busLineService;
 
+    // No parent
+    // TODO forse scorta
     @GetMapping("/availabilities/{rideId}")
     public List<AvailabilityEntity> getAvailabilitiesForRideWithId(@PathVariable(value="rideId") Long rideId) {
         return availabilityService.getAllAvailabilitiesForRideWithId(rideId);
     }
 
     /* Get single availability */
+    // No parent
+    // Escort can only get their own
     @GetMapping("/availability/{availabilityId}")
     public AvailabilityEntity getAvailabilityWithId(@PathVariable(value="availabilityId") Long availabilityId)
         throws ResponseStatusException {
         return availabilityService.getAvailabilityWithId(availabilityId);
     }
 
+    // No parent
+    // Escort can only get their own
     @GetMapping("/availabilities/{line_id}/{user_id}/{date}/{n}")
     public List<AvailabilityEntity> getNReservationsByUserFromDate(@PathVariable(value="line_id") Long lineId,
                                                                    @PathVariable(value="user_id") Long userId,
@@ -46,6 +52,7 @@ public class AvailabilityController {
     }
     
     /* Create escort availability */
+    // Only escort
     @PostMapping("/availability")
     public AvailabilityEntity createAvailability(@RequestBody AvailabilityPostBody availabilityPostBody)
         throws ResponseStatusException {
@@ -64,6 +71,7 @@ public class AvailabilityController {
     }
 
     /* Modify escort availability */
+    // Only escort who owns the availability
     @PutMapping("/availability/{availabilityId}")
     public AvailabilityEntity putAvailability(@PathVariable(value="availabilityId") Long availabilityId,
                                               @RequestBody AvailabilityPostBody availabilityPostBody)
@@ -76,6 +84,7 @@ public class AvailabilityController {
     }
 
     /* Delete escort availability */
+    // Only escort who owns the availability
     @DeleteMapping("/availability/{availabilityId}")
     public void deleteAvailabilityWithId(@PathVariable(value="availabilityId") Long availabilityId)
         throws ResponseStatusException {
@@ -83,6 +92,8 @@ public class AvailabilityController {
     }
 
     /* Assign availability */
+    // Escort who owns it
+    // Admin of line
     @PutMapping("/availability/{availabilityId}/{statusCode}")
     public void PutAvailabilityStatus(@PathVariable(value="availabilityId") Long availabilityId,
                 @PathVariable(value="statusCode") Integer status)

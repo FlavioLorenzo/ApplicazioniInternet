@@ -70,6 +70,8 @@ public class AvailabilityEntity {
         this.ride = ride;
     }
 
+    public ShiftStatus getShiftStatus() { return this.shiftStatus;}
+
     @Override
     public String toString() {
         String result =  "AvailabilityEntity " + id + ":\n" +

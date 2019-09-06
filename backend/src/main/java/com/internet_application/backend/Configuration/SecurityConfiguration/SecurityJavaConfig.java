@@ -53,15 +53,18 @@ public class SecurityJavaConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/login", "/register", "/confirm-account", "/recover", "/recover/**",
                         "/check-email", "/reservations/**", "/rides/**", "/availability/**", "/availability**", "/availabilities/**",
                         "/children**", "/children/**", "/child/**", "/token-info**", "/token-info/**", "/complete-registration**",
-                        "/complete-registration/**", "/user**","/user/**", "/notifications**", "/notifications/**")
+                        "/complete-registration/**", "/notifications**", "/notifications/**")
                     .permitAll()
                 //.antMatchers("/reservations")
                     //.hasRole("USER")
                 .antMatchers("/css/**")
                     .permitAll()
-                .antMatchers("/users", "/users/*", "/ws**", "/ws/**")
+                .antMatchers("/ws**", "/ws/**")
                     .permitAll()
                     //.hasAnyRole("ADMIN", "SYS_ADMIN")
+                /* Secure admin controller */
+                .antMatchers("/users**", "users/**")
+                    .hasRole("SYS_ADMIN")
                 .anyRequest().authenticated()
         .and()
             .apply(new JwtConfigurer(jwtTokenProvider));

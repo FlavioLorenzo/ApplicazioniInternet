@@ -20,6 +20,7 @@ import org.springframework.web.server.ResponseStatusException;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.security.Principal;
 import java.util.*;
 
 @CrossOrigin()
@@ -61,6 +62,7 @@ public class UserController {
         }
     }
 
+    // sysadmin and admin
     @PostMapping("/register")
     @ResponseBody
     public ResponseEntity register(@RequestBody @Valid RegistrationPostBody rpb) {
@@ -137,6 +139,15 @@ public class UserController {
     @GetMapping("/user/administered-line/{userId}")
     public List<BusLineEntity> getAdministeredLineOfUser(@PathVariable(value="userId") Long userId) {
         return userService.getAdministeredLineOfUser(userId);
+    }
+
+
+    @GetMapping("/user/principal")
+    public UserEntity getUserName(Principal principal)
+    {
+        if (principal == null)
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        return userService.getUserFromEmail(principal.getName());
     }
 }
 

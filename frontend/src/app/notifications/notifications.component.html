@@ -1,0 +1,14 @@
+<div class="row justify-content-center">
+  <div class="col-12 col-sm-10 col-md-8 col-lg-6" *ngIf="notifications.length!==0">
+    <app-single-notification *ngFor="let notification of notifications"
+                             [notification]="notification"
+                             (notificationDelete)="onNotificationDeleted()"></app-single-notification>
+  </div>
+  <div class="ai-no-results" *ngIf="notifications.length === 0">
+    <b>
+      <div><i class="far fa-envelope"></i></div>
+      <div>Your notification inbox is empty!</div>
+    </b>
+  </div>
+</div>
+

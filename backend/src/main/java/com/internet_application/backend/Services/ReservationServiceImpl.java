@@ -40,6 +40,8 @@ public class ReservationServiceImpl implements ReservationService {
     private RideService rideService;
     @Autowired
     private LineStopService lineStopService;
+    @Autowired
+    private NotificationService notificationService;
 
     @PersistenceContext
     private EntityManager em;
@@ -137,6 +139,25 @@ public class ReservationServiceImpl implements ReservationService {
 
         r = reservationRepository.save(r);
 
+        RideEntity ride = r.getRide();
+
+        for(AvailabilityEntity availability: ride.getAvailabilities()) {
+            if(availability.getShiftStatus().getCode() == 3) {
+                ChildEntity child = r.getChild();
+
+                String direction = ride.getDirection() ? "return ride" : "ride to school";
+
+                notificationService.createNotification(
+                        availability.getUser().getId(),
+                        "The child " + child.getFirstName() + " " + child.getLastName() + " " +
+                                "made a reservation for the " + direction + " of line " +
+                                ride.getLine().getName() + " scheduled for the day " +
+                                DateUtils.dateToString(ride.getDate()),
+                        ""
+                );
+            }
+        }
+
         return r;
     }
 
@@ -161,6 +182,17 @@ public class ReservationServiceImpl implements ReservationService {
         r.setChild(builtReservation.getChild());
         r.setPresence(builtReservation.getPresence());
         reservationRepository.save(r);
+
+        if(r.getPresence() == true) {
+            ChildEntity child = r.getChild();
+
+            notificationService.createNotification(
+                    child.getParent().getId(),
+                    "Your child " + child.getFirstName() + " " + child.getLastName() + " " +
+                            "has been marked as present.",
+                    ""
+            );
+        }
 
         return r;
     }
@@ -244,7 +276,25 @@ public class ReservationServiceImpl implements ReservationService {
 
         isReservationValid(res);
 
+        ChildEntity child = res.getChild();
+        RideEntity ride = res.getRide();
+
         em.remove(em.merge(res));
+
+        for(AvailabilityEntity availability: ride.getAvailabilities()) {
+            if(availability.getShiftStatus().getCode() == 3) {
+                String direction = ride.getDirection() ? "return ride" : "ride to school";
+
+                notificationService.createNotification(
+                        availability.getUser().getId(),
+                        "The child " + child.getFirstName() + " " + child.getLastName() + " " +
+                                "deleted his reservation for the " + direction + " of line " +
+                                ride.getLine().getName() + " scheduled for the day " +
+                                DateUtils.dateToString(ride.getDate()),
+                        ""
+                );
+            }
+        }
     }
 
     /**

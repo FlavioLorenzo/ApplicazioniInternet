@@ -1,6 +1,8 @@
 package com.internet_application.backend.Entities;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.internet_application.backend.Serializers.NotificationSerializer;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Type;
@@ -11,10 +13,11 @@ import java.util.Date;
 
 @Entity
 @Table(name = "notifications")
+@JsonSerialize(using = NotificationSerializer.class)
 public class NotificationEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonProperty("id_notification")
+    @JsonProperty("notificationId")
     @Column(name="id_notification")
     @Getter
     @Setter
@@ -34,11 +37,11 @@ public class NotificationEntity {
 
     @JsonProperty("link")
     @Column(name="link")
-    @URL
     @Getter
     @Setter
     private String link;
 
+    @JsonProperty("viewed")
     @Column
     @Getter
     @Setter

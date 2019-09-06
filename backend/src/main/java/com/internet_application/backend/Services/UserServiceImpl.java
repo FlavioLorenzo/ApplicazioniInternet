@@ -178,7 +178,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void save(UserEntity user) {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword())); //TODO: Come mai qua?
-        user.setRole(roleRepository.findByName(USER_ROLE)); //TODO: Anche questo come mai qua?
+        //user.setRole(roleRepository.findByName(USER_ROLE)); //TODO: Anche questo come mai qua?
         userRepository.save(user);
     }
 
@@ -285,4 +285,12 @@ public class UserServiceImpl implements UserService {
         return new ArrayList<>(user.getAdministeredBuslines());
     }
 
+    public UserEntity getUserFromEmail(String email)
+        throws ResponseStatusException {
+        UserEntity user = userRepository.findByEmail(email);
+        if (user == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+        return user;
+    }
 }

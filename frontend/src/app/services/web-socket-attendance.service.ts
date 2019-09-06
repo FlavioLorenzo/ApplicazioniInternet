@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {environment} from '../../environments/environment';
 import * as Stomp from 'stompjs';
 import * as SockJS from 'sockjs-client';
-import {AttendanceDisplayComponent} from "../attendance-page/attendance-display/attendance-display.component";
+import {AttendanceDisplayComponent} from '../attendance-page/attendance-display/attendance-display.component';
 
 @Injectable({
   providedIn: 'root'

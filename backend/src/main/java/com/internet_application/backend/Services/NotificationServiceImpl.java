@@ -6,6 +6,7 @@ import com.internet_application.backend.Repositories.NotificationRepository;
 import com.internet_application.backend.Repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
@@ -21,6 +22,10 @@ public class NotificationServiceImpl implements NotificationService {
     @Autowired
     private NotificationRepository notificationRepository;
 
+    // The SimpMessagingTemplate is used to send Stomp over WebSocket messages.
+    @Autowired
+    private SimpMessagingTemplate messagingTemplate;
+
     @Override
     public NotificationEntity getNotificationEntityWithId(Long Id)
         throws ResponseStatusException {
@@ -28,6 +33,18 @@ public class NotificationServiceImpl implements NotificationService {
         if (notificationEntity == null)
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         return notificationEntity;
+    }
+
+    @Override
+    public NotificationEntity createNotification(Long userId, String message, String url)
+            throws ResponseStatusException {
+        NotificationEntity newNotification = buildNotification(userId, message, url);
+        newNotification = addNotificationEntity(newNotification);
+
+        // Send a notification to the recipient of the message
+        notifyUser(userId, "new");
+
+        return newNotification;
     }
 
     @Override
@@ -48,9 +65,9 @@ public class NotificationServiceImpl implements NotificationService {
     @Override
     public NotificationEntity addNotificationEntity(NotificationEntity notificationEntity)
         throws ResponseStatusException {
-        UserEntity user = notificationEntity.getUser();
+        /*UserEntity user = notificationEntity.getUser();
         user.addNotification(notificationEntity);
-        userRepository.save(user);
+        userRepository.save(user);*/
         notificationRepository.save(notificationEntity);
         return notificationEntity;
     }
@@ -62,9 +79,12 @@ public class NotificationServiceImpl implements NotificationService {
                 .orElse(null);
         if (notificationEntity == null)
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        UserEntity user = notificationEntity.getUser();
+        /*UserEntity user = notificationEntity.getUser();
         user.removeNotification(notificationEntity);
-        userRepository.save(user);
+        userRepository.save(user);*/
+
+        notifyUser(notificationEntity.getUser().getId(), "deleted");
+
         notificationRepository.delete(notificationEntity);
     }
 
@@ -77,16 +97,33 @@ public class NotificationServiceImpl implements NotificationService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         notificationEntity.setViewed(true);
         notificationRepository.save(notificationEntity);
+
+        notifyUser(notificationEntity.getUser().getId(), "viewed");
         return notificationEntity;
+    }
+
+    @Override
+    public List<NotificationEntity> getNotificationsForUserWithId(Long userId)
+            throws ResponseStatusException {
+        return notificationRepository.getNotificationsForUser(userId);
     }
 
     @Override
     public List<NotificationEntity> getActiveNotificationsForUserWithId(Long userId)
         throws ResponseStatusException {
-        NotificationEntity notificationEntity = notificationRepository.findById(userId)
-                .orElse(null);
-        if (notificationEntity == null)
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        return notificationRepository.getNewNotificationForUser(userId);
+        return notificationRepository.getNewNotificationsForUser(userId);
+    }
+
+    /**
+     * Send notification to users subscribed on channel "/messages/{userId}".
+     *
+     * The notification will be sent only to the user with the given userId.
+     *
+     * @param userId The id of the receiver.
+     */
+    public void notifyUser(Long userId, String message) {
+        messagingTemplate.convertAndSend("/messages/" + userId, message);
+
+        return;
     }
 }
