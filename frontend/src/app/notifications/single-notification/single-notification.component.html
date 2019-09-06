@@ -1,0 +1,21 @@
+<div class="ai-notification-container" (click)="onElementAreaClicked()"
+     [ngClass]="notification.viewed === false ? 'ai-not-viewed' : 'ai-viewed'">
+  <div class="ai-notification-header">
+    <div class="row">
+      <div class="col-9">{{notification.date}}</div>
+      <div class="col-3 ai-delete" (click)="onDeleteClick($event)">
+        <i class="far fa-trash-alt"></i>
+      </div>
+    </div>
+  </div>
+  <div class="ai-notification-body">
+    <div class="ai-notification-element row justify-content-center">
+      <div class="col-12">
+        {{notification.message}}
+      </div>
+    </div>
+  </div>
+  <div *ngIf="notification.link !== ''" class="ai-notification-footer">
+    <a routerLink="{{notification.link}}">Go to the page of interest -></a>
+  </div>
+</div>

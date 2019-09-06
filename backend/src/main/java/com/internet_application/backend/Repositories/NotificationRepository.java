@@ -11,6 +11,11 @@ public interface NotificationRepository extends JpaRepository<NotificationEntity
     @Query("SELECT n FROM NotificationEntity n " +
             "WHERE n.user.id = ?1 " +
             "AND n.viewed = false " +
-            "ORDER BY n.date ASC")
-    List<NotificationEntity> getNewNotificationForUser(Long userId);
+            "ORDER BY n.id DESC")
+    List<NotificationEntity> getNewNotificationsForUser(Long userId);
+
+    @Query("SELECT n FROM NotificationEntity n " +
+            "WHERE n.user.id = ?1 " +
+            "ORDER BY n.id DESC")
+    List<NotificationEntity> getNotificationsForUser(Long userId);
 }

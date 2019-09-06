@@ -1,12 +1,15 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container">
     <a class="navbar-brand" routerLink="/attendance">Funbus</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
+    <button class="navbar-toggler" id="ai-navigation-button" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon">
+         <div class="ai-notification-circle" *ngIf="notificationCount>0">{{notificationCount}}</div>
+      </span>
     </button>
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="nav navbar-nav ml-auto">
+      <ul class="nav navbar-nav ml-auto" (click)="onNavBarClick()">
         <!--li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
           <a class="nav-link" routerLink="/">Home</a>
         </li-->
@@ -33,6 +36,13 @@
         </li>
         <li class="nav-item" *ngIf='currentUser' routerLinkActive="active">
           <a class="nav-link" routerLink="/shift-consolidation">Shift Consolidation</a>
+        </li>
+        <li class="nav-item" *ngIf='currentUser' routerLinkActive="active">
+          <a class="nav-link" routerLink="/notifications">
+            <i class="fas fa-envelope ai-notification-icon">
+              <div class="ai-notification-circle" *ngIf="notificationCount>0">{{notificationCount}}</div>
+            </i>
+          </a>
         </li>
         <li class="nav-item" *ngIf='currentUser' routerLinkActive="active">
           <a class="nav-link" routerLink="/logout">Logout</a>

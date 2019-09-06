@@ -24,6 +24,14 @@ public class NotificationController {
         return notificationService.getNotificationEntityWithId(notificationId);
     }
 
+    @GetMapping("/notifications/all/{userId}")
+    public List<NotificationEntity> getNotificationsForUserWithId(
+            @PathVariable(value="userId") Long userId
+    )
+            throws ResponseStatusException {
+        return notificationService.getNotificationsForUserWithId(userId);
+    }
+
     // utente deve matchare a chi e` destinata
     @GetMapping("/notifications/pending/{userId}")
     public List<NotificationEntity> getActiveNotificationsForUserWithId(
@@ -43,7 +51,7 @@ public class NotificationController {
     }
 
     // utente deve matchare a chi e` destinata
-    @PutMapping("/notifications/{notificationId}/viewed")
+    @PutMapping("/notifications/viewed/{notificationId}")
     public NotificationEntity setViewedOnNotificationWithId(
             @PathVariable(value="notificationId") Long notificationId
     )

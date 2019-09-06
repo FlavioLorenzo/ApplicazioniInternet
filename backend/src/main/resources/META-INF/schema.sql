@@ -20,5 +20,5 @@ CREATE TABLE confirmation_token(id_token SERIAL PRIMARY KEY, confirmation_token 
 
 CREATE TABLE recover_token(id_token SERIAL PRIMARY KEY, recover_token VARCHAR(255), creation_date DATE, id_user INTEGER REFERENCES users (id_user), is_valid BOOLEAN);
 
-create TABLE notifications(id_notification SERIAL PRIMARY KEY, id_user INTEGER REFERENCES users, message VARCHAR(512), link VARCHAR(255), viewed BOOLEAN DEFAULT FALSE, date DATE NOT NULL);
+create TABLE notifications(id_notification SERIAL PRIMARY KEY, id_user INTEGER REFERENCES users, message TEXT, link VARCHAR(255), viewed BOOLEAN DEFAULT FALSE, date DATE NOT NULL);
 /*CREATE TABLE verification_token(id_token SERIAL PRIMARY KEY, verification_token VARCHAR(255), status VARCHAR(255), expired_date DATE, issued_date DATE, confirmed_date DATE, id_user INTEGER REFERENCES users (id_user));*/

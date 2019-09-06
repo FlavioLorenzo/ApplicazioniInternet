@@ -29,6 +29,8 @@ public class AvailabilityServiceImpl implements AvailabilityService {
     private UserRepository userRepository;
     @Autowired
     private StopRepository stopRepository;
+    @Autowired
+    private NotificationService notificationService;
 
     public AvailabilityEntity buildAvailability(Long rideId, Long userId, Long stopId) {
         RideEntity ride = rideRepository.findById(rideId).orElse(null);
@@ -119,6 +121,20 @@ public class AvailabilityServiceImpl implements AvailabilityService {
 
         availability.setShiftStatus(ssc.convertToEntityAttribute(status));
         availabilityRepository.save(availability);
+
+        // If the shift has been confirmed, send a notification to the companion
+        if(status == ShiftStatus.CONFIRMED.getCode()) {
+            notificationService.createNotification(
+                    availability.getUser().getId(),
+                    "Your availability for the ride of line " + availability.getRide().getLine().getId() +
+                            " scheduled for " + DateUtils.dateToString(availability.getRide().getDate()) +
+                            ", has been taken into account. " +
+                            "Please go to you Shift Definition page to acknowledge the reception of the message.",
+                    "/shift-definition/line/" + availability.getRide().getLine().getId() +
+                            "/" + DateUtils.dateToSendString(availability.getRide().getDate())
+            );
+        }
+
         return availability;
     }
 

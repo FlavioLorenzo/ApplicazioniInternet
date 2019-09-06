@@ -20,4 +20,8 @@ public class NotificationPostBody {
     @URL
     @NotBlank
     private String link;
+
+    @JsonProperty("viewed")
+    @NotBlank
+    private Boolean viewed;
 }
