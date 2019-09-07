@@ -4,6 +4,7 @@ import { ChildrenService } from '../services/children.service';
 import { User } from '../Models/User';
 import { Line } from '../Models/Line';
 import { RegistrationService } from '../services/registration.service';
+import { Observable, zip, forkJoin} from 'rxjs';
 
 @Component({
   selector: 'app-user-details-dialog',
@@ -31,6 +32,8 @@ export class UserDetailsDialogComponent implements OnInit {
     {id_line: 7, name: 'linea 8'}
   ];
 
+  pendingUserLines: Array<Line>;
+
   // Children beloning to the user
   userChildren;
 
@@ -41,14 +44,18 @@ export class UserDetailsDialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) data) {
       this.user = data.user;
       this.myLines = data.myLines;
+      console.log(`DIALOG: MYLINES: ${JSON.stringify(this.myLines)}`);
   }
 
   ngOnInit() {
+
     if (this.user.role && this.user.role.rolename === 'ROLE_USER') {
+
       this.childrenService.getChildrenForUser(this.user.userId).subscribe(children => {
         this.userChildren = children;
         this.isLoading = false;
       });
+
     } else {
 
       this.registrationService.getAdministeredLineOfUser(this.user.id_user).subscribe(
@@ -58,8 +65,9 @@ export class UserDetailsDialogComponent implements OnInit {
         }
       );
 
-
       this.isLoading = false;
+
+
     }
 
   }
@@ -67,21 +75,46 @@ export class UserDetailsDialogComponent implements OnInit {
   onLinesChanged(lines){
 
     setTimeout(() => {
-      this.isUserEdited = !this.arraysEqual(lines, this.userLines.map(it => it.id_line));
+      this.pendingUserLines = lines;
+      this.isUserEdited = !this.arraysEqual(lines, this.userLines);
     }, 0);
 
   }
 
   save() {
-    this.dialogRef.close();
+
+    //Start array and end array
+    //Start - End = Elements that need to be deleted
+    //End - Start = Elements that need to be added
+    const toDelete = this.userLines.filter(x => !this.pendingUserLines.map(it => it.id_line).includes(x.id_line));
+    const toAdd = this.pendingUserLines.filter(x => !this.userLines.map(it => it.id_line).includes(x.id_line));
+
+    console.log(`New lines: ${JSON.stringify(toAdd)}`);
+    console.log(`Old lines: ${JSON.stringify(toDelete)}`);
+
+    const addSubscriptions = toAdd.map(line => this.registrationService.addAdminRoleOfLineToUser(this.user.id_user, line.id_line));
+    const removeSubscriptions = toDelete.map(line => this.registrationService.removeAdminRoleOfLineFromUser(this.user.id_user, line.id_line));
+
+    const allSubscription = addSubscriptions.concat(removeSubscriptions);
+
+    forkJoin(allSubscription)
+    .subscribe(result => {
+        console.log("SUCCESS", JSON.stringify(result));
+        this.dialogRef.close({status: 'success'});
+    },
+    error => {
+      console.log("ERROR", error);
+      this.dialogRef.close({status: 'failure'});
+    });
+
   }
 
   close() {
-    this.dialogRef.close();
+    this.dialogRef.close(); 
   }
 
   //TODO: Move somewhere else
-  arraysEqual(_arr1, _arr2) {
+  arraysEqual(_arr1: Array<Line>, _arr2: Array<Line>) {
 
     if (!Array.isArray(_arr1) || ! Array.isArray(_arr2) || _arr1.length !== _arr2.length)
       return false;
@@ -91,7 +124,7 @@ export class UserDetailsDialogComponent implements OnInit {
 
     for (var i = 0; i < arr1.length; i++) {
 
-        if (arr1[i] !== arr2[i])
+        if (arr1[i].id_line !== arr2[i].id_line)
             return false;
 
     }

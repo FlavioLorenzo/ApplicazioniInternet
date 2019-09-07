@@ -9,8 +9,13 @@ import { FormControl } from '@angular/forms';
 })
 export class LineSelectorComponent implements OnInit {
 
-  private _checkableLines; // private property _item
-  private _alreadySelectedLines; // private property _item
+/* ----- Input ------- */
+
+  //Lines of which I'm admin
+  private _checkableLines = []; // private property _item
+
+  //Lines of user is admin
+  private _alreadySelectedLines = []; // private property _item
 
   get checkableLines(): Line[] { 
     return this._checkableLines;
@@ -20,56 +25,65 @@ export class LineSelectorComponent implements OnInit {
   set checkableLines(val: Line[]) {
     this._checkableLines = val;
     this.processArguments()
-}
+  }
 
+  get alreadySelectedLines(): Line[] { 
+    return this._alreadySelectedLines;
+  }
 
-get alreadySelectedLines(): Line[] { 
-  return this._alreadySelectedLines;
-}
+  @Input()
+  set alreadySelectedLines(val: Line[]) {
+    this._alreadySelectedLines = val;
+    this.processArguments();
+  }
 
-@Input()
-set alreadySelectedLines(val: Line[]) {
-  this._alreadySelectedLines = val;
-  this.processArguments()
-}
+  /* -------------------------- */
 
   allLines: Line[];
-  @Output() chekedLinesId = new EventEmitter<number[]>();
+
+  @Output() checkedLines = new EventEmitter<Line[]>();
 
   linesControl = new FormControl('');
-
 
   constructor() { }
 
   ngOnInit() {
-   this.processArguments()
+    this.processArguments();
   }
 
   processArguments(){
-    if(this._checkableLines && this._alreadySelectedLines){
-      this.allLines = this._checkableLines.concat(this._alreadySelectedLines);
-      this.chekedLinesId.next(this._alreadySelectedLines.map(it => it.id_line));
-      console.log(`Lines processed`);
-    }else{
-      console.log(`No lines loaded in the component`);
-    }
+
+      this.allLines = this.getUnique(this._checkableLines.concat(this._alreadySelectedLines), 'id_line');
+
+      setTimeout(()=>{
+        this.setPreselectedLines(this.alreadySelectedLines);
+      }, 0);
+
   }
 
-  onSelectChange(lineIds){
-    console.log(`Selected lines: ${JSON.stringify(lineIds)}`);
-    this.chekedLinesId.next(lineIds);
+  onSelectChange(lines){
+    console.log(`Lines selected changed: ${JSON.stringify(lines)}`);
+    this.checkedLines.next(lines);
   }
 
-  isLineDisabled(lineId){
-    const alreadyPresent = this._alreadySelectedLines.map(it => it.id_line).indexOf(lineId) > -1;
-    const amIAdmin = this._checkableLines.map(it => it.id_line).indexOf(lineId) > -1;
-
-    return alreadyPresent && !amIAdmin;
+  isLineDisabled(line: Line){
+    const alreadyPresent = this._alreadySelectedLines.map(it => it.id_line).indexOf(line.id_line) > -1;
+    const amIAdmin = this._checkableLines.map(it => it.id_line).indexOf(line.id_line) > -1;
+    return alreadyPresent && !amIAdmin;;
   }
 
-  isLineSelected(lineId){
-    const alreadyPresent = this._alreadySelectedLines.map(it => it.id_line).indexOf(lineId) > -1;
-    return alreadyPresent;
+  setPreselectedLines(lines: Array<Line>){
+
+    const selectedLines = this.allLines.filter(line => lines.map(it => it.id_line).indexOf(line.id_line) >= 0);
+
+    console.log(`Setting selected lines as: ${JSON.stringify(lines)}`);
+    this.linesControl.setValue(selectedLines);
+  }
+
+  getUnique(arr,comp){
+
+    return arr.map(e => e[comp]).map((e, i, final) =>final.indexOf(e) === i && i).filter((e)=> arr[e]).map(e=>arr[e]);
+
   }
 
 }

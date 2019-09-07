@@ -7,6 +7,7 @@ import { UserDetailsDialogComponent } from '../user-details-dialog/user-details-
 import { Line } from '../Models/Line';
 import { AuthService } from '../services/auth.service';
 import { RegistrationService } from '../services/registration.service';
+import { MatSnackBar } from '@angular/material';
 
 @Component({
   selector: 'app-user-list',
@@ -21,7 +22,7 @@ export class UserListComponent implements OnInit {
 
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 
-  constructor(private usersService: UsersService, private dialog: MatDialog, private authService: AuthService, private registrationService: RegistrationService) { 
+  constructor(private usersService: UsersService, private dialog: MatDialog, private authService: AuthService, private registrationService: RegistrationService, private snackBar: MatSnackBar) { 
   }
 
   ngOnInit() {
@@ -79,7 +80,18 @@ export class UserListComponent implements OnInit {
     }
     dialogConfig.minWidth = '400px';
 
-    this.dialog.open(UserDetailsDialogComponent, dialogConfig);
+    const dialogRef = this.dialog.open(UserDetailsDialogComponent, dialogConfig);
+
+    dialogRef.afterClosed().subscribe(result => {
+
+      if (result  && result.status === 'success'){
+        this.snackBar.open("Utente aggiornato con successo");
+      } else if (result  && result.status === 'failure'){
+        this.snackBar.open("Errore nell'aggiornamento dell'utente");
+      }
+
+    });
+
 }
 
 }
