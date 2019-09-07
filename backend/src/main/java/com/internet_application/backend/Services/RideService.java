@@ -8,6 +8,7 @@ import com.internet_application.backend.Entities.RideEntity;
 import java.util.List;
 
 public interface RideService {
+    RideEntity getRide(Long rideId);
     List<RideEntity> getNRidesFromDate(Long lineId, String date, Integer n);
     JsonNode getAdministeredLinesRidesFromDateToDate(Long userId, String fromDate, String toDate, String openOrLocked);
     RideEntity closeStop(Long rideId, Long stopId);

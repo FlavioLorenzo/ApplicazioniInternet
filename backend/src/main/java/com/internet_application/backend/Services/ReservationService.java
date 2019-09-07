@@ -7,6 +7,7 @@ import com.internet_application.backend.PostBodies.ReservationPostBody;
 import java.util.List;
 
 public interface ReservationService {
+    ReservationEntity getReservationById(Long reservationId);
     JsonNode getAllReservationForLineAndData(Long lineId, String date);
     List<ReservationEntity> getNReservationsByChildFromDate(Long lineId, Long childId, String date, Integer n);
     ReservationEntity addReservation(Long lineId, String date, ReservationPostBody rpb);

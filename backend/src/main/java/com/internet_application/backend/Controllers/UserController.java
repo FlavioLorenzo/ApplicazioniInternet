@@ -23,6 +23,11 @@ import java.io.IOException;
 import java.security.Principal;
 import java.util.*;
 
+/*
+* SECURITY POLICY
+* TODO to define
+* */
+
 @CrossOrigin()
 @RestController
 public class UserController {

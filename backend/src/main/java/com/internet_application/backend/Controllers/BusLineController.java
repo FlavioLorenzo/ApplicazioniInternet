@@ -15,6 +15,11 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
+/*
+ * SECURITY POLICY
+ * All methods allowed to every role
+ * */
+
 @CrossOrigin()
 @RestController
 public class BusLineController {
@@ -24,6 +29,7 @@ public class BusLineController {
     private StopRepository stopRepository;
     @Autowired
     private LineStopRepository lineStopRepository;
+
 
     @GetMapping("/lines")
     public List<BusLineEntity> getAllBusLines() {

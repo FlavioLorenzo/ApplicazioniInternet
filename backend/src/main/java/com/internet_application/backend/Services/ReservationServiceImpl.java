@@ -46,6 +46,15 @@ public class ReservationServiceImpl implements ReservationService {
     @PersistenceContext
     private EntityManager em;
 
+    @Override
+    public ReservationEntity getReservationById(Long reservationId)
+            throws ResponseStatusException {
+        ReservationEntity reservation = reservationRepository.findById(reservationId).orElse(null);
+        if (reservation == null)
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        return reservation;
+    }
+
     public JsonNode getAllReservationForLineAndData(Long lineId, String date) {
         Date d = DateUtils.dateParser(date);
 

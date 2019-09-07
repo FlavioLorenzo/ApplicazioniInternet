@@ -56,6 +56,16 @@ public class RideServiceImpl implements RideService {
     }
 
     @Override
+    public RideEntity getRide(Long rideId)
+        throws ResponseStatusException {
+        RideEntity ride = rideRepository.findById(rideId).orElse(null);
+        if (ride == null)
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        return ride;
+    }
+
+
+    @Override
     public JsonNode getAdministeredLinesRidesFromDateToDate
             (Long userId, String fromDate, String toDate, String openOrLocked) {
         Date from = DateUtils.dateParser(fromDate);

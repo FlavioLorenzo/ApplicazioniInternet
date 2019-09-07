@@ -12,6 +12,12 @@ import org.springframework.web.server.ResponseStatusException;
 import java.security.Principal;
 import java.util.List;
 
+/*
+* SECURITY POLICY
+* Everyone allowed.
+* Users can use methods only on owned children
+* */
+
 @CrossOrigin()
 @RestController
 public class ChildController {
@@ -25,7 +31,7 @@ public class ChildController {
         throws ResponseStatusException {
         /* Disallowed to normal user */
         if (principalService.IsUserParent(principal))
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
 
         return childService.getAllChildren();
     }
@@ -39,7 +45,7 @@ public class ChildController {
         /* Restricted to normal user */
         if (principalService.IsUserParent(principal) &&
             !principalService.doesUserMatchPrincipal(principal, userId))
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
 
         return childService.getAllChildrenWithParentId(userId);
     }
@@ -52,7 +58,7 @@ public class ChildController {
             throws ResponseStatusException {
         /* Disallowed to normal user */
         if (principalService.IsUserParent(principal))
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
 
         return childService.getFreeChildren(date, direction);
     }
@@ -65,7 +71,7 @@ public class ChildController {
         /* Restricted to normal user */
         if (principalService.IsUserParent(principal) &&
             !principalService.IsUserParentOfChild(principal, childId))
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
 
         return childService.getChildWithId(childId);
     }
@@ -78,7 +84,7 @@ public class ChildController {
             throws  ResponseStatusException {
         /* Sysadmin allowed only */
         if (!principalService.IsUserSystemAdmin(principal))
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
 
         childService.deleteChildWithId(childId);
     }
@@ -96,8 +102,7 @@ public class ChildController {
                     principal, childPostBody.getUserId()
             )
         )
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
-        // TODO should escorts and admins be able to create a child?
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         ChildEntity child = childService.buildChild(
                 childPostBody.getUserId(),
                 childPostBody.getFirstName(),
