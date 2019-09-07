@@ -4,17 +4,21 @@ import {catchError, map, retry} from 'rxjs/operators';
 import {BehaviorSubject, Observable, throwError} from 'rxjs';
 import {CurrentUser} from '../Models/currentUser';
 import {environment} from '../../environments/environment';
+import { UsersService } from './users.service';
 
 @Injectable()
 export class RegistrationService {
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private usersService: UsersService) {}
 
   register(rpb: RegistrationPostBody) {
     return this.http.post<any>(
        `${environment.apiUrl}/register`,
        rpb)
-      .pipe(map(res => res));
+      .pipe(map(res => {
+        this.usersService.getAllusers();
+        return res;
+      }));
   }
 
   completeRegistration(token: string, rpb: CompleteUserPostBody) {
