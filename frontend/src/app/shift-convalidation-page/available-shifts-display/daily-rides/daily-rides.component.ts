@@ -22,7 +22,6 @@ export class DailyRidesComponent implements OnInit {
 
   onCloseOpenButtonClick(event: Event, ride: RideSummary) {
     event.stopPropagation();
-    console.log(event);
     this.shiftChange.emit(ride);
   }
 }
