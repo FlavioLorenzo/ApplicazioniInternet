@@ -235,7 +235,8 @@ public class UserServiceImpl implements UserService {
         if (previousAdmin != null) {
             previousAdmin.removeManagedLine(busLineEntity);
             /* If the previous user has no administered line set its role to escort */
-            if (previousAdmin.getAdministeredBuslines().isEmpty()) {
+            if (previousAdmin.getAdministeredBuslines().isEmpty() &&
+                !previousAdmin.getRole().name.equals("ROLE_SYS_ADMIN")) {
                 previousAdmin.setRole(roleRepository.findByName("ROLE_ESCORT"));
                 userRepository.save(previousAdmin);
             }
@@ -243,7 +244,8 @@ public class UserServiceImpl implements UserService {
         /* Set the user as admin */
         busLineEntity.setAdmin(user);
         user.addManagedLine(busLineEntity);
-        user.setRole(roleRepository.findByName("ROLE_ADMIN"));
+        if (!user.getRole().name.equals("ROLE_SYS_ADMIN"))
+            user.setRole(roleRepository.findByName("ROLE_ADMIN"));
         busLineRepository.save(busLineEntity);
         userRepository.save(user);
         return user;
@@ -266,7 +268,8 @@ public class UserServiceImpl implements UserService {
         user.removeManagedLine(busLineEntity);
         busLineEntity.setAdmin(null);
         /* If the user has no administered line drop its role to escort */
-        if (user.getAdministeredBuslines().isEmpty()) {
+        if (user.getAdministeredBuslines().isEmpty() &&
+            !user.getRole().name.equals("ROLE_SYS_ADMIN")) {
             user.setRole(roleRepository.findByName("ROLE_ESCORT"));
         }
         userRepository.save(user);
