@@ -40,7 +40,7 @@
               </mat-form-field>
       
               <app-line-selector class="line-selector" *ngIf="selectFormControl.value === 3"
-              [checkableLines]="myLines"
+              [checkableLines]="managedLines"
               [alreadySelectedLines]="[]"
               (chekedLinesId)="onLinesChanged($event)"></app-line-selector>
       

@@ -93,6 +93,7 @@ import { NotificationsComponent } from './notifications/notifications.component'
 import {NotificationsService} from './services/notifications.service';
 import { SingleNotificationComponent } from './notifications/single-notification/single-notification.component';
 import {WebSocketNotificationService} from './services/web-socket-notification.service';
+import { ManagedLineResolverService as ManagedLineResolverService } from './resolvers/managed-line-resolver.service';
 
 @NgModule({
   declarations: [
@@ -206,6 +207,7 @@ import {WebSocketNotificationService} from './services/web-socket-notification.s
     ReservationResolverService,
     AvailabilitiesResolverService,
     ShiftConsolidationResolverService,
+    ManagedLineResolverService,
     WebSocketAttendanceService,
     NotificationsService,
     WebSocketNotificationService

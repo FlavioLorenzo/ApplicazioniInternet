@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {HttpClientModule, HttpClient, HttpHeaders} from '@angular/common/http';
-import {catchError, map, retry} from 'rxjs/operators';
+import {catchError, map, retry, tap} from 'rxjs/operators';
 import {BehaviorSubject, Observable, throwError} from 'rxjs';
 import {CurrentUser} from '../Models/currentUser';
 import {environment} from '../../environments/environment';
@@ -15,8 +15,8 @@ export class RegistrationService {
     return this.http.post<any>(
        `${environment.apiUrl}/register`,
        rpb)
-      .pipe(map(res => {
-        this.usersService.getAllusers();
+      .pipe(tap(res => {
+        this.usersService.updateUserList();
         return res;
       }));
   }
@@ -102,7 +102,7 @@ export class RegistrationService {
   }
 
   getAdministeredLineOfUser(userId: number) {
-    return this.http.post<any>(
+    return this.http.get<any>(
       `${environment.apiUrl}/user/administered-line/${userId}`,
        {})
        .pipe(

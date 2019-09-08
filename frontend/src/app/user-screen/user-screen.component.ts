@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Line } from '../Models/Line';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-user-screen',
@@ -8,7 +9,11 @@ import { Line } from '../Models/Line';
 })
 export class UserScreenComponent implements OnInit {
 
-  constructor() { }
+  managedLines: Line[];
+
+  constructor(private route: ActivatedRoute) {
+     this.managedLines = this.route.snapshot.data.managedLines;
+   }
 
   ngOnInit() {
   }

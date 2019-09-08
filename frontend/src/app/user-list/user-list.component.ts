@@ -7,7 +7,7 @@ import { UserDetailsDialogComponent } from '../user-details-dialog/user-details-
 import { Line } from '../Models/Line';
 import { AuthService } from '../services/auth.service';
 import { RegistrationService } from '../services/registration.service';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar, MatPaginator } from '@angular/material';
 
 @Component({
   selector: 'app-user-list',
@@ -18,9 +18,11 @@ export class UserListComponent implements OnInit {
 
   userList;
   displayedColumns: string[] = ['first_name', 'last_name', 'phone', 'email', 'role'];
-  @Input() myLines: Array<Line>;
+  @Input() managedLines: Array<Line>;
 
   @ViewChild(MatSort, {static: true}) sort: MatSort;
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+
 
   constructor(private usersService: UsersService, private dialog: MatDialog, private authService: AuthService, private registrationService: RegistrationService, private snackBar: MatSnackBar) { 
   }
@@ -36,33 +38,14 @@ export class UserListComponent implements OnInit {
       //How the **** I'm supposed to know that this line has to be called inside a timeout?
       setTimeout(() => {
         this.userList.sort = this.sort;
+        this.userList.paginator = this.paginator;
+
       });
       
     });
 
-    this.authService.currentUser.subscribe(currentUser => {
-      this.registrationService.getAdministeredLineOfUser(currentUser.id).subscribe(lines => {
-        if(lines.length == 0){
-          console.log("DEBUG: USING FAKE LINES");
-          lines.push({ id_line: 0, name: "Linea 1" },
-          { id_line: 1, name: "Linea 2" },
-          { id_line: 2, name: "Linea 3" },
-          { id_line: 3, name: "Linea 4" },
-          { id_line: 4, name: "Linea 5" });
-        }
-        this.myLines = lines;
-      }, error => {
-        console.log("DEBUG ON ERROR: USING FAKE LINES");
-        const lines = [{ id_line: 0, name: "Linea 1" },
-          { id_line: 1, name: "Linea 2" },
-          { id_line: 2, name: "Linea 3" },
-          { id_line: 3, name: "Linea 4" },
-          { id_line: 4, name: "Linea 5" }];
-
-          this.myLines = lines;
-      });
-    });
   }
+
 
   onUserPressed(user){
     this.openDialog(user);
@@ -76,7 +59,7 @@ export class UserListComponent implements OnInit {
     dialogConfig.autoFocus = true;
     dialogConfig.data = {
       user,
-      myLines: this.myLines
+      myLines: this.managedLines
     }
     dialogConfig.minWidth = '400px';
 
@@ -86,6 +69,7 @@ export class UserListComponent implements OnInit {
 
       if (result  && result.status === 'success'){
         this.snackBar.open("Utente aggiornato con successo");
+        this.usersService.updateUserList();
       } else if (result  && result.status === 'failure'){
         this.snackBar.open("Errore nell'aggiornamento dell'utente");
       }

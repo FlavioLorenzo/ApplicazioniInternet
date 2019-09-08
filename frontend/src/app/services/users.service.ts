@@ -15,20 +15,13 @@ export class UsersService {
   public userList: Observable<Array<User>>;
 
 
-  constructor(private http: HttpClient, private authService: AuthService) { 
+  constructor(private http: HttpClient) { 
     this.userListSubject = new BehaviorSubject<Array<User>>([]);
     this.userList = this.userListSubject.asObservable();
-
-    this.authService.currentUser.subscribe(
-      currentUser => {
-        if(currentUser && (currentUser.role.id_role == '1' || currentUser.role.id_role == '2')){
-            this.updateUserList(currentUser.id);
-        }
-      }
-    )
+    this.updateUserList();
   }
 
-  private updateUserList(currentUserId){
+  public updateUserList(){
     this.getAllusers().subscribe(users => {
       this.fetchedUsers = users;
       this.userListSubject.next(users);
@@ -40,7 +33,6 @@ export class UsersService {
       environment.apiUrl +
       environment.usersUrl)
       .pipe(
-        tap(users => this.updateUserList(users)),
         retry(3),
         catchError(err => {
           console.error(err.message);

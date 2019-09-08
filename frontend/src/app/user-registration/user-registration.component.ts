@@ -23,7 +23,7 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 })
 export class UserRegistrationComponent implements OnInit {
 
-  myLines: Array<Line>;
+  @Input() managedLines: Array<Line>;
 
   emailFormControl = new FormControl('', [Validators.required, Validators.email]);
   selectFormControl = new FormControl('', [Validators.required]);
@@ -45,30 +45,7 @@ export class UserRegistrationComponent implements OnInit {
 
   constructor(private snackBar: MatSnackBar, private registrationService: RegistrationService, private authService: AuthService) {}
 
-  ngOnInit() {
-    this.authService.currentUser.subscribe(currentUser => {
-      this.registrationService.getAdministeredLineOfUser(currentUser.id).subscribe(lines => {
-        if(lines.length == 0){
-          console.log("DEBUG: USING FAKE LINES");
-          lines.push({ id_line: 0, name: "Linea 1" },
-          { id_line: 1, name: "Linea 2" },
-          { id_line: 2, name: "Linea 3" },
-          { id_line: 3, name: "Linea 4" },
-          { id_line: 4, name: "Linea 5" });
-        }
-        this.myLines = lines;
-      }, error => {
-        console.log("DEBUG ON ERROR: USING FAKE LINES");
-        const lines = [{ id_line: 0, name: "Linea 1" },
-          { id_line: 1, name: "Linea 2" },
-          { id_line: 2, name: "Linea 3" },
-          { id_line: 3, name: "Linea 4" },
-          { id_line: 4, name: "Linea 5" }];
-
-          this.myLines = lines;
-      });
-    });
-  }
+  ngOnInit() { }
 
   onSendRegistration() {
 

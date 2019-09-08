@@ -29,6 +29,7 @@ import {ReservationResolverService} from './resolvers/reservation-resolver.servi
 import {AvailabilitiesResolverService} from './resolvers/availabilities-resolver.service';
 import {ShiftConsolidationResolverService} from './resolvers/shift-consolidation-resolver.service';
 import {NotificationsComponent} from './notifications/notifications.component';
+import { ManagedLineResolverService as ManagedLineResolverService } from './resolvers/managed-line-resolver.service';
 
 const appRoutes: Routes = [
   /*{
@@ -86,7 +87,7 @@ const appRoutes: Routes = [
       {
         path: '',
         component: AvailableShiftsDisplayComponent,
-        resolve: {rides: ShiftConsolidationResolverService }
+        resolve: {rides: ShiftConsolidationResolverService } 
       },
       {
         path: ':rideId',
@@ -111,7 +112,8 @@ const appRoutes: Routes = [
   {
     path: 'users',
     component: UserScreenComponent,
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard],
+    resolve: {managedLines: ManagedLineResolverService }
   },
   {
     path: 'children',

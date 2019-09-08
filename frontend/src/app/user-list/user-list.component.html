@@ -33,5 +33,9 @@
           <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="onUserPressed(row)"></tr>
         </table>
     </div>
+    <mat-paginator [length]="100"
+    [pageSize]="10"
+    [pageSizeOptions]="[5, 10, 25, 100]">
+    </mat-paginator>
       
 </div>
