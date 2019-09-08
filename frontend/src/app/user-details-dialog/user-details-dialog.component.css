@@ -1,4 +1,19 @@
 .dialog-container {
-    margin: auto;
-    width: 80%;
+  font-size: 0.9rem;
+}
+
+.dialog-element {
+  margin-bottom: 1rem;
+}
+
+.dialog-title {
+  font-weight: bold;
+}
+
+.dialog-value {
+
+}
+
+.line-selector {
+  margin-top: 0.5rem;
 }

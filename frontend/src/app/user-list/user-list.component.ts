@@ -60,8 +60,9 @@ export class UserListComponent implements OnInit {
     dialogConfig.data = {
       user,
       myLines: this.managedLines
-    }
-    dialogConfig.minWidth = '400px';
+    };
+
+    dialogConfig.width = '250px';
 
     const dialogRef = this.dialog.open(UserDetailsDialogComponent, dialogConfig);
 

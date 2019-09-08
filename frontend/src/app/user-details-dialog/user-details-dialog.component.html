@@ -2,37 +2,56 @@
 
 <div class="dialog-container">
   <mat-dialog-content>
-    <div><span class="">User type</span> <span>{{user.role | roleLabel}}</span></div>
-    <div><span class="">Email</span> <span>{{user.email}}</span></div>
-    <div><span class="">Phone</span> <span>{{user.phone || "Not added yet"}}</span></div>
-   
+    <div class="dialog-element">
+      <div class="dialog-title">User type</div>
+      <div class="dialog-value">{{user.role | roleLabel}}</div>
+    </div>
+    <div class="dialog-element">
+      <div class="dialog-title"><span class="">Email</span> </div>
+      <div class="dialog-value"><span>{{user.email}}</span></div>
+    </div>
+    <div class="dialog-element">
+      <div class="dialog-title"><span class="">Phone</span> </div>
+      <div class="dialog-value"><span>{{user.phone || "Not added yet"}}</span></div>
+    </div>
+
     <mat-spinner *ngIf="isLoading"></mat-spinner>
     
     <div *ngIf="user.role.name === 'ROLE_USER'">
-        <ul *ngIf="!isLoading && userChildren.length > 0">
-            <strong>Figli registrati:</strong> 
-            <li *ngFor="let child of userChildren">
-              <span>{{child.first_name}} {{child.last_name}}</span>
-            </li>
-          </ul>
-          <p *ngIf="!isLoading && userChildren.length == 0"style="padding: 10px;">This user hasn't added any children yet.</p>
+      <div class="dialog-element">
+        <div class="dialog-title">Registered children:</div>
+        <div class="dialog-value">
+          <ng-template [ngIf]="!isLoading && userChildren.length > 0">
+            <ul *ngIf="!isLoading">
+              <li *ngFor="let child of userChildren">
+                <span>{{child.first_name}} {{child.last_name}}</span>
+              </li>
+            </ul>
+          </ng-template>
+          <ng-template [ngIf]="!isLoading && userChildren.length == 0">
+            This user hasn't added any children yet.
+          </ng-template>
+        </div>
+      </div>
     </div>
-
     <div *ngIf="user.role.name !== 'ROLE_USER'">
-      <strong>Linee amministrate:</strong>
-      <ul *ngIf="!isLoading">
-        <app-line-selector class="line-selector"
-        [checkableLines]="myLines"
-        [alreadySelectedLines]="userLines"
-        (checkedLines)="onLinesChanged($event)"></app-line-selector>
-      </ul>
-  </div>
+      <div class="dialog-element">
+        <div class="dialog-title">Administered Lines:</div>
+        <div class="dialog-value">
+          <ng-template [ngIf]="!isLoading">
+            <app-line-selector class="line-selector"
+                               [checkableLines]="myLines"
+                               [alreadySelectedLines]="userLines"
+                               (checkedLines)="onLinesChanged($event)"></app-line-selector>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </mat-dialog-content>
 
-</mat-dialog-content>
-
-<mat-dialog-actions>
-    <button class="mat-raised-button"(click)="close()">Close</button>
-    <button *ngIf="isUserEdited" class="mat-raised-button mat-primary"(click)="save()">Save</button>
-</mat-dialog-actions>
+  <mat-dialog-actions>
+      <button class="mat-raised-button"(click)="close()">Close</button>
+      <button *ngIf="isUserEdited" class="mat-raised-button mat-primary"(click)="save()">Save</button>
+  </mat-dialog-actions>
 </div>
 
