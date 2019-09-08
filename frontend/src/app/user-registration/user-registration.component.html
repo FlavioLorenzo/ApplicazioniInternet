@@ -5,7 +5,7 @@
         <form class="registration-form">
             <mat-form-field class="example-full-width">
                 <input matInput placeholder="Email" [formControl]="emailFormControl"
-                       [errorStateMatcher]="matcher">
+                       [errorStateMatcher]="matcher" maxlength="128">
                 <mat-error *ngIf="emailFormControl.hasError('email') && !emailFormControl.hasError('required')">
                   Please enter a valid email address
                 </mat-error>
@@ -15,14 +15,14 @@
               </mat-form-field>
               <mat-form-field>
                   <input matInput placeholder="First name" [formControl]="firstNameFormControl"
-                         [errorStateMatcher]="matcher">
+                         [errorStateMatcher]="matcher" maxlength="20">
                   <mat-error *ngIf="firstNameFormControl.hasError('required')">
                     First name is <strong>required</strong>
                   </mat-error>
               </mat-form-field>
               <mat-form-field>
                   <input matInput placeholder="Last name" [formControl]="lastNameFormControl"
-                         [errorStateMatcher]="matcher">
+                         [errorStateMatcher]="matcher" maxlength="20">
                   <mat-error *ngIf="lastNameFormControl.hasError('required')">
                     Last name is <strong>required</strong>
                   </mat-error>

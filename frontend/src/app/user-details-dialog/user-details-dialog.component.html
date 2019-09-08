@@ -2,20 +2,20 @@
 
 <div class="dialog-container">
   <mat-dialog-content>
-    <div><span class="">User type</span> {{user.role | roleLabel}}</div>
-    <div><span class="">Email</span> {{user.email}}</div>
-    <div><span class="">Phone</span> {{user.phone}}</div>
+    <div><span class="">User type</span> <span>{{user.role | roleLabel}}</span></div>
+    <div><span class="">Email</span> <span>{{user.email}}</span></div>
+    <div><span class="">Phone</span> <span>{{user.phone || "Not added yet"}}</span></div>
    
     <mat-spinner *ngIf="isLoading"></mat-spinner>
     
     <div *ngIf="user.role.name === 'ROLE_USER'">
-        <strong>Figli registrati:</strong> 
-      
-        <ul *ngIf="!isLoading">
+        <ul *ngIf="!isLoading && userChildren.length > 0">
+            <strong>Figli registrati:</strong> 
             <li *ngFor="let child of userChildren">
               <span>{{child.first_name}} {{child.last_name}}</span>
             </li>
           </ul>
+          <p *ngIf="!isLoading && userChildren.length == 0"style="padding: 10px;">This user hasn't added any children yet.</p>
     </div>
 
     <div *ngIf="user.role.name !== 'ROLE_USER'">

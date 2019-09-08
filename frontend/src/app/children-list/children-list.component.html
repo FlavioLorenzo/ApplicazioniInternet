@@ -2,7 +2,10 @@
   <h2>Children list</h2>
 
   <div class="table-container">
-    <table mat-table [dataSource]="childrenList" matSort >
+    
+    <p *ngIf="childrenList !== undefined && childrenList.data.length == 0"style="padding: 40px;">No children added to the system. Use the registration form below to add your children.</p>
+
+    <table mat-table [dataSource]="childrenList" matSort *ngIf="this.childrenList && this.childrenList.data.length > 0">
   
       <ng-container matColumnDef="first_name">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>First name</th>

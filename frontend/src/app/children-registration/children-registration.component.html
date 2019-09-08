@@ -5,21 +5,21 @@
     <form class="registration-form">
       <mat-form-field>
           <input matInput placeholder="First name" [formControl]="firstNameFormControl"
-                  [errorStateMatcher]="matcher">
+                  [errorStateMatcher]="matcher" maxlength="20">
           <mat-error *ngIf="firstNameFormControl.hasError('required')">
             First name is <strong>required</strong>
           </mat-error>
       </mat-form-field>
       <mat-form-field>
           <input matInput placeholder="Last name" [formControl]="lastNameFormControl"
-                  [errorStateMatcher]="matcher">
+                  [errorStateMatcher]="matcher" maxlength="20">
           <mat-error *ngIf="lastNameFormControl.hasError('required')">
             Last name is <strong>required</strong>
           </mat-error>
       </mat-form-field>
       <mat-form-field>
         <input matInput placeholder="Phone" [formControl]="phoneFormControl"
-                [errorStateMatcher]="matcher">
+                [errorStateMatcher]="matcher" maxlength="20">
     </mat-form-field>
         
     <button *ngIf="!isLoading" mat-raised-button (click)="onSendRegistration()">REGISTER CHILD</button>

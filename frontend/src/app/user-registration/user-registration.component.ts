@@ -49,40 +49,52 @@ export class UserRegistrationComponent implements OnInit {
 
   onSendRegistration() {
 
+
     if (this.lastNameFormControl.valid && this.firstNameFormControl.valid && this.emailFormControl.valid && this.selectFormControl.valid) {
       const firstName = this.firstNameFormControl.value;
       const lastName = this.lastNameFormControl.value;
       const email = this.emailFormControl.value;
       const role = this.selectFormControl.value;
 
-      this.isLoading = true; // Load indicator
-
-      //const selectedLines = this.lineSelectorComponent.getSelectedLines()
-
-      console.log(`Registering ${firstName} ${lastName} ${email} ${role}`);
-
-      this.registrationService.register(new RegistrationPostBody(email, firstName, lastName, role))
-      .subscribe(userResult => {
-          console.log(`Registration result: ${JSON.stringify(userResult)}`);
-          this.isLoading = false;
-          this.clearForm();
-          this.snackBar.open("Utente creato con successo");
-
-
-          this.pendingLinesToMakeAdmin.forEach(lineId => {
-            this.registrationService.addAdminRoleOfLineToUser(userResult.id_user, lineId).subscribe(result => {
-              console.log(`Line ${lineId} added to user with success`);
-            });
-          });
-
-
-      });
-
+      if(role === 3 && this.pendingLinesToMakeAdmin.length > 0 && this.authService.currentUserValue.role.id_role !== '1'){
+        if(confirm("Confirming the registration you won't be anymore admin of the selected lines. Confirm?")) {
+          this.completeRegistration(firstName, lastName, email, role);
+        }
+      }else{
+        this.completeRegistration(firstName, lastName, email, role);
+      }
     }else{
       console.log('Check the data');
     }
-
   }
+
+  completeRegistration(firstName, lastName, email, role){
+    
+    this.isLoading = true; // Load indicator
+
+    console.log(`Registering ${firstName} ${lastName} ${email} ${role}`);
+
+    this.registrationService.register(new RegistrationPostBody(email, firstName, lastName, role))
+    .subscribe(userResult => {
+        console.log(`Registration result: ${JSON.stringify(userResult)}`);
+        this.isLoading = false;
+        this.clearForm();
+        this.snackBar.open("User created successfully!");
+        this.pendingLinesToMakeAdmin.forEach(lineId => {
+          this.registrationService.addAdminRoleOfLineToUser(userResult.id_user, lineId).subscribe(result => {
+            console.log(`Line ${lineId} added to user with success`);
+          });
+        });
+
+
+    },
+    error => {
+      this.snackBar.open("Sorry! Something went wrong. Try again later.");
+      this.isLoading = false;
+    });
+
+ 
+}
 
   onLinesChanged(lines){
     this.pendingLinesToMakeAdmin = lines;

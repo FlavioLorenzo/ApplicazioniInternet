@@ -20,6 +20,7 @@ export class ChildrenListComponent implements OnInit {
 
   ngOnInit() {
 
+
     // Query the user children
     this.childrenService.currentUserChild.subscribe(childrenList => this.setDataSource(childrenList));
 

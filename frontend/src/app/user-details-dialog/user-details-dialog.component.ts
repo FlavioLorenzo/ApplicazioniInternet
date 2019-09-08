@@ -5,6 +5,7 @@ import { User } from '../Models/User';
 import { Line } from '../Models/Line';
 import { RegistrationService } from '../services/registration.service';
 import { Observable, zip, forkJoin} from 'rxjs';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-user-details-dialog',
@@ -35,12 +36,13 @@ export class UserDetailsDialogComponent implements OnInit {
   pendingUserLines: Array<Line>;
 
   // Children beloning to the user
-  userChildren;
+  userChildren = [];
 
   constructor(
     private registrationService: RegistrationService,
     private childrenService: ChildrenService,
     private dialogRef: MatDialogRef<UserDetailsDialogComponent>,
+    private authService: AuthService,
     @Inject(MAT_DIALOG_DATA) data) {
       this.user = data.user;
       this.myLines = data.myLines;
@@ -82,7 +84,6 @@ export class UserDetailsDialogComponent implements OnInit {
   }
 
   save() {
-
     //Start array and end array
     //Start - End = Elements that need to be deleted
     //End - Start = Elements that need to be added
@@ -92,8 +93,22 @@ export class UserDetailsDialogComponent implements OnInit {
     console.log(`New lines: ${JSON.stringify(toAdd)}`);
     console.log(`Old lines: ${JSON.stringify(toDelete)}`);
 
-    const addSubscriptions = toAdd.map(line => this.registrationService.addAdminRoleOfLineToUser(this.user.id_user, line.id_line));
-    const removeSubscriptions = toDelete.map(line => this.registrationService.removeAdminRoleOfLineFromUser(this.user.id_user, line.id_line));
+    if(toDelete.length > 0 && this.authService.currentUserValue.role.id_role !== '1'){
+      //Standard admin trying to delete a certain line
+      if(confirm("Confirming the edit you won't be anymore admin of the selected lines. Confirm?")) {
+        this.completeEdit(toAdd, toDelete);
+      }
+
+    }else{
+      //Sys admin or no lines toDelete
+      this.completeEdit(toAdd, toDelete);
+    }
+
+  }
+
+  completeEdit(toAddLines, toDeleteLines){
+    const addSubscriptions = toAddLines.map(line => this.registrationService.addAdminRoleOfLineToUser(this.user.id_user, line.id_line));
+    const removeSubscriptions = toDeleteLines.map(line => this.registrationService.removeAdminRoleOfLineFromUser(this.user.id_user, line.id_line));
 
     const allSubscription = addSubscriptions.concat(removeSubscriptions);
 
@@ -106,7 +121,6 @@ export class UserDetailsDialogComponent implements OnInit {
       console.log("ERROR", error);
       this.dialogRef.close({status: 'failure'});
     });
-
   }
 
   close() {
