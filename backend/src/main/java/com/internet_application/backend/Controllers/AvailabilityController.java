@@ -4,13 +4,25 @@ import com.internet_application.backend.Entities.AvailabilityEntity;
 import com.internet_application.backend.PostBodies.AvailabilityPostBody;
 import com.internet_application.backend.Services.AvailabilityService;
 import com.internet_application.backend.Services.BusLineService;
+import com.internet_application.backend.Services.PrincipalService;
 import com.internet_application.backend.Services.RideService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.security.Principal;
 import java.util.List;
+
+/*
+ * SECURITY POLICY
+ * System admin -> Permission for everything
+ * Admin -> GET on everything. Checks on POST, PUT and DELETE
+ * Escort -> GET, POST, PUT, DELETE on owned availabilities. No permission on others
+ * User -> No permission
+ * */
 
 @CrossOrigin
 @RestController
@@ -21,46 +33,69 @@ public class AvailabilityController {
     RideService rideService;
     @Autowired
     BusLineService busLineService;
+    @Autowired
+    PrincipalService principalService;
 
-    // No parent
-    // TODO forse scorta
+
     @GetMapping("/availabilities/{rideId}")
+    @PreAuthorize("hasAnyRole('SYS_ADMIN','ADMIN')")
     public List<AvailabilityEntity> getAvailabilitiesForRideWithId(@PathVariable(value="rideId") Long rideId) {
         return availabilityService.getAllAvailabilitiesForRideWithId(rideId);
     }
 
     /* Get single availability */
-    // No parent
-    // Escort can only get their own
     @GetMapping("/availability/{availabilityId}")
-    public AvailabilityEntity getAvailabilityWithId(@PathVariable(value="availabilityId") Long availabilityId)
+    @PreAuthorize("hasAnyRole('SYS_ADMIN', 'ADMIN', 'ESCORT')")
+    public AvailabilityEntity getAvailabilityWithId(
+            Principal principal,
+            @PathVariable(value="availabilityId") Long availabilityId
+    )
         throws ResponseStatusException {
-        return availabilityService.getAvailabilityWithId(availabilityId);
+        AvailabilityEntity availability = availabilityService.getAvailabilityWithId(availabilityId);
+
+        /* Security check */
+        if (principalService.IsUserEscort(principal) &&
+            !principalService.doesUserMatchPrincipal(principal, availability.getUser().getId()))
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        return availability;
     }
 
-    // No parent
-    // Escort can only get their own
     @GetMapping("/availabilities/{line_id}/{user_id}/{date}/{n}")
-    public List<AvailabilityEntity> getNReservationsByUserFromDate(@PathVariable(value="line_id") Long lineId,
+    @PreAuthorize("hasAnyRole('SYS_ADMIN', 'ADMIN', 'ESCORT')")
+    public List<AvailabilityEntity> getNReservationsByUserFromDate(Principal principal,
+                                                                   @PathVariable(value="line_id") Long lineId,
                                                                    @PathVariable(value="user_id") Long userId,
                                                                    @PathVariable(value="date") String date,
                                                                    @PathVariable(value="n") Integer n)
             throws ResponseStatusException {
+        /* Security check */
+        if (principalService.IsUserEscort(principal) &&
+                !principalService.doesUserMatchPrincipal(principal, userId))
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+
         List<AvailabilityEntity> availabilities =
                 availabilityService.getNAvailabilitiesByUserFromDate(lineId, userId, date, n);
         return availabilities;
     }
     
     /* Create escort availability */
-    // Only escort
     @PostMapping("/availability")
-    public AvailabilityEntity createAvailability(@RequestBody AvailabilityPostBody availabilityPostBody)
+    @PreAuthorize("hasAnyRole('SYS_ADMIN', 'ESCORT')")
+    public AvailabilityEntity createAvailability(
+            Principal principal,
+            @RequestBody AvailabilityPostBody availabilityPostBody
+    )
         throws ResponseStatusException {
 
         if (availabilityPostBody.getRideId() == null ||
             availabilityPostBody.getUserId() == null ||
             availabilityPostBody.getStopId() == null)
         throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+
+        /* Security check */
+        if (principalService.IsUserEscort(principal) &&
+                !principalService.doesUserMatchPrincipal(principal, availabilityPostBody.getUserId()))
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
 
         AvailabilityEntity availability = availabilityService.buildAvailability(
                 availabilityPostBody.getRideId(),
@@ -71,11 +106,19 @@ public class AvailabilityController {
     }
 
     /* Modify escort availability */
-    // Only escort who owns the availability
     @PutMapping("/availability/{availabilityId}")
-    public AvailabilityEntity putAvailability(@PathVariable(value="availabilityId") Long availabilityId,
+    @PreAuthorize("hasAnyRole('SYS_ADMIN', 'ADMIN', 'ESCORT')")
+    public AvailabilityEntity putAvailability(Principal principal,
+                                              @PathVariable(value="availabilityId") Long availabilityId,
                                               @RequestBody AvailabilityPostBody availabilityPostBody)
         throws ResponseStatusException {
+
+        /* Security check */
+        AvailabilityEntity availability = availabilityService.getAvailabilityWithId(availabilityId);
+        if (principalService.IsUserEscort(principal) &&
+                !principalService.doesUserMatchPrincipal(principal, availability.getUser().getId()))
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+
         return availabilityService.modifyAvailability(
                 availabilityId,
                 availabilityPostBody.getRideId(),
@@ -84,20 +127,39 @@ public class AvailabilityController {
     }
 
     /* Delete escort availability */
-    // Only escort who owns the availability
     @DeleteMapping("/availability/{availabilityId}")
-    public void deleteAvailabilityWithId(@PathVariable(value="availabilityId") Long availabilityId)
+    @PreAuthorize("hasAnyRole('SYS_ADMIN', 'ESCORT')")
+    public void deleteAvailabilityWithId(
+            Principal principal,
+            @PathVariable(value="availabilityId") Long availabilityId
+    )
         throws ResponseStatusException {
+
+        /* Security check */
+        AvailabilityEntity availability = availabilityService.getAvailabilityWithId(availabilityId);
+        if (principalService.IsUserEscort(principal) &&
+                !principalService.doesUserMatchPrincipal(principal, availability.getUser().getId()))
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+
         availabilityService.deleteAvailabilityWithId(availabilityId);
     }
 
     /* Assign availability */
-    // Escort who owns it
-    // Admin of line
     @PutMapping("/availability/{availabilityId}/{statusCode}")
-    public void PutAvailabilityStatus(@PathVariable(value="availabilityId") Long availabilityId,
-                @PathVariable(value="statusCode") Integer status)
+    @PreAuthorize("hasAnyRole('SYS_ADMIN', 'ADMIN', 'ESCORT')")
+    public void PutAvailabilityStatus(
+            Principal principal,
+            @PathVariable(value="availabilityId") Long availabilityId,
+            @PathVariable(value="statusCode") Integer status)
             throws ResponseStatusException {
+        /* Security check */
+        AvailabilityEntity availability = availabilityService.getAvailabilityWithId(availabilityId);
+        if (principalService.IsUserEscort(principal) &&
+                !principalService.doesUserMatchPrincipal(principal, availability.getUser().getId()))
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        if (principalService.IsUserAdmin(principal) &&
+                !principalService.IsUserAdminOfLine(principal, availability.getRide().getLine().getId()))
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         availabilityService.setStatusOfAvailability(availabilityId, status);
     }
 }

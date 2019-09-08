@@ -3,7 +3,6 @@ package com.internet_application.backend.Services;
 import com.internet_application.backend.Entities.AvailabilityEntity;
 import com.internet_application.backend.Entities.RideEntity;
 import com.internet_application.backend.Entities.StopEntity;
-import com.internet_application.backend.Entities.UserEntity;
 
 import java.util.List;
 
