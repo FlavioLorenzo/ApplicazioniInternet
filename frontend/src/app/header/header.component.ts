@@ -3,6 +3,7 @@ import {AuthService} from '../services/auth.service';
 import {CurrentUser} from '../Models/currentUser';
 import {NotificationsService} from '../services/notifications.service';
 import {WebSocketNotificationService} from '../services/web-socket-notification.service';
+import {formatNumber} from "@angular/common";
 
 @Component({
   selector: 'app-header',
@@ -22,9 +23,8 @@ export class HeaderComponent implements OnInit {
   ngOnInit() {
     this.authenticationService.currentUser
       .subscribe(x => {
+        this.currentUser = x;
         if (x != null) {
-          this.currentUser = x;
-
           this.retrieveNotificationCount();
 
           this.webSocketNotificationService.setupHeader(this);
@@ -34,13 +34,15 @@ export class HeaderComponent implements OnInit {
   }
 
   retrieveNotificationCount() {
-    this.notificationService.getActiveNotificationsForUser(this.currentUser.id).subscribe(
-      (data) => {
-        this.notificationCount = data.length;
-      },
-      (error) => {console.log(error); },
-      () => console.log('Done building rides data structure')
-    );
+    if (this.currentUser != null) {
+      this.notificationService.getActiveNotificationsForUser(this.currentUser.id).subscribe(
+        (data) => {
+          this.notificationCount = data.length;
+        },
+        (error) => {console.log(error); },
+        () => console.log('Done building rides data structure')
+      );
+    }
   }
 
   notificationsUpdated() {
@@ -54,5 +56,17 @@ export class HeaderComponent implements OnInit {
     if (document.getElementById('ai-navigation-button').offsetParent !== null) {
       document.getElementById('ai-navigation-button').click();
     }
+  }
+
+  isCurrentRoleAdmitted(admittedRoles: number[]) {
+    const currentRole: number = +this.currentUser.role.id_role;
+
+    for (const role of admittedRoles) {
+      if (currentRole === +role) {
+        return true;
+      }
+    }
+
+    return false;
   }
 }

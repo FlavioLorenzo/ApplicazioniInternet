@@ -19,10 +19,10 @@
         <li class="nav-item" *ngIf='!currentUser' routerLinkActive="active">
           <a class="nav-link" routerLink="/login">Login</a>
         </li>
-        <li class="nav-item" *ngIf='currentUser' routerLinkActive="active">
+        <li class="nav-item" *ngIf='currentUser && isCurrentRoleAdmitted([1, 2, 3])' routerLinkActive="active">
           <a class="nav-link" routerLink="/attendance">Attendance</a>
         </li>
-        <li class="nav-item" *ngIf='currentUser' routerLinkActive="active">
+        <li class="nav-item" *ngIf='currentUser && isCurrentRoleAdmitted([1, 2, 3])' routerLinkActive="active">
           <a class="nav-link" routerLink="/users">Users</a>
         </li>
         <li class="nav-item" *ngIf='currentUser' routerLinkActive="active">
@@ -31,10 +31,10 @@
         <li class="nav-item" *ngIf='currentUser' routerLinkActive="active">
           <a class="nav-link" routerLink="/children">Children</a>
         </li>
-        <li class="nav-item" *ngIf='currentUser' routerLinkActive="active">
+        <li class="nav-item" *ngIf='currentUser && isCurrentRoleAdmitted([1, 2, 3])' routerLinkActive="active">
           <a class="nav-link" routerLink="/shift-definition">Shift Definition</a>
         </li>
-        <li class="nav-item" *ngIf='currentUser' routerLinkActive="active">
+        <li class="nav-item" *ngIf='currentUser && isCurrentRoleAdmitted([1, 2])' routerLinkActive="active">
           <a class="nav-link" routerLink="/shift-consolidation">Shift Consolidation</a>
         </li>
         <li class="nav-item" *ngIf='currentUser' routerLinkActive="active">
