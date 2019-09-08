@@ -3,8 +3,7 @@ import {Observable, throwError} from 'rxjs';
 import {environment} from '../../environments/environment';
 import {catchError, retry} from 'rxjs/operators';
 import {HttpClient} from '@angular/common/http';
-import {AuthService} from "./auth.service";
-import {Ride} from "../Models/Ride";
+import {AuthService} from './auth.service';
 
 @Injectable({
   providedIn: 'root'

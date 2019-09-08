@@ -43,7 +43,10 @@ export class AuthGuard implements CanActivate {
       case 2:
         return true;
       case 3:
-        return !(url.search('/shift-consolidation') >= 0);
+        return !(
+          (url.search('/shift-consolidation') >= 0) ||
+          (url.search('/users') >= 0)
+        );
       default:
         return !(
           (url.search('/shift-consolidation')) >= 0 ||

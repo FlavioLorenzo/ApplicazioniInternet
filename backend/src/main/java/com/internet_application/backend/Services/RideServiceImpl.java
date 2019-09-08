@@ -65,14 +65,12 @@ public class RideServiceImpl implements RideService {
         // Based on the filter type, select only the rides that satisfy the filter
         List<RideEntity> rides;
 
-        System.out.println(openOrLocked);
-
         if (openOrLocked.equals("open"))
-            rides = rideRepository.getAllRidesBetweenDates(from, to, false);
+            rides = rideRepository.getAllAdministeredRidesBetweenDates(userId, from, to, false);
         else if (openOrLocked.equals("closed"))
-            rides = rideRepository.getAllRidesBetweenDates(from, to, true);
+            rides = rideRepository.getAllAdministeredRidesBetweenDates(userId, from, to, true);
         else
-            rides = rideRepository.getAllRidesBetweenDates(from, to);
+            rides = rideRepository.getAllAdministeredRidesBetweenDates(userId, from, to);
 
         if (rides==null) return null;
 
