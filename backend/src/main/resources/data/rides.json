@@ -55,7 +55,7 @@
     "direction": 0,
     "id_line": 2,
     "ride_booking_status": 1,
-    "locked":  1
+    "locked":  0
   },
   {
     "id_ride": 8,

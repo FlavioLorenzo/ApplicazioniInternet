@@ -13,4 +13,6 @@ public interface PrincipalService {
     boolean IsUserEscortInRide(Principal principal, Long rideId);
     boolean IsUserParent(Principal principal);
     boolean IsUserParentOfChild(Principal principal, Long childId);
+    boolean canUserEditRide(Principal principal, Long rideId);
+    boolean canUserEditReservation(Principal principal, Long resId);
 }

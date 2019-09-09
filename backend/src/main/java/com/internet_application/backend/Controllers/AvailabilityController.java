@@ -80,7 +80,7 @@ public class AvailabilityController {
     
     /* Create escort availability */
     @PostMapping("/availability")
-    @PreAuthorize("hasAnyRole('SYS_ADMIN', 'ESCORT')")
+    @PreAuthorize("hasAnyRole('SYS_ADMIN', 'ADMIN', 'ESCORT')")
     public AvailabilityEntity createAvailability(
             Principal principal,
             @RequestBody AvailabilityPostBody availabilityPostBody
@@ -128,7 +128,7 @@ public class AvailabilityController {
 
     /* Delete escort availability */
     @DeleteMapping("/availability/{availabilityId}")
-    @PreAuthorize("hasAnyRole('SYS_ADMIN', 'ESCORT')")
+    @PreAuthorize("hasAnyRole('SYS_ADMIN', 'ADMIN', 'ESCORT')")
     public void deleteAvailabilityWithId(
             Principal principal,
             @PathVariable(value="availabilityId") Long availabilityId
@@ -154,12 +154,15 @@ public class AvailabilityController {
             throws ResponseStatusException {
         /* Security check */
         AvailabilityEntity availability = availabilityService.getAvailabilityWithId(availabilityId);
-        if (principalService.IsUserEscort(principal) &&
-                !principalService.doesUserMatchPrincipal(principal, availability.getUser().getId()))
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
-        if (principalService.IsUserAdmin(principal) &&
-                !principalService.IsUserAdminOfLine(principal, availability.getRide().getLine().getId()))
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+
+        if(!principalService.doesUserMatchPrincipal(principal, availability.getUser().getId())) {
+            if (principalService.IsUserEscort(principal))
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+            if (principalService.IsUserAdmin(principal) &&
+                    !principalService.IsUserAdminOfLine(principal, availability.getRide().getLine().getId()))
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
+
         availabilityService.setStatusOfAvailability(availabilityId, status);
     }
 }

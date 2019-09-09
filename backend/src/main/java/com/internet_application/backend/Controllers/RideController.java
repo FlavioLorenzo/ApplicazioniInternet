@@ -73,41 +73,42 @@ public class RideController {
     }
 
     @PutMapping("/rides/{rideId}/close/{stopId}")
-    @PreAuthorize("hasAnyRole('SYS_ADMIN', 'ESCORT')")
+    @PreAuthorize("hasAnyRole('SYS_ADMIN', 'ADMIN', 'ESCORT')")
     public RideEntity putCloseStop(
             Principal principal,
             @PathVariable(value="rideId") Long rideId,
             @PathVariable(value="stopId") Long stopId)
             throws ResponseStatusException {
         /* Security check -> assigned escort */
-        if (principalService.IsUserEscort(principal) &&
-            !principalService.IsUserEscortInRide(principal, rideId))
+
+        if(!principalService.canUserEditRide(principal, rideId))
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+
         return rideService.closeStop(rideId, stopId);
     }
 
     @PutMapping("/rides/{rideId}/open")
-    @PreAuthorize("hasAnyRole('SYS_ADMIN', 'ESCORT')")
+    @PreAuthorize("hasAnyRole('SYS_ADMIN', 'ADMIN', 'ESCORT')")
     public RideEntity putOpenRide(
             Principal principal,
             @PathVariable(value="rideId") Long rideId)
             throws ResponseStatusException {
         /* Security check -> assigned escort */
-        if (principalService.IsUserEscort(principal) &&
-                !principalService.IsUserEscortInRide(principal, rideId))
+        System.out.println("Reached Here!");
+        if(!principalService.canUserEditRide(principal, rideId))
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        System.out.println("Reached after");
         return rideService.openRide(rideId);
     }
 
     @PutMapping("/rides/{rideId}/close")
-    @PreAuthorize("hasAnyRole('SYS_ADMIN', 'ESCORT')")
+    @PreAuthorize("hasAnyRole('SYS_ADMIN', 'ADMIN', 'ESCORT')")
     public RideEntity putCloseRide(
             Principal principal,
             @PathVariable(value="rideId") Long rideId)
             throws ResponseStatusException {
         /* Security check -> assigned escort */
-        if (principalService.IsUserEscort(principal) &&
-                !principalService.IsUserEscortInRide(principal, rideId))
+        if(!principalService.canUserEditRide(principal, rideId))
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         return rideService.closeRide(rideId);
     }

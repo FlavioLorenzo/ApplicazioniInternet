@@ -24,6 +24,10 @@ public class PrincipalServiceImpl implements PrincipalService {
     AvailabilityRepository availabilityRepository;
     @Autowired
     ChildRepository childRepository;
+    @Autowired
+    RideService rideService;
+    @Autowired
+    ReservationService reservationService;
 
     /*
     * Get user from principal
@@ -95,7 +99,7 @@ public class PrincipalServiceImpl implements PrincipalService {
         UserEntity user = getUserFromPrincipal(principal);
         RideEntity rideEntity = rideRepository.findById(rideId).orElse(null);
         AvailabilityEntity availabilityEntity = availabilityRepository
-                .findAvailabilityByRideAndUser(user.getId(), rideId);
+                .findAvailabilityByRideAndUser(rideId, user.getId());
         /* If ride is null throw 404 */
         if (rideEntity == null)
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
@@ -103,12 +107,7 @@ public class PrincipalServiceImpl implements PrincipalService {
         * If availability is null it's not an escort
         * If the availability is not in state viewed it's not an escort
          * */
-        if (availabilityEntity != null &&
-            user.getRole().getId().equals(3L) &&
-            availabilityEntity.getShiftStatus().equals(ShiftStatus.VIEWED)
-        )
-            return true;
-        return false;
+        return (availabilityEntity != null && availabilityEntity.getShiftStatus().equals(ShiftStatus.VIEWED));
     }
 
     @Override
@@ -129,9 +128,56 @@ public class PrincipalServiceImpl implements PrincipalService {
         /* If child does not exist throw 404 */
         if (child == null)
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        if (user.getRole().getId().equals(4L) &&
+        /*if (user.getRole().getId().equals(4L) &&
             child.getParent().equals(user))
-            return true;
-        return false;
+            return true;*/
+        return child.getParent().equals(user);
+    }
+
+    @Override
+    public boolean canUserEditRide(Principal principal, Long rideId) {
+        System.out.println("Entered");
+        if(!IsUserEscortInRide(principal, rideId)) {
+            if (IsUserEscort(principal))
+                return false;
+            System.out.println("Not escort");
+
+            Long lineId = rideService.getRide(rideId).getLine().getId();
+            if(IsUserAdmin(principal) &&
+                    !IsUserAdminOfLine(principal,lineId))
+                return false;
+            System.out.println("Admin of line or SysAdmin");
+
+        }
+
+        return true;
+    }
+
+    @Override
+    public boolean canUserEditReservation(Principal principal, Long resId) {
+        ReservationEntity reservation = reservationService.getReservationById(resId);
+
+        if(reservation == null)
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+
+        /* If the user is the parent of the child, there is no problem */
+        if(!IsUserParentOfChild(principal, reservation.getChild().getId())) {
+            /* Parent of child */
+            if (IsUserParent(principal))
+                return false;
+
+            /* Escort in ride */
+            if (!IsUserEscortInRide(principal, reservation.getRide().getId())) {
+                if(IsUserEscort(principal))
+                    return false;
+
+                /* Admin of line */
+                if (IsUserAdmin(principal) &&
+                        !IsUserAdminOfLine(principal, reservation.getRide().getLine().getId()))
+                    return false;
+            }
+        }
+
+        return true;
     }
 }

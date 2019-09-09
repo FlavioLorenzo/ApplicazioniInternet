@@ -44,18 +44,7 @@ public class ReservationController {
                                             @RequestBody ReservationPostBody rpb)
             throws ResponseStatusException {
         /* Security check */
-        ReservationEntity reservation = reservationService.getReservationById(reservationId);
-        /* Parent of child */
-        if (principalService.IsUserParent(principal) &&
-            !principalService.IsUserParentOfChild(principal, reservation.getChild().getId()))
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
-        /* Admin of line */
-        if (principalService.IsUserAdmin(principal) &&
-            !principalService.IsUserAdminOfLine(principal, reservation.getRide().getLine().getId()))
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
-        /* Escort in ride */
-        if (principalService.IsUserEscort(principal) &&
-            !principalService.IsUserEscortInRide(principal, reservation.getRide().getId()))
+        if(!principalService.canUserEditReservation(principal, reservationId))
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
 
         return reservationService.updateReservation(lineId, date, reservationId, rpb);
@@ -84,18 +73,7 @@ public class ReservationController {
                                          @PathVariable(value="reservation_id") Long res_id)
             throws ResponseStatusException {
         /* Security check */
-        ReservationEntity reservation = reservationService.getReservationById(res_id);
-        /* Parent of child */
-        if (principalService.IsUserParent(principal) &&
-            !principalService.IsUserParentOfChild(principal, reservation.getChild().getId()))
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
-        /* Admin of line */
-        if (principalService.IsUserAdmin(principal) &&
-            !principalService.IsUserAdminOfLine(principal, reservation.getRide().getLine().getId()))
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
-        /* Escort in ride */
-        if (principalService.IsUserEscort(principal) &&
-                !principalService.IsUserEscortInRide(principal, reservation.getRide().getId()))
+        if(!principalService.canUserEditReservation(principal, res_id))
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
 
         reservationService.deleteReservation(lineId, date, res_id);
