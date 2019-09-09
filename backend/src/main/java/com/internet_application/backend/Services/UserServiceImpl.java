@@ -296,4 +296,13 @@ public class UserServiceImpl implements UserService {
         }
         return user;
     }
+
+    public UserEntity getUserById(Long userId)
+            throws ResponseStatusException {
+        UserEntity user = userRepository.getOne(userId);
+        if (user == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+        return user;
+    }
 }

@@ -64,11 +64,15 @@ public class RideController {
     }
 
     @GetMapping("/rides/manage/{userId}/{fromDate}/{toDate}/{openOrLocked}")
-    public JsonNode getAdministeredLinesRidesFromDateToDate(@PathVariable(value="userId") Long userId,
+    @PreAuthorize("hasAnyRole('SYS_ADMIN', 'ADMIN')")
+    public JsonNode getAdministeredLinesRidesFromDateToDate(Principal principal,
+                                                            @PathVariable(value="userId") Long userId,
                                                             @PathVariable(value="fromDate") String fromDate,
                                                             @PathVariable(value="toDate") String toDate,
                                                             @PathVariable(value="openOrLocked") String openOrLocked)
             throws ResponseStatusException {
+        if(!principalService.doesUserMatchPrincipal(principal, userId))
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "UserId must match the Id of the logged in user");
         return rideService.getAdministeredLinesRidesFromDateToDate(userId, fromDate, toDate, openOrLocked);
     }
 
@@ -94,10 +98,8 @@ public class RideController {
             @PathVariable(value="rideId") Long rideId)
             throws ResponseStatusException {
         /* Security check -> assigned escort */
-        System.out.println("Reached Here!");
         if(!principalService.canUserEditRide(principal, rideId))
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
-        System.out.println("Reached after");
         return rideService.openRide(rideId);
     }
 

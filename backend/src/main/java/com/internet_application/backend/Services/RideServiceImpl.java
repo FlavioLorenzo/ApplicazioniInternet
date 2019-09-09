@@ -71,16 +71,25 @@ public class RideServiceImpl implements RideService {
         Date from = DateUtils.dateParser(fromDate);
         Date to = DateUtils.dateParser(toDate);
 
-        // TODO: Still need to add support for administered lines
         // Based on the filter type, select only the rides that satisfy the filter
         List<RideEntity> rides;
 
-        if (openOrLocked.equals("open"))
-            rides = rideRepository.getAllAdministeredRidesBetweenDates(userId, from, to, false);
-        else if (openOrLocked.equals("closed"))
-            rides = rideRepository.getAllAdministeredRidesBetweenDates(userId, from, to, true);
-        else
-            rides = rideRepository.getAllAdministeredRidesBetweenDates(userId, from, to);
+        if(userService.getUserById(userId).getRole().getName().equals("ROLE_ADMIN")) {
+            if (openOrLocked.equals("open"))
+                rides = rideRepository.getAllAdministeredRidesBetweenDates(userId, from, to, false);
+            else if (openOrLocked.equals("closed"))
+                rides = rideRepository.getAllAdministeredRidesBetweenDates(userId, from, to, true);
+            else
+                rides = rideRepository.getAllAdministeredRidesBetweenDates(userId, from, to);
+        } else {
+            if (openOrLocked.equals("open"))
+                rides = rideRepository.getAllRidesBetweenDates(from, to, false);
+            else if (openOrLocked.equals("closed"))
+                rides = rideRepository.getAllRidesBetweenDates(from, to, true);
+            else
+                rides = rideRepository.getAllRidesBetweenDates(from, to);
+        }
+
 
         if (rides==null) return null;
 
