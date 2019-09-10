@@ -21,7 +21,7 @@ export class UsersService {
     //this.updateUserList();
   }
 
-  public updateUserList(){
+  public updateUserList() {
     this.getAllusers().subscribe(users => {
       this.fetchedUsers = users;
       this.userListSubject.next(users);
