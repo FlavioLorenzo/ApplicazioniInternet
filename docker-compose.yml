@@ -20,7 +20,7 @@ services:
     volumes:
       - "./backend/target/:/var/www/"
   database:
-    image: postgres
+    image: mdillon/postgis
     environment:
       POSTGRES_PASSWORD: "aipolito"
     expose:
