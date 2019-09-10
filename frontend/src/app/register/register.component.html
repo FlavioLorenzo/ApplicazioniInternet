@@ -6,10 +6,10 @@
       <mat-spinner></mat-spinner>
     </div>
     <div *ngIf="!isLoading && hasError">
-      <p>Nessuna registrazione in corso trovata con il seguente link. Contatta l'amministratore per ulteriori informazioni</p>
+      <p>No registration has been found for this link. Please contact the administrator for further details.</p>
     </div>
     <div *ngIf="registrationCompleted">
-        <p>Registrazione completata con successo. Ora effettua il login</p>
+        <p>Registration was successful. You can now log in</p>
        <!-- <a [routerLink]="[ '/login']">Vai al login</a> -->
       </div>
     <div *ngIf="!isLoading && !hasError">
