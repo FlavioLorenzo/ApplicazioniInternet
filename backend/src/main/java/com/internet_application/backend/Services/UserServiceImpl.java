@@ -78,7 +78,7 @@ public class UserServiceImpl implements UserService {
             mailMessage.setSubject("Complete Registration!");
             mailMessage.setFrom("prova123@test.it");
             mailMessage.setText("To confirm your account, please click here : "
-                    + "http://localhost:4200/confirm-account/" + confirmationToken.getConfirmationToken());
+                    + "http://localhost:4200/register/" + confirmationToken.getConfirmationToken());
 
             emailSenderService.sendEmail(mailMessage);
 
