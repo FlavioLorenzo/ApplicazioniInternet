@@ -85,7 +85,7 @@ export class RegisterComponent implements OnInit {
 
 
     if (val.phone && val.password && val.passwordConfirm) {
-
+      // tslint:disable-next-line:max-line-length
       this.registrationService.completeRegistration(this.pendingActivationCode, new CompleteUserPostBody(val.password, val.passwordConfirm, val.phone))
         .pipe(first())
         .subscribe(

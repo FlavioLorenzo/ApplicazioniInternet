@@ -37,6 +37,15 @@ const appRoutes: Routes = [
     component: HomeComponent,
     canActivate: [AuthGuard]
   },*/
+
+  {
+    path: 'register/:code',
+    component: RegisterComponent
+  },
+  {
+    path: 'login',
+    component: LoginComponent
+  },
   {
     path: 'notifications',
     component: NotificationsComponent,
@@ -87,7 +96,7 @@ const appRoutes: Routes = [
       {
         path: '',
         component: AvailableShiftsDisplayComponent,
-        resolve: {rides: ShiftConsolidationResolverService } 
+        resolve: {rides: ShiftConsolidationResolverService }
       },
       {
         path: ':rideId',
@@ -95,14 +104,6 @@ const appRoutes: Routes = [
       }
     ],
     canActivate: [AuthGuard]
-  },
-  {
-    path: 'login',
-    component: LoginComponent
-  },
-  {
-    path: 'register/:code',
-    component: RegisterComponent
   },
   {
     path: 'logout',
