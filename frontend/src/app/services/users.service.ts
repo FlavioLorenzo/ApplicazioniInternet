@@ -18,7 +18,7 @@ export class UsersService {
   constructor(private http: HttpClient) { 
     this.userListSubject = new BehaviorSubject<Array<User>>([]);
     this.userList = this.userListSubject.asObservable();
-    this.updateUserList();
+    //this.updateUserList();
   }
 
   public updateUserList(){

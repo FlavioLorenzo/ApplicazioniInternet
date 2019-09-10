@@ -39,10 +39,10 @@ export class UserListComponent implements OnInit {
       setTimeout(() => {
         this.userList.sort = this.sort;
         this.userList.paginator = this.paginator;
-
       });
-      
     });
+
+    this.usersService.updateUserList();
 
   }
 
