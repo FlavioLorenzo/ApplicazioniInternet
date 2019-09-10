@@ -39,6 +39,7 @@ public class PersistenceJPAConfig {
     public DataSource dataSource(){
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("org.postgresql.Driver");
+        //dataSource.setUrl("jdbc:postgresql://localhost:5432/aipolito");
         //mvn -Dmaven.test.skip=true packagedataSource.setUrl("jdbc:postgresql://localhost:5432/postgres");
         dataSource.setUrl("jdbc:postgresql://database:5432/postgres");
         dataSource.setUsername( "postgres" );
@@ -61,7 +62,8 @@ public class PersistenceJPAConfig {
 
     Properties additionalProperties() {
         Properties properties = new Properties();
-        properties.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQL95Dialect");
+        // properties.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQL95Dialect");
+        properties.setProperty("hibernate.dialect", "org.hibernate.spatial.dialect.postgis.PostgisDialect");
         properties.setProperty("hibernate.hbm2ddl.auto", "update"); // create / create-drop / update
         properties.setProperty("hibernate.show_sql", "true");
         // Set the initialization of the database to happen at every startup

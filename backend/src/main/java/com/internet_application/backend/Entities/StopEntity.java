@@ -3,6 +3,7 @@ package com.internet_application.backend.Entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.vividsolutions.jts.geom.Point;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -28,7 +29,8 @@ public class StopEntity {
     @Column
     @Getter
     @Setter
-    private String gps;
+    @JsonIgnore
+    private Point gps;
 
     @OneToMany(mappedBy = "stop")
     @JsonManagedReference(value = "stop")

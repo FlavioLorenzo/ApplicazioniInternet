@@ -79,6 +79,9 @@ public class BackendApplication {
 
     private void loadStops() {
         ObjectMapper mapper = new ObjectMapper();
+        SimpleModule module = new SimpleModule();
+        module.addDeserializer(StopEntity.class, new StopDeserializer());
+        mapper.registerModule(module);
         TypeReference<List<StopEntity>> stopType = new TypeReference<List<StopEntity>>() {};
         InputStream is = TypeReference.class.getResourceAsStream("/data/stops.json");
         try {
