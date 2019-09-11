@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
-import { map } from 'rxjs/operators';
-import {BehaviorSubject, Observable} from 'rxjs';
+import {catchError, map, retry} from 'rxjs/operators';
+import {BehaviorSubject, Observable, throwError} from 'rxjs';
 import {CurrentUser} from '../Models/currentUser';
 import {Router} from '@angular/router';
 import {environment} from '../../environments/environment';
+import {User} from '../Models/User';
 
 @Injectable()
 export class AuthService {
@@ -60,6 +61,43 @@ export class AuthService {
     }
   }
 
+  /* Should pop up a message saying restore link has been sent */
+  public recoverPassword(email: string) {
+    return this.http.post<any>(environment.apiUrl + '/recover',
+      {email})
+      .pipe(map(res =>  {
+        return res;
+      }));
+  }
 
+  public resetPassword(
+    recoverToken: string,
+    password: string,
+    confirmPassword: string
+  ) {
+    return this.http.post<string>(
+      environment.apiUrl + '/recover/' + recoverToken,
+      {password, confirmPassword})
+      .pipe(retry(1),
+        catchError(err => {
+          console.log(err.message);
+          return throwError('Error thrown from catchError');
+        }),
+        map(res => {
+          // TODO: action to perform after registration
+        }));
+  }
+
+  public getResetTokenInfo(token: string) {
+    return this.http.get<any>(environment.apiUrl + '/recover/' + token)
+      .pipe(
+        retry(1),
+        catchError(err => {
+          console.error(err.message);
+          console.log('Error is handled');
+          return throwError('Error thrown from catchError');
+        })
+      );
+  }
 
 }

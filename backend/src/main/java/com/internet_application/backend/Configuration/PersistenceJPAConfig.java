@@ -39,9 +39,9 @@ public class PersistenceJPAConfig {
     public DataSource dataSource(){
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("org.postgresql.Driver");
-        //dataSource.setUrl("jdbc:postgresql://localhost:5432/aipolito");
+        dataSource.setUrl("jdbc:postgresql://localhost:5432/aipolito");
         // mvn -Dmaven.test.skip=true packagedataSource.setUrl("jdbc:postgresql://localhost:5432/postgres");
-        dataSource.setUrl("jdbc:postgresql://database:5432/postgres");
+        //dataSource.setUrl("jdbc:postgresql://database:5432/postgres");
         dataSource.setUsername( "postgres" );
         dataSource.setPassword( "aipolito" );
         return dataSource;

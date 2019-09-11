@@ -15,6 +15,7 @@ import java.util.Map;
 @CrossOrigin()
 @Controller
 public class UserPageController {
+    /*
     @GetMapping("/recover/{randomUUID}")
     public String recoverAccountPage(@PathVariable(value="randomUUID") String token, Model m) {
         m.addAttribute("content", "recover");
@@ -23,5 +24,5 @@ public class UserPageController {
         Map<String, String> messages = new HashMap<>();
         m.addAttribute("messages", messages);
         return "index";
-    }
+    }*/
 }

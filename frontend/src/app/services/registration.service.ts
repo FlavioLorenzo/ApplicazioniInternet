@@ -31,7 +31,7 @@ export class RegistrationService {
         catchError(err => {
           console.error(err.message);
           console.log('Error is handled');
-          return throwError('Error th rown from catchError');
+          return throwError('Error thrown from catchError');
         }),
         map(res => {
           // TODO: action to perform after registration

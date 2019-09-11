@@ -113,9 +113,14 @@ public class UserController {
 
     @PostMapping(value="/recover/{randomUUID}")
     @ResponseBody
-    public ResponseEntity restorePassword(@PathVariable(value="randomUUID") String token, @RequestBody @Valid RecoverNewPwdPostBody rrpb) {
+    public void restorePassword(@PathVariable(value="randomUUID") String token, @RequestBody @Valid RecoverNewPwdPostBody rrpb) {
         userService.restorePassword(rrpb.getPassword(), rrpb.getConfirmPassword(), token);
-        return ResponseEntity.status(HttpStatus.OK).body("Password correctly restored");
+    }
+
+    @GetMapping("/recover/{randomUUID}")
+    @ResponseBody
+    public UserEntity getUserWithRecoverRandomUUID(@PathVariable(value="randomUUID") String token) {
+        return userService.getAccountRecoveryInfo(token);
     }
 
     @PostMapping("/check-email")

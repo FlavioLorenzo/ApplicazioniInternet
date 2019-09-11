@@ -13,7 +13,7 @@ public class RecoverNewPwdPostBody {
     @Size(min=8, max=32)
     private String password;
 
-    @JsonProperty("confirm_password")
+    @JsonProperty("confirmPassword")
     @NotBlank(message = "Password is mandatory")
     @Size(min=8, max=32)
     private String confirmPassword;

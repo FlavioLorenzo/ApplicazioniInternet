@@ -94,6 +94,7 @@ import {NotificationsService} from './services/notifications.service';
 import { SingleNotificationComponent } from './notifications/single-notification/single-notification.component';
 import {WebSocketNotificationService} from './services/web-socket-notification.service';
 import { ManagedLineResolverService as ManagedLineResolverService } from './resolvers/managed-line-resolver.service';
+import { PasswordResetComponent } from './password-reset/password-reset.component';
 
 @NgModule({
   declarations: [
@@ -138,7 +139,8 @@ import { ManagedLineResolverService as ManagedLineResolverService } from './reso
     FilterAvailabilitiesPopupComponent,
     SelectChildComponent,
     NotificationsComponent,
-    SingleNotificationComponent
+    SingleNotificationComponent,
+    PasswordResetComponent
   ],
   entryComponents: [
     DialogBoxPickNotBookedUserComponent,

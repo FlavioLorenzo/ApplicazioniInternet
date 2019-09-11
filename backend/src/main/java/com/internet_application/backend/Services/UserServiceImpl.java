@@ -111,6 +111,14 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
+    @Override
+    public UserEntity getAccountRecoveryInfo(String token) {
+        RecoverToken recoverToken= recoverTokenRepository.findByRecoverToken(token);
+        if (recoverToken == null || !recoverToken.getIsValid())
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        return recoverToken.getUser();
+    }
+
     // TODO we may want to change the response if the token is invalid or the user was already confirmed
     @Override
     public void completeAccount(String token, String password, String confirmPassword, String phone) {
@@ -157,9 +165,8 @@ public class UserServiceImpl implements UserService {
     /*
      * For now we suppose that the recoverToken has the same expiry duration of the confirmationToken
      */
-    public void restorePassword(String password, String confirmPassword, String randomUUID) {
-        RecoverToken recoverToken = recoverTokenRepository.findByRecoverToken(randomUUID);
-
+    public void restorePassword(String password, String confirmPassword, String token) {
+        RecoverToken recoverToken = recoverTokenRepository.findByRecoverToken(token);
         if (recoverToken == null ||
                 !isStillValid(recoverToken.getCreationDate()) ||
                 !recoverToken.getIsValid() ||

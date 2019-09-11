@@ -14,6 +14,7 @@ public interface UserService {
     String login(String email, String password);
     UserEntity register(String email, String firstName, String lastName, Long roleId);
     UserEntity getAccountConfirmationInfo(String token);
+    UserEntity getAccountRecoveryInfo(String token);
     void completeAccount(String token, String password, String confirmPassword, String phone);
     void recoverAccount(String email);
     void restorePassword(String password, String confirmPassword, String randomUUID);
