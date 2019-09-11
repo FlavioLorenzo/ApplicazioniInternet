@@ -83,7 +83,8 @@ public class ChildController {
     )
             throws  ResponseStatusException {
         /* Sysadmin allowed only */
-        if (!principalService.IsUserSystemAdmin(principal))
+        if (!principalService.IsUserSystemAdmin(principal) &&
+            !principalService.IsUserParentOfChild(principal,childId))
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
 
         childService.deleteChildWithId(childId);

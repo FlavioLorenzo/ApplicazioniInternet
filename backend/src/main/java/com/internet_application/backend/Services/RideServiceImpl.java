@@ -216,6 +216,9 @@ public class RideServiceImpl implements RideService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Ride can't be locked unless its coverage is " +
                     "complete");
 
+        if (!ride.getRideBookingStatus().equals(RideBookingStatus.NOT_STARTED))
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Cannot modified started ride");
+
         ride.setLocked(locked);
         RideEntity toReturn = rideRepository.save(ride);
 
