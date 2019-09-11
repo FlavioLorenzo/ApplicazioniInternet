@@ -3,7 +3,7 @@ import {DateUtilsService} from '../../services/date-utils.service';
 import {AuthService} from '../../services/auth.service';
 import {RideService} from '../../services/ride.service';
 import {RidesSummaryByDateContainer, RideSummary} from '../rides-summary-by-date-container';
-import {MatDialog} from '@angular/material';
+import {MatDialog, MatSnackBar} from '@angular/material';
 import {FilterAvailabilitiesPopupComponent} from './filter-availabilities-popup/filter-availabilities-popup.component';
 import {ActivatedRoute} from '@angular/router';
 
@@ -20,7 +20,7 @@ export class AvailableShiftsDisplayComponent implements OnInit {
   ridesByDay: Array<RidesSummaryByDateContainer> = [];
 
   constructor(private route: ActivatedRoute, private dateService: DateUtilsService, private auth: AuthService,
-              private rideService: RideService, private dialog: MatDialog) { }
+              private rideService: RideService, private dialog: MatDialog, private snackBar: MatSnackBar) { }
 
   ngOnInit() {
     this.userId = this.auth.currentUserValue.id;
@@ -47,7 +47,10 @@ export class AvailableShiftsDisplayComponent implements OnInit {
   onShiftChange(ride: RideSummary) {
     this.rideService.changeLockedStatus(ride.id, !ride.locked).subscribe(
       () => { this.getRidesAndAvailabilities(); },
-      (error) => {console.log(error); },
+      (error) => {
+        console.log(error);
+        this.snackBar.open('Cannot change the status of the ride.');
+      },
       () => console.log('Done building data structure'));
   }
 

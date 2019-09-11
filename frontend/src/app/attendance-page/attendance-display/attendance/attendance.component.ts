@@ -3,6 +3,7 @@ import {ReservationPostBody, ReservationsService} from '../../../services/reserv
 import {Ride} from '../../../Models/Ride';
 import {BusStop} from '../../../Models/BusLineStop';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material';
 import {DialogBoxPickNotBookedUserComponent} from './dialog-box-pick-not-booked-user.component';
 import {Child} from '../../../Models/Child';
 import {ChildrenService} from '../../../services/children.service';
@@ -29,7 +30,8 @@ export class AttendanceComponent implements OnInit {
   freeChildren: Array<Child> = [];
 
   constructor(private reservationsService: ReservationsService, private childrenService: ChildrenService,
-              public dialog: MatDialog, private dateService: DateUtilsService, private rideService: RideService) {
+              public dialog: MatDialog, private dateService: DateUtilsService, private rideService: RideService,
+              private snackBar: MatSnackBar) {
   }
 
   ngOnInit() {
@@ -60,6 +62,12 @@ export class AttendanceComponent implements OnInit {
       },
       (error) => {
         console.log(error);
+
+        if (this.ride.rideBookingStatus === 'Not started yet') {
+          this.snackBar.open('Cannot select the child. The ride in not started yet.');
+        } else {
+          this.snackBar.open('Cannot select the child. Maybe his stop is already closed?');
+        }
       });
   }
 
