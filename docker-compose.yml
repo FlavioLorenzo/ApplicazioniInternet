@@ -26,11 +26,11 @@ services:
     expose:
       - "5432"
   mailserver:
-    build: mail-server/
+    image: digiplant/fake-smtp
     ports:
-      - "1234:1234"
-    expose:
-      - "1234"
+      - "1025:25"
+    volumes:
+      - ./email:/var/mail
     
 
     
