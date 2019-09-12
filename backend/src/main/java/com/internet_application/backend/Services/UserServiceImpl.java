@@ -23,6 +23,8 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private EmailSenderService emailSenderService;
     @Autowired
+    private BusLineService busLineService;
+    @Autowired
     private ConfirmationTokenRepository confirmationTokenRepository;
     @Autowired
     private RecoverTokenRepository recoverTokenRepository;
@@ -294,7 +296,14 @@ public class UserServiceImpl implements UserService {
         if (user == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
-        return new ArrayList<>(user.getAdministeredBuslines());
+
+        if(user.getRole().getName().equals("ROLE_SYS_ADMIN")){
+            //Sysadmin manage all lines
+            return new ArrayList<>(busLineService.getAllBusLines());
+        }else{
+            return new ArrayList<>(user.getAdministeredBuslines());
+        }
+
     }
 
     public UserEntity getUserFromEmail(String email)

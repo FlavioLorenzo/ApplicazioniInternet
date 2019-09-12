@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Line } from '../Models/Line';
 import { FormControl } from '@angular/forms';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-line-selector',
@@ -37,6 +38,8 @@ export class LineSelectorComponent implements OnInit {
     this.processArguments();
   }
 
+  @Input() disableAll = false
+
   /* -------------------------- */
 
   allLines: Line[];
@@ -45,13 +48,17 @@ export class LineSelectorComponent implements OnInit {
 
   linesControl = new FormControl('');
 
-  constructor() { }
+  constructor(private authService: AuthService) { }
 
   ngOnInit() {
     this.processArguments();
   }
 
   processArguments(){
+
+    console.log(this.authService.currentUserValue.role.id_role);
+    console.log(this.authService.currentUserValue.role.id_role === 1);
+
 
       this.allLines = this.getUnique(this._checkableLines.concat(this._alreadySelectedLines), 'id_line');
 
@@ -69,7 +76,7 @@ export class LineSelectorComponent implements OnInit {
   isLineDisabled(line: Line){
     const alreadyPresent = this._alreadySelectedLines.map(it => it.id_line).indexOf(line.id_line) > -1;
     const amIAdmin = this._checkableLines.map(it => it.id_line).indexOf(line.id_line) > -1;
-    return alreadyPresent && !amIAdmin;;
+    return ((alreadyPresent && !amIAdmin && this.authService.currentUserValue.role.id_role !== '1') || this.disableAll);
   }
 
   setPreselectedLines(lines: Array<Line>){
