@@ -42,17 +42,6 @@ public interface RideRepository extends JpaRepository<RideEntity, Long> {
     List<RideEntity> getRidesWithLineIdAndDateAndDirection(Long lineId, Date d, Boolean dir);
 
     @Query("SELECT r FROM RideEntity r " +
-            "WHERE r.date BETWEEN ?1 AND ?2 " +
-            "AND r.locked = ?3 " +
-            "ORDER BY r.date, r.line.id, r.direction ASC ")
-    List<RideEntity> getAllRidesBetweenDates(Date fromDate, Date toDate, Boolean locked);
-
-    @Query("SELECT r FROM RideEntity r " +
-            "WHERE r.date BETWEEN ?1 AND ?2 " +
-            "ORDER BY r.date, r.line.id, r.direction ASC ")
-    List<RideEntity> getAllRidesBetweenDates(Date fromDate, Date toDate);
-
-    @Query("SELECT r FROM RideEntity r " +
             "WHERE r.id IN (" +
                 "SELECT a.ride.id FROM AvailabilityEntity a " +
                 "WHERE a.user.id = ?1 " +
@@ -79,6 +68,17 @@ public interface RideRepository extends JpaRepository<RideEntity, Long> {
             "AND r.locked = ?4 " +
             "ORDER BY r.date, r.line.id, r.direction ASC ")
     List<RideEntity> getAllAdministeredRidesBetweenDates(Long userId, Date from, Date to, boolean locked);
+
+    @Query("SELECT r FROM RideEntity r " +
+            "WHERE r.date BETWEEN ?1 AND ?2 " +
+            "AND r.locked = ?3 " +
+            "ORDER BY r.date, r.line.id, r.direction ASC ")
+    List<RideEntity> getAllRidesBetweenDates(Date fromDate, Date toDate, boolean locked);
+
+    @Query("SELECT r FROM RideEntity r " +
+            "WHERE r.date BETWEEN ?1 AND ?2 " +
+            "ORDER BY r.date, r.line.id, r.direction ASC ")
+    List<RideEntity> getAllRidesBetweenDates(Date fromDate, Date toDate);
 
 }
 

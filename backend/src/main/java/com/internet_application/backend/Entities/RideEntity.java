@@ -19,6 +19,7 @@ import java.util.Set;
 @JsonSerialize(using = RideSerializer.class)
 public class RideEntity {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonProperty("id_ride")
     @Column(name="id_ride")
     @Getter

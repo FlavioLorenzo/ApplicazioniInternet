@@ -90,7 +90,6 @@ public class RideServiceImpl implements RideService {
                 rides = rideRepository.getAllRidesBetweenDates(from, to);
         }
 
-
         if (rides==null) return null;
 
         // I start to create a JSON node to hold the answer
@@ -137,8 +136,6 @@ public class RideServiceImpl implements RideService {
             calendar.add(Calendar.DATE, 1);
             curDate = calendar.getTime();
         }
-
-
 
         return rootNode;
     }

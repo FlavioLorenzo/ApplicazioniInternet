@@ -1,12 +1,18 @@
 package com.internet_application.backend.Utils;
 
+import de.jollyday.Holiday;
+import de.jollyday.HolidayCalendar;
+import de.jollyday.HolidayManager;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Set;
 
 public class DateUtils {
     /**
@@ -290,5 +296,43 @@ public class DateUtils {
     public static String timeToString(Date date) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
         return dateFormat.format(date);
+    }
+
+    public static Date convertToDateViaSqlDate(LocalDate dateToConvert) {
+        return java.sql.Date.valueOf(dateToConvert);
+    }
+
+    public static LocalDate convertToLocalDateViaInstant(Date dateToConvert) {
+        return dateToConvert.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
+    }
+
+    public static boolean isHoliday(Date date) {
+        HolidayManager m = HolidayManager.getInstance(HolidayCalendar.ITALY);
+
+        Set<Holiday> holidays = m.getHolidays(2019, "it");
+
+        for(Holiday holiday: holidays) {
+            if( holiday.getDate().equals( convertToLocalDateViaInstant(date) ) ) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public static boolean isHoliday(LocalDate date) {
+        HolidayManager m = HolidayManager.getInstance(HolidayCalendar.ITALY);
+
+        Set<Holiday> holidays = m.getHolidays(2019, "it");
+
+        for(Holiday holiday: holidays) {
+            if( holiday.getDate().equals( date ) ) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

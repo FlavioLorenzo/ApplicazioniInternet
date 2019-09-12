@@ -6,9 +6,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.internet_application.backend.Deserializers.*;
 import com.internet_application.backend.Entities.*;
+import com.internet_application.backend.Enums.RideBookingStatus;
 import com.internet_application.backend.Repositories.*;
+import com.internet_application.backend.Services.BusLineService;
 import com.internet_application.backend.Services.ChildService;
 import com.internet_application.backend.Services.UserService;
+import com.internet_application.backend.Utils.DateUtils;
+import de.jollyday.Holiday;
+import de.jollyday.HolidayCalendar;
+import de.jollyday.HolidayManager;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -17,7 +23,11 @@ import org.springframework.context.annotation.Bean;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @SpringBootApplication
 @SuppressWarnings("Duplicates")
@@ -155,21 +165,46 @@ public class BackendApplication {
     }
 
     private void loadRides() {
-        ObjectMapper mapper = new ObjectMapper();
-        SimpleModule module = new SimpleModule();
-        module.addDeserializer(RideEntity.class, new RideDeserializer());
-        mapper.registerModule(module);
-        TypeReference<List<RideEntity>> rideType = new TypeReference<List<RideEntity>>() {};
-        InputStream is = TypeReference.class.getResourceAsStream("/data/rides.json");
-        try {
-            System.out.println("Rides list saved successfully");
+        // Retrieve all the lines available
+        List<BusLineEntity> lines =  busLineRepository.findAll();
 
-            List<RideEntity> stateList = mapper.readValue(is, rideType);
-            rideRepository.saveAll(stateList);
-            System.out.println("Rides list saved successfully");
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
+        // Select all the dates that are not holidays
+        List<Date> dateList = new ArrayList<Date>();
+        for (LocalDate date = LocalDate.now(); date.isBefore(LocalDate.now().plusMonths(2)); date = date.plusDays(1)) {
+            if(!DateUtils.isHoliday(date)) {
+                dateList.add(DateUtils.convertToDateViaSqlDate(date));
+            }
         }
+
+        // For each line and each day which is not a holiday, create all the rides for the next two months
+        List<RideEntity> rideList = new ArrayList<RideEntity>();
+        for(BusLineEntity line: lines) {
+            for(Date date: dateList) {
+                RideEntity toSchoolRide = new RideEntity();
+                toSchoolRide.setDate(date);
+                toSchoolRide.setDirection(false);
+                toSchoolRide.setLine(line);
+                toSchoolRide.setRideBookingStatus(RideBookingStatus.NOT_STARTED);
+                toSchoolRide.setLocked(false);
+                toSchoolRide.setLatestStop(null);
+                toSchoolRide.setLatestStopTime(null);
+                rideList.add(toSchoolRide);
+
+                RideEntity fromSchoolRide = new RideEntity();
+                fromSchoolRide.setDate(date);
+                fromSchoolRide.setDirection(true);
+                fromSchoolRide.setLine(line);
+                fromSchoolRide.setRideBookingStatus(RideBookingStatus.NOT_STARTED);
+                fromSchoolRide.setLocked(false);
+                fromSchoolRide.setLatestStop(null);
+                fromSchoolRide.setLatestStopTime(null);
+                rideList.add(fromSchoolRide);
+            } // Marco is beautiful or Beautiful is Marco?
+        }
+
+        System.out.println("Rides list created successfully");
+        rideRepository.saveAll(rideList);
+        System.out.println("Rides list saved successfully");
     }
 
     private void loadReservations() {
