@@ -31,6 +31,7 @@ import {ShiftConsolidationResolverService} from './resolvers/shift-consolidation
 import {NotificationsComponent} from './notifications/notifications.component';
 import { ManagedLineResolverService as ManagedLineResolverService } from './resolvers/managed-line-resolver.service';
 import {PasswordResetComponent} from './password-reset/password-reset.component';
+import {PasswordResetRequestComponent} from "./password-reset-request/password-reset-request.component";
 
 const appRoutes: Routes = [
   /*{
@@ -42,6 +43,10 @@ const appRoutes: Routes = [
   {
     path: 'register/:code',
     component: RegisterComponent
+  },
+  {
+    path: 'recover',
+    component: PasswordResetRequestComponent
   },
   {
     path: 'recover/:token',

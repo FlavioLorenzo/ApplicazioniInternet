@@ -139,7 +139,7 @@ public class UserServiceImpl implements UserService {
     public void recoverAccount(String email) {
         UserEntity currentUser = userRepository.findByEmail(email);
         if(currentUser == null){
-            return;
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No user with this email was found.");
         }
 
         RecoverToken recoverToken = new RecoverToken();

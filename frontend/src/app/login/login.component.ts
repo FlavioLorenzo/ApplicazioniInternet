@@ -39,7 +39,7 @@ export class LoginComponent implements OnInit {
     }
 
     const val = this.form.value;
-    if (val.email && val.password) {
+    if (val.email) {
       this.authenticationService.login(val.email, val.password)
         .pipe(first())
         .subscribe(

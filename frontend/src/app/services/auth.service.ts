@@ -65,9 +65,14 @@ export class AuthService {
   public recoverPassword(email: string) {
     return this.http.post<any>(environment.apiUrl + '/recover',
       {email})
-      .pipe(map(res =>  {
-        return res;
-      }));
+      .pipe(
+        retry(1),
+        catchError(err => {
+          console.error(err.message);
+          console.log('Error is handled');
+          return throwError('Error thrown from catchError');
+        })
+      );
   }
 
   public resetPassword(

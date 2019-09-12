@@ -106,9 +106,8 @@ public class UserController {
 
     @PostMapping("/recover")
     @ResponseBody
-    public ResponseEntity recoverAccount(@RequestBody @Valid RecoverRequestPostBody rrpb) {
+    public void recoverAccount(@RequestBody @Valid RecoverRequestPostBody rrpb) throws ResponseStatusException {
         userService.recoverAccount(rrpb.getEmail());
-        return ResponseEntity.status(HttpStatus.OK).body("Email with link to restore password sent");
     }
 
     @PostMapping(value="/recover/{randomUUID}")
