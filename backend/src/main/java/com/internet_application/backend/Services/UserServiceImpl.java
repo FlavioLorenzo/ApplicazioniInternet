@@ -150,12 +150,14 @@ public class UserServiceImpl implements UserService {
 
         recoverTokenRepository.save(recoverToken);
 
+        System.out.println("Password recover token: " + recoverToken);
+
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setTo(currentUser.getEmail());
         mailMessage.setSubject("Recover Password!");
         mailMessage.setFrom("prova123@test.it");
         mailMessage.setText("To recover your password, please click here : "
-                +"http://localhost:8080/recover/"+recoverToken.getRecoverToken());
+                +"http://localhost:4200/recover/"+recoverToken.getRecoverToken());
 
         emailSenderService.sendEmail(mailMessage);
 

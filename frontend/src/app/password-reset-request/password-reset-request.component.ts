@@ -48,6 +48,7 @@ export class PasswordResetRequestComponent implements OnInit {
             this.snackBar.open('An email has been sent to your email address. Please check your inbox and follow ' +
               'the provided link to reset your password.');
             this.invalidCredentials = false;
+            this.router.navigate(['/']); //I send a redirect after completing the procedure
           },
           error => {
             console.error(error);

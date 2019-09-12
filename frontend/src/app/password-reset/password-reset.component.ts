@@ -52,7 +52,7 @@ export class PasswordResetComponent implements OnInit {
 
       const node = document.createElement('div');
       node.setAttribute('id', 'ai-generic-error');
-      node.appendChild(document.createTextNode('There is an error in your form.'));
+      node.appendChild(document.createTextNode('Please check if password is more than 8 characters long.'));
       mexBox.appendChild(node);
       this.countErrors++;
       return;

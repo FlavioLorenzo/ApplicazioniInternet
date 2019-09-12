@@ -1,0 +1,11 @@
+        Thu, 12 Sep 2019 11:56:28 +0000 (GMT)
+Date: Thu, 12 Sep 2019 11:56:28 +0000 (GMT)
+From: prova123@test.it
+To: u2@example.it
+Message-ID: <1156408468.2.1568289388015@3b78978c3e9d>
+Subject: Recover Password!
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+
+To recover your password, please click here : http://localhost:4200/recover/07ce63db-e79a-4905-a726-74284f83dacf
