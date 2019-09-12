@@ -24,18 +24,26 @@ export class UserListComponent implements OnInit {
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
 
-  constructor(private usersService: UsersService, private dialog: MatDialog, private authService: AuthService, private registrationService: RegistrationService, private snackBar: MatSnackBar) { 
-  }
+  // tslint:disable-next-line:max-line-length
+  constructor(
+    private usersService: UsersService,
+    private dialog: MatDialog,
+    private authService: AuthService,
+    private registrationService: RegistrationService,
+    private snackBar: MatSnackBar
+  ) {}
 
   ngOnInit() {
+    this.getAndUpdateUsers();
+  }
 
-    this.usersService.userList.subscribe(users => {
- 
+  getAndUpdateUsers() {
+    this.usersService.getAllusers().subscribe(users => {
       this.userList = new MatTableDataSource(users);
 
       console.log(JSON.stringify(users));
 
-      //How the **** I'm supposed to know that this line has to be called inside a timeout?
+      // How the **** I'm supposed to know that this line has to be called inside a timeout?
       setTimeout(() => {
         this.userList.sort = this.sort;
         this.userList.paginator = this.paginator;
@@ -43,11 +51,10 @@ export class UserListComponent implements OnInit {
     });
 
     this.usersService.updateUserList();
-
   }
 
 
-  onUserPressed(user){
+  onUserPressed(user) {
     this.openDialog(user);
   }
 
@@ -68,11 +75,11 @@ export class UserListComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
 
-      if (result  && result.status === 'success'){
-        this.snackBar.open("Utente aggiornato con successo");
-        this.usersService.updateUserList();
-      } else if (result  && result.status === 'failure'){
-        this.snackBar.open("Errore nell'aggiornamento dell'utente");
+      if (result  && result.status === 'success') {
+        this.snackBar.open('Utente aggiornato con successo');
+        this.getAndUpdateUsers();
+      } else if (result  && result.status === 'failure') {
+        this.snackBar.open('Errore nell\'aggiornamento dell\'utente');
       }
 
     });

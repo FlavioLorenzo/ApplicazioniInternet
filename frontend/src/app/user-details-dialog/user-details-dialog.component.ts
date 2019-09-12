@@ -68,7 +68,7 @@ export class UserDetailsDialogComponent implements OnInit {
 
   }
 
-  onLinesChanged(lines){
+  onLinesChanged(lines) {
 
     setTimeout(() => {
       this.pendingUserLines = lines;
