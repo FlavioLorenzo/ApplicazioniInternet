@@ -42,7 +42,8 @@
             <app-line-selector class="line-selector"
                                [checkableLines]="myLines"
                                [alreadySelectedLines]="userLines"
-                               (checkedLines)="onLinesChanged($event)"></app-line-selector>
+                               (checkedLines)="onLinesChanged($event)"
+                               [disableAll]="user.role.id_role === 1"></app-line-selector>
           </ng-template>
         </div>
       </div>

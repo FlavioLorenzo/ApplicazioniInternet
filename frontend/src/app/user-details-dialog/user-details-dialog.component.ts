@@ -25,13 +25,7 @@ export class UserDetailsDialogComponent implements OnInit {
   // Lines that I'm managing
   myLines: Array<Line>;
 
-  userLines: Array<Line> = [
-    {id_line: 3, name: 'linea 4'},
-    {id_line: 4, name: 'linea 5'},
-    {id_line: 5, name: 'linea 6'},
-    {id_line: 6, name: 'linea 7'},
-    {id_line: 7, name: 'linea 8'}
-  ];
+  userLines: Array<Line> = [];
 
   pendingUserLines: Array<Line>;
 
@@ -93,7 +87,7 @@ export class UserDetailsDialogComponent implements OnInit {
     console.log(`New lines: ${JSON.stringify(toAdd)}`);
     console.log(`Old lines: ${JSON.stringify(toDelete)}`);
 
-    if(toDelete.length > 0 && this.authService.currentUserValue.role.id_role !== '1'){
+    if(toAdd.length > 0 && this.authService.currentUserValue.role.id_role !== 1){
       //Standard admin trying to delete a certain line
       if(confirm("Confirming the edit you won't be anymore admin of the selected lines. Confirm?")) {
         this.completeEdit(toAdd, toDelete);

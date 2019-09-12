@@ -1,5 +1,5 @@
 export class Role {
-  constructor(public id_role: string, public name: string){}
+  constructor(public id_role: string | number, public name: string){}
 }
 
 export class CurrentUser {
