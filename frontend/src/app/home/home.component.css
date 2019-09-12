@@ -1,0 +1,39 @@
+.ai-home-title {
+  text-align: center;
+}
+
+.ai-home-title h2 {
+  margin-top: 2.5rem;
+  margin-bottom: 2rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.ai-home-button-container {
+  padding: 0.5rem 0.3rem;
+}
+
+.ai-home-button {
+  border-radius: 20px;
+  color: #24242d;
+  padding: 1rem;
+  text-align: center;
+  background-color: #ffc937;;
+  height: 100%;
+  width: 100%;
+}
+
+.ai-home-button:hover {
+  background-color: #ba0000;
+  color: whitesmoke;
+  cursor: pointer;
+}
+
+.ai-home-button-image {
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+
+.ai-home-button-text {
+
+}

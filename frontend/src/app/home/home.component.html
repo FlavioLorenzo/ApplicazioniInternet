@@ -1,3 +1,51 @@
-<p>
-  home works!
-</p>
+<div class="row justify-content-center">
+  <div class="col-12 ai-home-title">
+    <h2>Welcome back!</h2>
+  </div>
+  <div class="col-10 col-sm-5 col-md-4 col-lg-3 ai-home-button-container"
+       *ngIf='isCurrentRoleAdmitted([1, 2, 3])' (click)="onButtonClick('attendance')">
+    <div class="ai-home-button">
+      <div class="ai-home-button-image"><i class="far fa-list-alt"></i></div>
+      <div class="ai-home-button-text">Check Child Attendance</div>
+    </div>
+  </div>
+  <div class="col-10 col-sm-5 col-md-4 col-lg-3 ai-home-button-container"
+       *ngIf='isCurrentRoleAdmitted([1, 2])' (click)="onButtonClick('users')">
+    <div class="ai-home-button">
+      <div class="ai-home-button-image"><i class="far fa-user"></i></div>
+      <div class="ai-home-button-text">Manage Users</div>
+    </div>
+  </div>
+  <div class="col-10 col-sm-5 col-md-4 col-lg-3 ai-home-button-container"(click)="onButtonClick('reservation')">
+    <div class="ai-home-button">
+      <div class="ai-home-button-image"><i class="far fa-clipboard"></i></div>
+      <div class="ai-home-button-text">Your Reservations</div>
+    </div>
+  </div>
+  <div class="col-10 col-sm-5 col-md-4 col-lg-3 ai-home-button-container" (click)="onButtonClick('children')">
+    <div class="ai-home-button">
+      <div class="ai-home-button-image"><i class="fas fa-child"></i></div>
+      <div class="ai-home-button-text">Manage Children</div>
+    </div>
+  </div>
+  <div class="col-10 col-sm-5 col-md-4 col-lg-3 ai-home-button-container"
+       *ngIf='isCurrentRoleAdmitted([1, 2, 3])' (click)="onButtonClick('shift-definition')">
+    <div class="ai-home-button">
+      <div class="ai-home-button-image"><i class="fas fa-pen-alt"></i></div>
+      <div class="ai-home-button-text">Define your Shifts</div>
+    </div>
+  </div>
+  <div class="col-10 col-sm-5 col-md-4 col-lg-3 ai-home-button-container"
+       *ngIf='isCurrentRoleAdmitted([1, 2])' (click)="onButtonClick('shift-consolidation')">
+    <div class="ai-home-button">
+      <div class="ai-home-button-image"><i class="far fa-calendar-check"></i></div>
+      <div class="ai-home-button-text">Consolidate the Shifts</div>
+    </div>
+  </div>
+  <div class="col-10 col-sm-5 col-md-4 col-lg-3 ai-home-button-container" (click)="onButtonClick('notifications')">
+    <div class="ai-home-button">
+      <div class="ai-home-button-image"><i class="far fa-envelope"></i></div>
+      <div class="ai-home-button-text">Inbox</div>
+    </div>
+  </div>
+</div>

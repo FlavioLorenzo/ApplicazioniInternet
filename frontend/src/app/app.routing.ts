@@ -31,15 +31,15 @@ import {ShiftConsolidationResolverService} from './resolvers/shift-consolidation
 import {NotificationsComponent} from './notifications/notifications.component';
 import { ManagedLineResolverService as ManagedLineResolverService } from './resolvers/managed-line-resolver.service';
 import {PasswordResetComponent} from './password-reset/password-reset.component';
-import {PasswordResetRequestComponent} from "./password-reset-request/password-reset-request.component";
+import {PasswordResetRequestComponent} from './password-reset-request/password-reset-request.component';
+import {HomeComponent} from './home/home.component';
 
 const appRoutes: Routes = [
-  /*{
+  {
     path: '',
     component: HomeComponent,
     canActivate: [AuthGuard]
-  },*/
-
+  },
   {
     path: 'register/:code',
     component: RegisterComponent
@@ -133,7 +133,7 @@ const appRoutes: Routes = [
   },
   { // Otherwise redirect to home
     path: '**',
-    redirectTo: 'reservation'
+    redirectTo: ''
   }
 ];
 
