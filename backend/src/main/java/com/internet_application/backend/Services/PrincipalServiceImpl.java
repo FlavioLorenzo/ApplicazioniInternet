@@ -34,7 +34,8 @@ public class PrincipalServiceImpl implements PrincipalService {
     * If the principal is not provided or the user does not exist throw 401
     * userRepository automatically throws it.
     * */
-    private UserEntity getUserFromPrincipal(Principal principal)
+    @Override
+    public UserEntity getUserFromPrincipal(Principal principal)
         throws ResponseStatusException {
         if (principal == null)
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);

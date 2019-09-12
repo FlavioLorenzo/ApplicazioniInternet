@@ -25,19 +25,18 @@ export class AuthService {
   }
 
   login(email: string, password: string ) {
-
     return this.http.post<any>(environment.apiUrl + '/login',
       {email, password})
       .pipe(map(res =>  {
         let cus = null;
         if (res) {
 
-          //Create and set the new user
+          // Create and set the new user
           cus = new CurrentUser(res.id, res.mail, res.token, res.role);
           localStorage.setItem('currentUser', JSON.stringify(cus));
           this.currentUserSubject.next(cus);
 
-          //Handle the redirect logic after the login
+          // Handle the redirect logic after the login
           this.handleRedirectUrl();
 
         }
@@ -48,6 +47,29 @@ export class AuthService {
   public logout() {
     localStorage.removeItem('currentUser');
     this.currentUserSubject.next(null);
+  }
+
+  updateUserRole() {
+    return this.http.get<any>(environment.apiUrl + '/updated-user-role')
+      .pipe(map(res =>  {
+        let cus = null;
+
+        console.log(res);
+        console.log(this.currentUserSubject.value.role);
+        if (res && (res.role.id_role !== this.currentUserSubject.value.role.id_role)) {
+          const previous = this.currentUserSubject.value;
+
+          // Create and set the new user
+          cus = new CurrentUser(previous.id, previous.mail, previous.token, res.role);
+          localStorage.setItem('currentUser', JSON.stringify(cus));
+          this.currentUserSubject.next(cus);
+
+          // Handle the redirect logic after the login
+          this.handleRedirectUrl();
+
+        }
+        return cus;
+      }));
   }
 
   handleRedirectUrl() {

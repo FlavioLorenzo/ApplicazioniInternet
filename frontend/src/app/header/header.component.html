@@ -16,7 +16,7 @@
         <li class="nav-item" *ngIf='!currentUser' routerLinkActive="active">
           <a class="nav-link" routerLink="/login">Login</a>
         </li>
-        <li class="nav-item" *ngIf='currentUser' routerLinkActive="active">
+        <li class="nav-item" *ngIf='currentUser' routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
           <a class="nav-link" routerLink="/">Home</a>
         </li>
         <li class="nav-item" *ngIf='currentUser && isCurrentRoleAdmitted([1, 2, 3])' routerLinkActive="active">

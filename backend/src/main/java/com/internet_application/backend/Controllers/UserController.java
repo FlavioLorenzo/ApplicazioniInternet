@@ -6,6 +6,7 @@ import com.internet_application.backend.Entities.BusLineEntity;
 import com.internet_application.backend.Entities.RoleEntity;
 import com.internet_application.backend.Entities.UserEntity;
 import com.internet_application.backend.PostBodies.*;
+import com.internet_application.backend.Services.PrincipalService;
 import com.internet_application.backend.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,6 +34,8 @@ import java.util.*;
 public class UserController {
     @Autowired
     UserService userService;
+    @Autowired
+    PrincipalService principalService;
 
     @Autowired
     AuthenticationManager authenticationManager;
@@ -66,6 +69,23 @@ public class UserController {
             throw new BadCredentialsException("Invalid username/password");
         }
     }
+
+    @GetMapping("/updated-user-role")
+    @ResponseBody
+    public ResponseEntity updateUserRole(Principal principal) {
+        try {
+            UserEntity u = this.principalService.getUserFromPrincipal(principal);
+
+            List<String> roles = new ArrayList<>();
+            roles.add(u.getRole().getName());
+            Map<Object, Object> model = new HashMap<>();
+            model.put("role", u.getRole());
+            return ResponseEntity.ok(model);
+        } catch (Exception e) {
+            throw new BadCredentialsException("Invalid username/password");
+        }
+    }
+
 
     // sysadmin and admin
     @PostMapping("/register")

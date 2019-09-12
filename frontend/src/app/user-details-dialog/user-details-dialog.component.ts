@@ -100,7 +100,7 @@ export class UserDetailsDialogComponent implements OnInit {
 
   }
 
-  completeEdit(toAddLines, toDeleteLines){
+  completeEdit(toAddLines, toDeleteLines) {
     const addSubscriptions = toAddLines.map(line => this.registrationService.addAdminRoleOfLineToUser(this.user.id_user, line.id_line));
     const removeSubscriptions = toDeleteLines.map(line => this.registrationService.removeAdminRoleOfLineFromUser(this.user.id_user, line.id_line));
 
@@ -108,11 +108,13 @@ export class UserDetailsDialogComponent implements OnInit {
 
     forkJoin(allSubscription)
     .subscribe(result => {
-        console.log("SUCCESS", JSON.stringify(result));
+        console.log('SUCCESS', JSON.stringify(result));
+
+        this.authService.updateUserRole().subscribe();
         this.dialogRef.close({status: 'success'});
     },
     error => {
-      console.log("ERROR", error);
+      console.log('ERROR', error);
       this.dialogRef.close({status: 'failure'});
     });
   }

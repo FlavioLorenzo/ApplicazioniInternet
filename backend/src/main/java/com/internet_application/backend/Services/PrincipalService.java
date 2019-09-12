@@ -5,6 +5,7 @@ import com.internet_application.backend.Entities.UserEntity;
 import java.security.Principal;
 
 public interface PrincipalService {
+    UserEntity getUserFromPrincipal(Principal principal);
     boolean doesUserMatchPrincipal(Principal principal, Long userId);
     boolean IsUserSystemAdmin(Principal principal);
     boolean IsUserAdmin(Principal principal);
