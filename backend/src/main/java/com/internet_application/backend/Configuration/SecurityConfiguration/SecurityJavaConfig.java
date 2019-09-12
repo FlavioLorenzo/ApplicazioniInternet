@@ -66,7 +66,7 @@ public class SecurityJavaConfig extends WebSecurityConfigurerAdapter {
                     //.hasAnyRole("ADMIN", "SYS_ADMIN")
                 /* Secure admin controller */
                 .antMatchers("/users**", "users/**")
-                    .hasRole("SYS_ADMIN")
+                    .hasAnyRole("SYS_ADMIN","ADMIN")
                 .anyRequest().authenticated()
         .and()
             .apply(new JwtConfigurer(jwtTokenProvider));
