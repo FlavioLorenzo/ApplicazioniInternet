@@ -55,7 +55,6 @@ public class BusLineInitDeserializer extends JsonDeserializer<BusLineEntity> {
         for(JsonNode node: lineStops) {
             final Long id_stop = node.get("id_stop").asLong();
             final Date arrival_time = DateUtils.timeParser(node.get("arrival_time").asText());
-            final Boolean direction = node.get("direction").asBoolean();
 
             StopEntity stop = new StopEntity();
             stop.setId(id_stop);
@@ -63,7 +62,6 @@ public class BusLineInitDeserializer extends JsonDeserializer<BusLineEntity> {
             LineStopEntity lineStop = new LineStopEntity();
 
             lineStop.setStop(stop);
-            lineStop.setDirection(direction);
             lineStop.setArrivalTime(arrival_time);
 
             lineStopsSet.add(lineStop);

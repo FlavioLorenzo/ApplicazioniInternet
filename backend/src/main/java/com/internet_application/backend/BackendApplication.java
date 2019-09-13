@@ -113,11 +113,13 @@ public class BackendApplication {
 
                 for(LineStopEntity ls: line.getOutwordStops()) {
                     ls.setLine(savedLine);
+                    ls.setDirection(false);
                     lineStopRepository.save(ls);
                 }
 
                 for(LineStopEntity ls: line.getReturnStops()) {
                     ls.setLine(savedLine);
+                    ls.setDirection(true);
                     lineStopRepository.save(ls);
                 }
             }

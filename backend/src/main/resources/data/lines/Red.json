@@ -4,45 +4,37 @@
   "toSchool": [
     {
       "id_stop":3,
-      "arrival_time":"08:00:00",
-      "direction":0
+      "arrival_time":"08:00:00"
     },
     {
       "id_stop":5,
-      "arrival_time":"08:10:00",
-      "direction":0
+      "arrival_time":"08:10:00"
     },
     {
       "id_stop":7,
-      "arrival_time":"08:15:00",
-      "direction":0
+      "arrival_time":"08:15:00"
     },
     {
       "id_stop":10,
-      "arrival_time":"08:25:00",
-      "direction":0
+      "arrival_time":"08:25:00"
     }
   ],
   "fromSchool": [
     {
       "id_stop":10,
-      "arrival_time":"17:05:00",
-      "direction":0
+      "arrival_time":"17:05:00"
     },
     {
       "id_stop":8,
-      "arrival_time":"17:10:00",
-      "direction":0
+      "arrival_time":"17:10:00"
     },
     {
       "id_stop":5,
-      "arrival_time":"17:25:00",
-      "direction":0
+      "arrival_time":"17:25:00"
     },
     {
       "id_stop":3,
-      "arrival_time":"17:30:00",
-      "direction":0
+      "arrival_time":"17:30:00"
     }
   ]
 }
