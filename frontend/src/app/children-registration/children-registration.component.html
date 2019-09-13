@@ -20,6 +20,9 @@
       <mat-form-field>
         <input matInput placeholder="Phone" [formControl]="phoneFormControl"
                 [errorStateMatcher]="matcher" maxlength="20">
+        <mat-error *ngIf="phoneFormControl.hasError('pattern')">
+          Insert a <strong>valid phone number</strong>
+        </mat-error>
     </mat-form-field>
         
     <button *ngIf="!isLoading" mat-raised-button (click)="onSendRegistration()">REGISTER CHILD</button>

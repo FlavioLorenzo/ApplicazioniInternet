@@ -15,7 +15,8 @@ export class ChildrenRegistrationComponent implements OnInit {
 
   firstNameFormControl = new FormControl('', [Validators.required]);
   lastNameFormControl = new FormControl('', [Validators.required]);
-  phoneFormControl = new FormControl('', []);
+  reg = /^(\+39)?\d{8,12}$/;
+  phoneFormControl = new FormControl('', [Validators.pattern(this.reg)]);
 
   constructor(private snackBar: MatSnackBar, private childrenService: ChildrenService, private authService: AuthService) {
 
@@ -24,9 +25,9 @@ export class ChildrenRegistrationComponent implements OnInit {
   ngOnInit() {
   }
 
-  onSendRegistration(){
+  onSendRegistration() {
 
-    if(this.lastNameFormControl.valid && this.firstNameFormControl.valid){
+    if (this.lastNameFormControl.valid && this.firstNameFormControl.valid && this.phoneFormControl.valid) {
       const firstName = this.firstNameFormControl.value;
       const lastName = this.lastNameFormControl.value;
       const phone = this.phoneFormControl.value;
@@ -39,10 +40,10 @@ export class ChildrenRegistrationComponent implements OnInit {
       this.childrenService.registerChild(new ChildPostBody(userId, firstName, lastName, phone)).subscribe( result => {
         this.isLoading = false;
         this.clearForm();
-        this.snackBar.open("Figlio creato con successo");
+        this.snackBar.open('Child added successfully');
       });
 
-    }else{
+    } else {
       console.log('Check the data');
     }
 

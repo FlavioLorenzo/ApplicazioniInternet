@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
 
@@ -94,7 +95,7 @@ public class ChildController {
     @PostMapping("/child")
     public ChildEntity createChild(
             Principal principal,
-            @RequestBody ChildPostBody childPostBody
+            @Valid @RequestBody ChildPostBody childPostBody
     )
             throws ResponseStatusException {
         /* For normal users principal must match post data */

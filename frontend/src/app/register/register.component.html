@@ -25,6 +25,9 @@
                 <label>Phone:</label>
                 <input name="phone" formControlName="phone">
               </div>
+              <mat-error *ngIf="form.get('phone').hasError('pattern')">
+                Insert a <strong>valid phone number</strong>
+              </mat-error>
               <div class="form-field">
                 <label>Password:</label>
                 <input name="password" formControlName="password"
