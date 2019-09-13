@@ -24,7 +24,7 @@
           <ng-template [ngIf]="!isLoading && userChildren.length > 0">
             <ul *ngIf="!isLoading">
               <li *ngFor="let child of userChildren">
-                <span>{{child.first_name}} {{child.last_name}}</span>
+                <span>{{child.firstName}} {{child.lastName}}</span>
               </li>
             </ul>
           </ng-template>

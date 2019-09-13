@@ -16,17 +16,17 @@ export class ChildrenService {
   public currentUserChild: Observable<Array<Child>>;
 
 
-  constructor(private http: HttpClient, private authService: AuthService) { 
+  constructor(private http: HttpClient, private authService: AuthService) {
     this.currentUserChildSubject = new BehaviorSubject<Array<Child>>([]);
     this.currentUserChild = this.currentUserChildSubject.asObservable();
 
     this.authService.currentUser.subscribe(
       currentUser => {
-        if(currentUser){
+        if (currentUser) {
             this.updateCurrentUserChildren(currentUser.id);
         }
       }
-    )
+    );
   }
 
   private updateCurrentUserChildren(currentUserId){

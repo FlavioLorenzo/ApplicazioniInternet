@@ -1,3 +1,12 @@
+.ai-title {
+  text-align: center;
+}
+
+label {
+  width: 150px;
+  text-align: left;
+}
+
 .ai-form {
   margin-top: 2rem;
   text-align: center;
@@ -13,7 +22,6 @@
   font-size: 0.9rem;
 }
 
-/* CSS for the errors message box */
 .ai-mex-box-error {
   border: 1px solid red;
   border-radius: 10px;

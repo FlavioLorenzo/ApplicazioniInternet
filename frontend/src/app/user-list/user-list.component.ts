@@ -76,10 +76,10 @@ export class UserListComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
 
       if (result  && result.status === 'success') {
-        this.snackBar.open('Utente aggiornato con successo');
+        this.snackBar.open('User updated with success.');
         this.getAndUpdateUsers();
       } else if (result  && result.status === 'failure') {
-        this.snackBar.open('Errore nell\'aggiornamento dell\'utente');
+        this.snackBar.open('Error while updating the user.');
       }
 
     });

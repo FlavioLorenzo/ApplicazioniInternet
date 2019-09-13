@@ -129,9 +129,22 @@ public class AvailabilityServiceImpl implements AvailabilityService {
                     "Your availability for the ride of line " + availability.getRide().getLine().getId() +
                             " scheduled for " + DateUtils.dateToString(availability.getRide().getDate()) +
                             ", has been taken into account. " +
-                            "Please go to you Shift Definition page to acknowledge the reception of the message.",
+                            "Please go to your Shift Definition page to acknowledge the reception of the message.",
                     "/shift-definition/line/" + availability.getRide().getLine().getId() +
                             "/" + DateUtils.dateToSendString(availability.getRide().getDate())
+            );
+        }
+
+        // If the shift has been viewed, send a notification to the admin of the line
+        if(status == ShiftStatus.VIEWED.getCode()) {
+            notificationService.createNotification(
+                    availability.getRide().getLine().getAdmin().getId(),
+                    "User " + availability.getUser().getFirstName() +
+                            " " + availability.getUser().getLastName() +
+                            " has received the confirmation for its availability for the ride of line " + availability.getRide().getLine().getId() +
+                            " scheduled for " + DateUtils.dateToString(availability.getRide().getDate()) + ". " +
+                            "Please go to the Shift Consolidation page to lock the ride.",
+                    "/shift-consolidation/" + availability.getRide().getId()
             );
         }
 

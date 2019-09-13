@@ -22,6 +22,7 @@ import java.util.Set;
 public class BusLineEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonProperty("id_line")
     @Column(name="id_line")
     @Getter

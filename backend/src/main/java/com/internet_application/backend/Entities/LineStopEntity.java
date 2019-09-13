@@ -30,6 +30,7 @@ import java.util.Date;
 public class LineStopEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonProperty("id_busline_stop")
     @Column(name="id_busline_stop")
     @Getter

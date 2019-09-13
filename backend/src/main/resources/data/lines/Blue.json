@@ -1,0 +1,48 @@
+{
+  "name": "Blue",
+  "adminId":1,
+  "toSchool": [
+    {
+      "id_stop":1,
+      "arrival_time":"08:05:00",
+      "direction":0
+    },
+    {
+      "id_stop":2,
+      "arrival_time":"08:10:00",
+      "direction":0
+    },
+    {
+      "id_stop":3,
+      "arrival_time":"08:15:00",
+      "direction":0
+    },
+    {
+      "id_stop":4,
+      "arrival_time":"08:20:00",
+      "direction":0
+    }
+  ],
+  "fromSchool": [
+    {
+      "id_stop":4,
+      "arrival_time":"15:05:00",
+      "direction":1
+    },
+    {
+      "id_stop":3,
+      "arrival_time":"15:10:00",
+      "direction":1
+    },
+    {
+      "id_stop":5,
+      "arrival_time":"15:15:00",
+      "direction":1
+    },
+    {
+      "id_stop":1,
+      "arrival_time":"15:20:00",
+      "direction":1
+    }
+  ]
+}

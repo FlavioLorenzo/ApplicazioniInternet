@@ -6,6 +6,7 @@ import { Line } from '../Models/Line';
 import { RegistrationService } from '../services/registration.service';
 import { Observable, zip, forkJoin} from 'rxjs';
 import { AuthService } from '../services/auth.service';
+import {Child} from "../Models/Child";
 
 @Component({
   selector: 'app-user-details-dialog',
@@ -29,8 +30,8 @@ export class UserDetailsDialogComponent implements OnInit {
 
   pendingUserLines: Array<Line>;
 
-  // Children beloning to the user
-  userChildren = [];
+  // Children belonging to the user
+  userChildren: Array<Child> = [];
 
   constructor(
     private registrationService: RegistrationService,
@@ -44,28 +45,20 @@ export class UserDetailsDialogComponent implements OnInit {
   }
 
   ngOnInit() {
+    console.log(this.user);
+    this.childrenService.getChildrenForUser(this.user.id_user).subscribe(children => {
+      this.userChildren = children;
+    });
 
-    if (this.user.role && this.user.role.rolename === 'ROLE_USER') {
-
-      this.childrenService.getChildrenForUser(this.user.userId).subscribe(children => {
-        this.userChildren = children;
-        this.isLoading = false;
-      });
-
-    } else {
-
+    if (this.user.role && this.user.role.rolename !== 'ROLE_USER') {
       this.registrationService.getAdministeredLineOfUser(this.user.id_user).subscribe(
         lines => {
           console.log(`User is managing lines ${lines}`);
           this.userLines = lines;
         }
       );
-
-      this.isLoading = false;
-
-
     }
-
+    this.isLoading = false;
   }
 
   onLinesChanged(lines) {
@@ -120,7 +113,7 @@ export class UserDetailsDialogComponent implements OnInit {
   }
 
   close() {
-    this.dialogRef.close(); 
+    this.dialogRef.close();
   }
 
   //TODO: Move somewhere else

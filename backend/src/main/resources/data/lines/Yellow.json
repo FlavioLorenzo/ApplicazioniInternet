@@ -1,0 +1,38 @@
+{
+  "name": "Red",
+  "adminId":1,
+  "toSchool": [
+    {
+      "id_stop":8,
+      "arrival_time":"08:00:00",
+      "direction":0
+    },
+    {
+      "id_stop":9,
+      "arrival_time":"08:10:00",
+      "direction":0
+    },
+    {
+      "id_stop":10,
+      "arrival_time":"08:15:00",
+      "direction":0
+    }
+  ],
+  "fromSchool": [
+    {
+      "id_stop":10,
+      "arrival_time":"17:05:00",
+      "direction":1
+    },
+    {
+      "id_stop":9,
+      "arrival_time":"17:10:00",
+      "direction":1
+    },
+    {
+      "id_stop":8,
+      "arrival_time":"17:20:00",
+      "direction":1
+    }
+  ]
+}

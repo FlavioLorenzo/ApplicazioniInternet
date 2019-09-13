@@ -20,7 +20,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.core.io.support.ResourcePatternResolver;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDate;
@@ -52,6 +56,7 @@ public class BackendApplication {
     @Autowired
     private ReservationRepository reservationRepository;
 
+
     public static void main(String[] args) {
         SpringApplication.run(BackendApplication.class, args);
     }
@@ -63,9 +68,10 @@ public class BackendApplication {
             loadRoles();
             loadUsers();
             loadChildren();
-            loadBusLines();
+            // loadBusLines();
             loadStops();
-            loadLineStops();
+            // loadLineStops();
+            loadLines();
             loadRides();
             loadReservations();
         };
@@ -81,6 +87,41 @@ public class BackendApplication {
         try {
             List<BusLineEntity> stateList = mapper.readValue(is, busLineType);
             busLineRepository.saveAll(stateList);
+            System.out.println("Bus lines list saved successfully");
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private void loadLines() {
+        ObjectMapper mapper = new ObjectMapper();
+        SimpleModule module = new SimpleModule();
+        module.addDeserializer(BusLineEntity.class, new BusLineInitDeserializer());
+        mapper.registerModule(module);
+        TypeReference<BusLineEntity> busLineType = new TypeReference<BusLineEntity>() {};
+
+        ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
+        try {
+            Resource[] resources = resolver.getResources("data/lines/*.json");
+
+            for (final Resource resource :resources) {
+                File curFile = resource.getFile();
+                BusLineEntity line = mapper.readValue(curFile, busLineType);
+                line.setName(curFile.getName().replaceFirst("[.][^.]+$", ""));
+
+                BusLineEntity savedLine =busLineRepository.save(line);
+
+                for(LineStopEntity ls: line.getOutwordStops()) {
+                    ls.setLine(savedLine);
+                    lineStopRepository.save(ls);
+                }
+
+                for(LineStopEntity ls: line.getReturnStops()) {
+                    ls.setLine(savedLine);
+                    lineStopRepository.save(ls);
+                }
+            }
+
             System.out.println("Bus lines list saved successfully");
         } catch (IOException e) {
             System.out.println(e.getMessage());

@@ -30,6 +30,8 @@ public class UserServiceImpl implements UserService {
     private RecoverTokenRepository recoverTokenRepository;
     @Autowired
     private BusLineRepository busLineRepository;
+    @Autowired
+    private NotificationService notificationService;
 
     private final String USER_ROLE = "ROLE_USER";
 
@@ -225,12 +227,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public void modifyRole(Long userId, String line, String role) {
         UserEntity user = userRepository.findById(userId).orElse(null);
+
         if (user == null)
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "user does not exist");
+
         RoleEntity re = roleRepository.findByName(role);
         if (re == null || re.getName().equals("ROLE_SYS_ADMIN"))
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "role does not exist");
         user.setRole(re);
+
         userRepository.save(user);
     }
 
@@ -247,6 +252,14 @@ public class UserServiceImpl implements UserService {
         UserEntity previousAdmin = busLineEntity.getAdmin();
         if (previousAdmin != null) {
             previousAdmin.removeManagedLine(busLineEntity);
+
+            notificationService.createNotification(
+                    previousAdmin.getId(),
+                    "You're not Line Administrator of line " + busLineEntity.getName() +
+                            " anymore.",
+                    ""
+            );
+
             /* If the previous user has no administered line set its role to escort */
             if (previousAdmin.getAdministeredBuslines().isEmpty() &&
                 !previousAdmin.getRole().name.equals("ROLE_SYS_ADMIN")) {
@@ -257,8 +270,23 @@ public class UserServiceImpl implements UserService {
         /* Set the user as admin */
         busLineEntity.setAdmin(user);
         user.addManagedLine(busLineEntity);
-        if (!user.getRole().name.equals("ROLE_SYS_ADMIN"))
+        if (user.getRole().getId() == 3) {
             user.setRole(roleRepository.findByName("ROLE_ADMIN"));
+            notificationService.createNotification(
+                    user.getId(),
+                    "You've been promoted to Line Administrator of line " + busLineEntity.getName() +
+                            ". Please logout the page to enjoy your new privileges.",
+                    ""
+            );
+        } else {
+            notificationService.createNotification(
+                    user.getId(),
+                    "You've been promoted to Line Administrator of line " + busLineEntity.getName() +
+                            ".",
+                    ""
+            );
+        }
+
         busLineRepository.save(busLineEntity);
         userRepository.save(user);
         return user;
@@ -287,6 +315,13 @@ public class UserServiceImpl implements UserService {
         }
         userRepository.save(user);
         busLineRepository.save(busLineEntity);
+
+        notificationService.createNotification(
+                user.getId(),
+                "You're not Line Administrator of line " + busLineEntity.getName() +
+                        " anymore.",
+                ""
+        );
         return user;
     }
 
