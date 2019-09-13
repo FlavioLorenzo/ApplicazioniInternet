@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.Pattern;
 import java.util.Set;
 
 @Entity
@@ -32,6 +33,7 @@ public class UserEntity {
     @Setter
     private String lastName;
 
+    @Pattern(regexp = "(\\+39)?[0-9]{8,12}")
     @JsonProperty("phone")
     @Column
     @Getter

@@ -4,11 +4,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 @Data
 public class ChildPostBody {
     @JsonProperty("userId")
-    @NotBlank
+    @NotNull
     private Long userId;
 
     @JsonProperty("firstName")
@@ -19,7 +21,7 @@ public class ChildPostBody {
     @NotBlank
     private String lastName;
 
+    @Pattern(regexp = "(\\+39)?[0-9]{8,12}")
     @JsonProperty("phone")
-    @NotBlank
     private String phone;
 }

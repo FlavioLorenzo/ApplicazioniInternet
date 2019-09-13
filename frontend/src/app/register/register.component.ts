@@ -24,6 +24,7 @@ export class RegisterComponent implements OnInit {
 
   pendingActivationCode: string; // The code used to complete the user
   displayName: string;
+  reg = /^(\+39)?\d{8,12}$/;
 
   constructor(private fb: FormBuilder,
               private registrationService: RegistrationService,
@@ -31,7 +32,7 @@ export class RegisterComponent implements OnInit {
               private route: ActivatedRoute
   ) {
     this.form = this.fb.group({
-      phone: ['', Validators.required],
+      phone: ['', [Validators.required, Validators.pattern(this.reg)]],
       password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(32)]],
       passwordConfirm: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(32)]]
     });
@@ -61,6 +62,7 @@ export class RegisterComponent implements OnInit {
     }
 
     const val = this.form.value;
+
 
     if (val.password !== val.passwordConfirm) {
       const mexBox = document.getElementById('ai-mex-box');
