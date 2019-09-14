@@ -31,6 +31,8 @@ public class BusLineInitDeserializer extends JsonDeserializer<BusLineEntity> {
 
         JsonNode node = oc.readTree(jp);
 
+        final String name = node.get("name").asText();
+
         // Define the admin
         final Long id_admin = node.get("adminId").asLong();
         UserEntity admin = new UserEntity();
@@ -42,6 +44,7 @@ public class BusLineInitDeserializer extends JsonDeserializer<BusLineEntity> {
 
         BusLineEntity line = new BusLineEntity();
 
+        line.setName(name);
         line.setAdmin(admin);
         line.setOutwordStops(outwardStops);
         line.setReturnStops(returnStops);

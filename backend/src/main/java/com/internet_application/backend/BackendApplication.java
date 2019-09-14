@@ -12,11 +12,13 @@ import com.internet_application.backend.Services.BusLineService;
 import com.internet_application.backend.Services.ChildService;
 import com.internet_application.backend.Services.UserService;
 import com.internet_application.backend.Utils.DateUtils;
+import com.internet_application.backend.Utils.MiscUtils;
 import de.jollyday.Holiday;
 import de.jollyday.HolidayCalendar;
 import de.jollyday.HolidayManager;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -55,6 +57,8 @@ public class BackendApplication {
     private RideRepository rideRepository;
     @Autowired
     private ReservationRepository reservationRepository;
+    @Value("classpath:/data/lines/*.json")
+    private Resource[] lineFiles;
 
 
     public static void main(String[] args) {
@@ -100,14 +104,17 @@ public class BackendApplication {
         mapper.registerModule(module);
         TypeReference<BusLineEntity> busLineType = new TypeReference<BusLineEntity>() {};
 
-        ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
-        try {
-            Resource[] resources = resolver.getResources("data/lines/*.json");
+        // PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
 
-            for (final Resource resource :resources) {
-                File curFile = resource.getFile();
+        try {
+            // Resource[] resources = resolver.getResources("file:/data/lines/*.json");
+
+            // MiscUtils.getResourceFolderFiles("/data/lines/")
+            for (final Resource lineResource : lineFiles) {
+                InputStream curFile = lineResource.getInputStream();
+
                 BusLineEntity line = mapper.readValue(curFile, busLineType);
-                line.setName(curFile.getName().replaceFirst("[.][^.]+$", ""));
+                // line.setName(curFile.getName().replaceFirst("[.][^.]+$", ""));
 
                 BusLineEntity savedLine =busLineRepository.save(line);
 
