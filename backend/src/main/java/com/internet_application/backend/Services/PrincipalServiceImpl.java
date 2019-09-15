@@ -137,17 +137,14 @@ public class PrincipalServiceImpl implements PrincipalService {
 
     @Override
     public boolean canUserEditRide(Principal principal, Long rideId) {
-        System.out.println("Entered");
         if(!IsUserEscortInRide(principal, rideId)) {
             if (IsUserEscort(principal))
                 return false;
-            System.out.println("Not escort");
 
             Long lineId = rideService.getRide(rideId).getLine().getId();
             if(IsUserAdmin(principal) &&
                     !IsUserAdminOfLine(principal,lineId))
                 return false;
-            System.out.println("Admin of line or SysAdmin");
 
         }
 

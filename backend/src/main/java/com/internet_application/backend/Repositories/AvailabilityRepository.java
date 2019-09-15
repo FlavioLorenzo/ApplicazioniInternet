@@ -50,4 +50,11 @@ public interface AvailabilityRepository extends JpaRepository<AvailabilityEntity
             "WHERE a.ride.id = ?1 " +
             "AND a.shiftStatus = com.internet_application.backend.Enums.ShiftStatus.VIEWED")
     Integer countViewedAvailabilitiesForRide(Long rideId);
+
+    @Query("SELECT a FROM AvailabilityEntity a " +
+            "WHERE a.user.id = ?1 " +
+            "AND a.ride.date = ?2 " +
+            "AND a.ride.direction = ?3 " +
+            "AND a.shiftStatus = com.internet_application.backend.Enums.ShiftStatus.CONFIRMED")
+    List<AvailabilityEntity> getConfirmedAvailabilitiesForUserAndDateAndDirection(Long userId, Date date, Boolean direction);
 }

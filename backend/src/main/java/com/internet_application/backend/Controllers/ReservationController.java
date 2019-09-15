@@ -47,7 +47,12 @@ public class ReservationController {
         if(!principalService.canUserEditReservation(principal, reservationId))
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
 
-        return reservationService.updateReservation(lineId, date, reservationId, rpb);
+        if(principalService.IsUserEscortInRide(principal,
+                reservationService.getReservation(lineId, date, reservationId).getRide().getId())) {
+            return reservationService.updateReservation(lineId, date, reservationId, rpb, true);
+        } else {
+            return reservationService.updateReservation(lineId, date, reservationId, rpb, false);
+        }
     }
 
 

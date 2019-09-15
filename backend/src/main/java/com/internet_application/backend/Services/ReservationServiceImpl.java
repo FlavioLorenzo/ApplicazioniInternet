@@ -144,7 +144,7 @@ public class ReservationServiceImpl implements ReservationService {
         if(reservations.size() > 0)
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A reservation for this child and time already exists");
 
-        ReservationEntity r = buildReservation(lineId, date, rpb);
+        ReservationEntity r = buildReservation(lineId, date, rpb, false);
 
         r = reservationRepository.save(r);
 
@@ -170,7 +170,11 @@ public class ReservationServiceImpl implements ReservationService {
         return r;
     }
 
-    public ReservationEntity updateReservation(Long lineId, String date, Long reservationId, ReservationPostBody rpb) throws ResponseStatusException {
+    public ReservationEntity updateReservation(Long lineId,
+                                               String date,
+                                               Long reservationId,
+                                               ReservationPostBody rpb,
+                                               boolean isAdmin) throws ResponseStatusException {
         ReservationEntity r = em.find(ReservationEntity.class, reservationId);
 
         /*Check if the reservation already exists*/
@@ -178,7 +182,7 @@ public class ReservationServiceImpl implements ReservationService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
 
-        ReservationEntity builtReservation = buildReservation(lineId, date, rpb);
+        ReservationEntity builtReservation = buildReservation(lineId, date, rpb, isAdmin);
 
         // If the companion is trying to update the child presence, check that the ride is already started
         if(r.getPresence() != builtReservation.getPresence() &&
@@ -206,7 +210,7 @@ public class ReservationServiceImpl implements ReservationService {
         return r;
     }
 
-    private ReservationEntity buildReservation(Long lineId, String date, ReservationPostBody rpb) {
+    private ReservationEntity buildReservation(Long lineId, String date, ReservationPostBody rpb, boolean isAdmin) {
         /* Name convention for all the passed variables */
         Date d = DateUtils.dateParser(date);
         Boolean dir = rpb.direction;
@@ -249,13 +253,13 @@ public class ReservationServiceImpl implements ReservationService {
             stop = lineStopService.getLineStopWithLineIdAndStopIdAndDir(lineId, stopId, dir);
         }
 
-        /* Check if the reservation is valid (i.e. the ride to which the reservation refers is not terminated or has
-        already passed through the desired stop ) */
-        rideService.isRidePassedOrEnded(stop, ride);
+        if( !isAdmin ) {
+            /* Check if the reservation is valid (i.e. the ride to which the reservation refers is not terminated or has
+            already passed through the desired stop ) */
+            rideService.isRidePassedOrEnded(stop, ride);
+        }
 
         ReservationEntity r = new ReservationEntity();
-        Long id = reservationRepository.getLastId().get(0);
-        r.setId(id + 1);
         r.setRide(ride);
         r.setStop(stop.getStop());
         r.setChild(child);

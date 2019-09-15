@@ -11,7 +11,7 @@ public interface ReservationService {
     JsonNode getAllReservationForLineAndData(Long lineId, String date);
     List<ReservationEntity> getNReservationsByChildFromDate(Long lineId, Long childId, String date, Integer n);
     ReservationEntity addReservation(Long lineId, String date, ReservationPostBody rpb);
-    ReservationEntity updateReservation(Long lineId, String date, Long reservationId, ReservationPostBody rpb);
+    ReservationEntity updateReservation(Long lineId, String date, Long reservationId, ReservationPostBody rpb, boolean isAdmin);
     ReservationEntity getReservation(Long lineId, String date, Long reservationId);
     void deleteReservation(Long lineId, String date, Long reservationId);
 }

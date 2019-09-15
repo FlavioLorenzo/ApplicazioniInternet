@@ -14,6 +14,7 @@ import javax.persistence.*;
 @JsonSerialize(using = ReservationSerializer.class)
 public class ReservationEntity {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonProperty("id_reservation")
     @Column(name="id_reservation")
     @Getter

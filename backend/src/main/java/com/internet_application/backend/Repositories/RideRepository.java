@@ -49,7 +49,7 @@ public interface RideRepository extends JpaRepository<RideEntity, Long> {
             "AND r.date >= ?2 " +
             "AND r.locked = true " +
             "AND r.rideBookingStatus <> com.internet_application.backend.Enums.RideBookingStatus.TERMINATED " +
-            "ORDER BY r.date ASC")
+            "ORDER BY r.date, r.direction ASC")
     List<RideEntity> getTopLockedRidesFromUserAndDate(Long lineId, Date date, Pageable pageable);
 
     default List<RideEntity> getTopNLockedRidesFromUserAndDate(Long userId, Date date, int n) {

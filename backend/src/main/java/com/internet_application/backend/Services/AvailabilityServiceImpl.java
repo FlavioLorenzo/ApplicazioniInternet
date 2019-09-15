@@ -107,9 +107,18 @@ public class AvailabilityServiceImpl implements AvailabilityService {
 
         ShiftStatus currentStatus = availability.getShiftStatus();
 
-        if(status == ShiftStatus.CONFIRMED.getCode() && currentStatus != ShiftStatus.NEW) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                    "Cannot set status to Confirmed since the current status is " + currentStatus.getDescription());
+        if(status == ShiftStatus.CONFIRMED.getCode()) {
+            if(currentStatus != ShiftStatus.NEW)
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                        "Cannot set status to Confirmed since the current status is " + currentStatus.getDescription());
+
+            if(availabilityRepository.getConfirmedAvailabilitiesForUserAndDateAndDirection(
+                    availability.getUser().getId(),
+                    availability.getRide().getDate(),
+                    availability.getRide().getDirection()).size() > 0)
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                        "Cannot set status to Confirmed since the selected user has already been confirmed for another " +
+                                "ride at the same time.");
         }
 
         if(status == ShiftStatus.VIEWED.getCode() && currentStatus != ShiftStatus.CONFIRMED) {
