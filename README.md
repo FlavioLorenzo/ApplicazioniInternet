@@ -2,7 +2,7 @@
 ### Componenti: 
 Flavio Lorenzo 246189, Marco Zudettich 251400, Simone Boscain 262626, Matteo Bucci 258282
 
-###Avvio con Docker:
+### Avvio con Docker:
 * Installare docker
 * Assicurarsi che il drive su cui e' presente questa cartella faccia parte degli shared drives (docker / Setting / Shared Drives)
 * Fermare tutte le istanze di postgres, fakesmtpserver, angular e spring che stanno girando.
