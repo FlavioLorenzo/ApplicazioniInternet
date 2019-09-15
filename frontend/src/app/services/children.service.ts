@@ -105,7 +105,8 @@ export class ChildrenService {
           console.error(err.message);
           console.log('Error is handled');
           return throwError('Error thrown from catchError');
-        }),tap(() => {
+        }),
+        tap(() => {
         //  this.fetchedUsers.push(cpb);
        //   this.currentUserChildSubject.next(this.fetchedUsers);
        this.updateCurrentUserChildren(cpb.userId);
