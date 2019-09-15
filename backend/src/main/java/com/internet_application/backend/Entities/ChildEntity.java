@@ -32,7 +32,7 @@ public class ChildEntity {
     @Setter
     private String lastName;
 
-    @Pattern(regexp = "(\\+39)?[0-9]{8,12}")
+    @Pattern(regexp = "^$|(\\+39)?[0-9]{8,12}")
     @JsonProperty("phone")
     @Column
     @Getter

@@ -29,7 +29,7 @@ export class ChildrenService {
     );
   }
 
-  private updateCurrentUserChildren(currentUserId){
+  private updateCurrentUserChildren(currentUserId) {
     this.getChildrenForUser(currentUserId).subscribe(children => {
       this.fetchedUsers = children;
       this.currentUserChildSubject.next(children);
@@ -96,7 +96,6 @@ export class ChildrenService {
   }
 
   public registerChild(cpb: ChildPostBody): Observable<any> {
-
     return this.http.post<any>(
       `${environment.apiUrl}/child/`,
       cpb)
